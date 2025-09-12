@@ -146,6 +146,15 @@
                 opacity: 1;
             }
         }
+
+        /* Modal / Lightbox Styles */
+        #portfolio-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #portfolio-modal.active > div {
+            transform: scale(1);
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -232,24 +241,16 @@
             <div class="container mx-auto px-6">
                 <div class="text-center mb-16">
                     <h2 class="font-syne text-4xl md:text-5xl font-bold">Karya Pilihan</h2>
-                    <p class="mt-4 text-lg text-gray-400">Berikut beberapa proyek yang pernah saya kerjakan.</p>
+                    <p class="mt-4 text-lg text-gray-400">Klik pada gambar untuk melihat detail proyek.</p>
                 </div>
                 
                 <!-- Portfolio Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Project 1 -->
-                    <a href="#" class="group block relative overflow-hidden rounded-2xl">
-                        <img src="https://placehold.co/600x400/1a1a1a/e5e7eb?text=Proyek+1" alt="[Gambar Proyek 1]" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0">
-                        <div class="absolute inset-0 bg-black/40 flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                            <div>
-                                <h3 class="text-2xl font-bold text-white">Nama Proyek Branding</h3>
-                                <p class="text-gray-300">Branding & Identity</p>
-                            </div>
-                        </div>
-                    </a>
-                    <!-- Project 2 -->
-                    <a href="#" class="group block relative overflow-hidden rounded-2xl lg:col-span-2">
-                        <img src="https://placehold.co/1200x400/1a1a1a/e5e7eb?text=Proyek+2" alt="[Gambar Proyek 2]" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0">
+                    <!-- Project 1 (Wide) -->
+                    <a href="#" class="group block relative overflow-hidden rounded-2xl lg:col-span-2 cursor-pointer" 
+                       data-title="Desain Aplikasi Mobile" 
+                       data-description="Sebuah konsep desain antarmuka untuk aplikasi mobile banking yang berfokus pada kemudahan penggunaan dan tampilan yang bersih. Dibuat menggunakan Figma dengan pendekatan user-centered design.<br><br><strong>Tools:</strong> Figma, Adobe Illustrator.">
+                        <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/1.png" alt="Desain Aplikasi Mobile" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0">
                         <div class="absolute inset-0 bg-black/40 flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                             <div>
                                 <h3 class="text-2xl font-bold text-white">Desain Aplikasi Mobile</h3>
@@ -257,23 +258,51 @@
                             </div>
                         </div>
                     </a>
-                    <!-- Project 3 -->
-                    <a href="#" class="group block relative overflow-hidden rounded-2xl lg:col-span-2">
-                        <img src="https://placehold.co/1200x400/1a1a1a/e5e7eb?text=Proyek+3" alt="[Gambar Proyek 3]" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0">
+                    <!-- Project 2 -->
+                    <a href="#" class="group block relative overflow-hidden rounded-2xl cursor-pointer"
+                       data-title="Logo Penguin Ceria"
+                       data-description="Desain logo untuk sebuah brand anak-anak, mengusung konsep keceriaan dan minimalisme. Bentuk geometris sederhana digunakan untuk menciptakan karakter penguin yang mudah diingat. <br><br><strong>Tools:</strong> Adobe Illustrator.">
+                        <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/penguin%20white.png" alt="Ilustrasi Logo Penguin" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0">
                         <div class="absolute inset-0 bg-black/40 flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                             <div>
-                                <h3 class="text-2xl font-bold text-white">Kampanye Iklan Digital</h3>
-                                <p class="text-gray-300">Ilustrasi & Motion</p>
+                                <h3 class="text-2xl font-bold text-white">Logo Penguin Ceria</h3>
+                                <p class="text-gray-300">Ilustrasi & Branding</p>
+                            </div>
+                        </div>
+                    </a>
+                    <!-- Project 3 -->
+                    <a href="#" class="group block relative overflow-hidden rounded-2xl cursor-pointer"
+                       data-title="Ilustrasi Karakter Focalors"
+                       data-description="Fan-art ilustrasi karakter Focalors dari game populer Genshin Impact. Dibuat dengan gaya anime yang detail, fokus pada pencahayaan dan komposisi warna yang dramatis.<br><br><strong>Tools:</strong> Procreate, iPad Pro.">
+                        <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/focalor.png" alt="Ilustrasi Karakter Focalors" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0">
+                        <div class="absolute inset-0 bg-black/40 flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            <div>
+                                <h3 class="text-2xl font-bold text-white">Ilustrasi Karakter Focalors</h3>
+                                <p class="text-gray-300">Ilustrasi Digital</p>
                             </div>
                         </div>
                     </a>
                     <!-- Project 4 -->
-                    <a href="#" class="group block relative overflow-hidden rounded-2xl">
-                        <img src="https://placehold.co/600x400/1a1a1a/e5e7eb?text=Proyek+4" alt="[Gambar Proyek 4]" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0">
+                    <a href="#" class="group block relative overflow-hidden rounded-2xl cursor-pointer"
+                       data-title="Desain Karakter Anime"
+                       data-description="Sebuah desain karakter original (OC) dengan gaya anime. Eksplorasi desain kostum dan ekspresi untuk proyek komik pribadi. <br><br><strong>Tools:</strong> Clip Studio Paint.">
+                        <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/anime.png" alt="Desain Karakter Anime" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0">
                         <div class="absolute inset-0 bg-black/40 flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                            <div>
-                                <h3 class="text-2xl font-bold text-white">Desain Kemasan Produk</h3>
-                                <p class="text-gray-300">Packaging</p>
+                                <h3 class="text-2xl font-bold text-white">Desain Karakter Anime</h3>
+                                <p class="text-gray-300">Ilustrasi</p>
+                            </div>
+                        </div>
+                    </a>
+                    <!-- Project 5 -->
+                    <a href="#" class="group block relative overflow-hidden rounded-2xl cursor-pointer"
+                       data-title="Personal Branding 'P'"
+                       data-description="Konsep logo monogram 'P' untuk personal branding. Desain ini menggabungkan kesan modern, simpel, dan elegan, cocok untuk materi promosi seorang profesional kreatif.<br><br><strong>Tools:</strong> Adobe Illustrator.">
+                        <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/pblack.png" alt="Personal Branding P" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0">
+                        <div class="absolute inset-0 bg-black/40 flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                           <div>
+                                <h3 class="text-2xl font-bold text-white">Personal Branding 'P'</h3>
+                                <p class="text-gray-300">Logo Design</p>
                             </div>
                         </div>
                     </a>
@@ -310,40 +339,93 @@
         </div>
     </footer>
 
+    <!-- Modal/Lightbox Structure -->
+    <div id="portfolio-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4 transition-opacity duration-300 opacity-0 pointer-events-none">
+        <div class="bg-[#1a1a1a] border border-gray-700 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row transform scale-95 transition-all duration-300 relative">
+            <!-- Content -->
+            <div class="w-full md:w-3/5 bg-black flex items-center justify-center">
+                <img id="modal-img" src="" alt="Project Image" class="w-full h-auto max-h-[90vh] object-contain">
+            </div>
+            <div class="w-full md:w-2/5 p-8 overflow-y-auto">
+                <h3 id="modal-title" class="font-syne text-3xl font-bold text-white mb-4"></h3>
+                <p id="modal-description" class="text-gray-300 leading-relaxed"></p>
+            </div>
+            <!-- Close Button -->
+            <button id="modal-close" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
 
     <script>
-        // Script untuk Preloader
-        window.addEventListener('load', () => {
-            const preloader = document.getElementById('preloader');
-            // Memberi sedikit jeda agar transisi terasa mulus
-            setTimeout(() => {
-                preloader.classList.add('preloader-hidden');
-            }, 300);
-        });
-
-        // Script untuk animasi fade-in saat scroll
         document.addEventListener("DOMContentLoaded", function() {
-            const sections = document.querySelectorAll('.fade-in-section');
+            // Script untuk Preloader
+            const preloader = document.getElementById('preloader');
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    preloader.classList.add('preloader-hidden');
+                }, 300);
+            });
 
+            // Script untuk animasi fade-in saat scroll
+            const sections = document.querySelectorAll('.fade-in-section');
             const observer = new IntersectionObserver(entries => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('is-visible');
                     }
                 });
-            }, {
-                threshold: 0.1 
-            });
-
+            }, { threshold: 0.1 });
             sections.forEach(section => {
                 observer.observe(section);
+            });
+
+            // Script untuk Portfolio Modal/Lightbox
+            const portfolioItems = document.querySelectorAll('#works .group');
+            const modal = document.getElementById('portfolio-modal');
+            const modalImg = document.getElementById('modal-img');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDescription = document.getElementById('modal-description');
+            const closeModalBtn = document.getElementById('modal-close');
+
+            portfolioItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const imgSrc = this.querySelector('img').src;
+                    const title = this.dataset.title;
+                    const description = this.dataset.description;
+
+                    modalImg.src = imgSrc;
+                    modalTitle.textContent = title;
+                    modalDescription.innerHTML = description;
+
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+
+            const closeModal = () => {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            };
+
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
+                }
             });
         });
     </script>
 </body>
 </html>
-
-
-
-
 
