@@ -27,6 +27,8 @@
             --nav-text-inactive: #515154;
             --plexus-particle-color: #555555;
             --plexus-line-color: #aaaaaa;
+            --form-bg: rgba(255, 255, 255, 0.8);
+            --form-input-bg: rgba(240, 240, 240, 0.5);
         }
 
         body.dark-mode {
@@ -41,6 +43,8 @@
             --nav-text-inactive: #a1a1a6;
             --plexus-particle-color: #eeeeee;
             --plexus-line-color: #666666;
+            --form-bg: rgba(29, 29, 31, 0.7);
+            --form-input-bg: rgba(45, 45, 48, 0.5);
         }
 
         /* Custom styles to apply the Inter font and create a smooth experience */
@@ -51,6 +55,27 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             transition: background-color 0.4s ease, color 0.4s ease;
+        }
+        
+        /* Loading Screen styles */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease-out;
+            opacity: 1;
+        }
+
+        #loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
         }
 
         #bg-canvas {
@@ -69,7 +94,7 @@
             border: 1px solid rgba(128, 128, 128, 0.1);
             transition: background-color 0.4s ease;
         }
-
+        
         .animated-header {
             opacity: 0;
             transform: translateY(30px);
@@ -130,7 +155,6 @@
             color: var(--nav-text-active);
         }
         
-        /* Smooth transition for nav text */
         .nav-text {
             display: inline-block;
             vertical-align: middle;
@@ -143,9 +167,9 @@
 
         @media (min-width: 640px) { /* sm breakpoint */
             .nav-text {
-                max-width: 100px; /* Adjust as needed */
+                max-width: 100px;
                 opacity: 1;
-                margin-left: 0.5rem; /* Creates the gap */
+                margin-left: 0.5rem;
             }
         }
 
@@ -188,7 +212,7 @@
             overflow: hidden;
         }
 
-        /* UPDATED: Colorful Skill Tags */
+        /* Colorful Skill Tags */
         .skill-tag {
             transition: transform 0.2s ease;
         }
@@ -211,9 +235,33 @@
         body.dark-mode .tag-teal { background-color: rgba(100, 210, 255, 0.2); color: #64d2ff; }
         body.dark-mode .tag-yellow { background-color: rgba(255, 214, 10, 0.2); color: #ffd60a; }
 
+        .form-input {
+            background-color: var(--form-input-bg);
+            border: 1px solid rgba(128, 128, 128, 0.2);
+            color: var(--text-color);
+            transition: background-color 0.4s ease, border-color 0.4s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: rgba(128, 128, 128, 0.4);
+            box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2);
+        }
+        
     </style>
 </head>
 <body class="dark-mode"> <!-- Default to dark mode -->
+
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="flex flex-col items-center">
+            <svg class="animate-spin h-10 w-10 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <p class="mt-4 text-gray-500 text-sm">Memuat...</p>
+        </div>
+    </div>
 
     <!-- The canvas for our 3D background -->
     <canvas id="bg-canvas"></canvas>
@@ -232,7 +280,6 @@
     <div class="relative min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
         
         <header class="text-center mb-8 sm:mb-12">
-            <!-- MOBILE-OPTIMIZED: Adjusted font sizes -->
             <h1 id="main-title" class="animated-header text-4xl sm:text-5xl md:text-7xl font-bold" style="color: var(--header-color);">
                 Hadi
             </h1>
@@ -281,7 +328,6 @@
 
         <!-- Content Panels -->
         <main id="content-container" class="w-full max-w-3xl mt-8">
-            <!-- MOBILE-OPTIMIZED: Responsive padding on panels -->
             <section id="about" class="content-section glass-panel p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem]">
                 <h2 class="text-2xl font-bold mb-4" style="color: var(--header-color);">Tentang Saya</h2>
                 <p class="leading-relaxed" style="color: var(--text-color-secondary);">
@@ -294,14 +340,14 @@
                 <div class="mt-6 flex flex-wrap gap-4">
                     <button id="education-modal-trigger" class="inline-flex items-center gap-2 bg-gray-500/20 hover:bg-gray-500/40 transition-colors px-4 py-2 rounded-lg text-sm font-semibold" style="color: var(--text-color);">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 011.07 0l3.12-1.336a1 1 0 000-1.84l-3.12-1.337a1 1 0 00-1.07 0L3.606 5.92l-1.54-1.027a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 011.07 0l3.12-1.336a1 1 0 000-1.84l-3.12-1.337a1 1 0 00-1.07 0L3.606 5.92l-1.54-1.027z" />
-                          <path fill-rule="evenodd" d="M5 10a1 1 0 011 1v3l-1.5 1.5V16h11v-1.5L14 13v-3a1 1 0 011-1h-1.5a1 1 0 00-1-1H7.5a1 1 0 00-1 1H5zm-2 1a3 3 0 013-3h5a3 3 0 013 3v3a1 1 0 01-.293.707L15 15.414V17a1 1 0 01-1 1H6a1 1 0 01-1-1v-1.586l-1.707-1.707A1 1 0 013 13V11z" clip-rule="evenodd" />
+                            <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 011.07 0l3.12-1.336a1 1 0 000-1.84l-3.12-1.337a1 1 0 00-1.07 0L3.606 5.92l-1.54-1.027a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 011.07 0l3.12-1.336a1 1 0 000-1.84l-3.12-1.337a1 1 0 00-1.07 0L3.606 5.92l-1.54-1.027z" />
+                            <path fill-rule="evenodd" d="M5 10a1 1 0 011 1v3l-1.5 1.5V16h11v-1.5L14 13v-3a1 1 0 011-1h-1.5a1 1 0 00-1-1H7.5a1 1 0 00-1 1H5zm-2 1a3 3 0 013-3h5a3 3 0 013 3v3a1 1 0 01-.293.707L15 15.414V17a1 1 0 01-1 1H6a1 1 0 01-1-1v-1.586l-1.707-1.707A1 1 0 013 13V11z" clip-rule="evenodd" />
                         </svg>
                         Pendidikan
                     </button>
                     <button id="experience-modal-trigger" class="inline-flex items-center gap-2 bg-gray-500/20 hover:bg-gray-500/40 transition-colors px-4 py-2 rounded-lg text-sm font-semibold" style="color: var(--text-color);">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                          <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zM4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 2a1 1 0 011-1h2a1 1 0 110 2H7a1 1 0 01-1-1zm3 4a1 1 0 100 2h2a1 1 0 100-2h-2z" clip-rule="evenodd" />
+                            <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zM4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 2a1 1 0 011-1h2a1 1 0 110 2H7a1 1 0 01-1-1zm3 4a1 1 0 100 2h2a1 1 0 100-2h-2z" clip-rule="evenodd" />
                         </svg>
                         Pengalaman Kerja
                     </button>
@@ -402,21 +448,46 @@
             <section id="contact" class="content-section glass-panel p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem]">
                 <h2 class="text-2xl font-bold mb-4" style="color: var(--header-color);">Hubungi Saya</h2>
                 <p class="mb-4" style="color: var(--text-color-secondary);">
-                    Tertarik untuk berkolaborasi atau memiliki pertanyaan? Jangan ragu untuk menghubungi saya melalui salah satu platform di bawah ini.
+                    Tertarik untuk berkolaborasi atau memiliki pertanyaan? Kirim pesan langsung melalui formulir di bawah ini.
                 </p>
-                <div class="flex flex-wrap items-center justify-center gap-4">
-                    <button class="contact-btn inline-flex items-center gap-2 bg-gray-700 text-white font-semibold px-5 py-2 rounded-full hover:bg-gray-600 transition-colors duration-300" data-type="Email" data-link="mailto:hadiprasetia7@gmail.com">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
-                        Email
-                    </button>
-                     <button class="contact-btn inline-flex items-center gap-2 bg-gray-700 text-white font-semibold px-5 py-2 rounded-full hover:bg-gray-600 transition-colors duration-300" data-type="WhatsApp" data-link="https://wa.me/6287821991710">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.01 2.252a7.75 7.75 0 00-7.749 7.75c0 1.832.645 3.55 1.733 4.922l-1.24 4.34a.75.75 0 00.91.91l4.34-1.24a7.75 7.75 0 102.006-10.782zM10 16.5a6.25 6.25 0 110-12.5 6.25 6.25 0 010 12.5z"></path><path d="M12.825 11.535a.75.75 0 00-1.06-1.06l-1.47 1.47-1.47-1.47a.75.75 0 00-1.06 1.06L10.235 12.6l-1.47 1.47a.75.75 0 101.06 1.06l1.47-1.47 1.47 1.47a.75.75 0 001.06-1.06l-1.47-1.47 1.47-1.47z"></path></svg>
-                        WhatsApp
-                    </button>
-                     <button class="contact-btn inline-flex items-center gap-2 bg-gray-700 text-white font-semibold px-5 py-2 rounded-full hover:bg-gray-600 transition-colors duration-300" data-type="Instagram" data-link="https://instagram.com/idhescobar_">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 5a5 5 0 100 10 5 5 0 000-10zm-7 5a7 7 0 1114 0 7 7 0 01-14 0z" clip-rule="evenodd"></path><path fill-rule="evenodd" d="M14.003 5.5a.5.5 0 100-1 .5.5 0 000 1z" clip-rule="evenodd"></path></svg>
-                        Instagram
-                    </button>
+                <!-- Contact Form -->
+                <form id="contact-form" class="space-y-4">
+                    <div>
+                        <label for="name" class="block text-sm font-medium mb-1" style="color: var(--text-color);">Nama Lengkap</label>
+                        <input type="text" id="name" name="name" required class="form-input w-full p-2.5 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium mb-1" style="color: var(--text-color);">Alamat Email</label>
+                        <input type="email" id="email" name="email" required class="form-input w-full p-2.5 rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label for="message" class="block text-sm font-medium mb-1" style="color: var(--text-color);">Pesan Anda</label>
+                        <textarea id="message" name="message" rows="4" required class="form-input w-full p-2.5 rounded-lg text-sm"></textarea>
+                    </div>
+                    <div class="flex items-center justify-end">
+                        <button type="submit" class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-full hover:bg-blue-500 transition-colors duration-300 transform hover:scale-105">
+                            Kirim Pesan
+                        </button>
+                    </div>
+                </form>
+                <div id="form-status" class="mt-4 text-center text-sm font-medium hidden"></div>
+
+                <p class="mt-6 text-center text-sm" style="color: var(--text-color-secondary);">
+                    Atau, Anda dapat menghubungi saya melalui platform ini:
+                </p>
+                <div class="flex flex-wrap items-center justify-center gap-4 mt-4">
+                    <a href="mailto:hadiprasetia7@gmail.com" target="_blank" class="contact-btn inline-flex items-center gap-2 bg-gray-500/20 text-gray-800 dark:text-gray-200 font-semibold px-5 py-2 rounded-full hover:bg-gray-500/40 transition-colors duration-300">
+                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
+                         Email
+                    </a>
+                     <a href="https://wa.me/6287821991710" target="_blank" class="contact-btn inline-flex items-center gap-2 bg-gray-500/20 text-gray-800 dark:text-gray-200 font-semibold px-5 py-2 rounded-full hover:bg-gray-500/40 transition-colors duration-300">
+                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.01 2.252a7.75 7.75 0 00-7.749 7.75c0 1.832.645 3.55 1.733 4.922l-1.24 4.34a.75.75 0 00.91.91l4.34-1.24a7.75 7.75 0 102.006-10.782zM10 16.5a6.25 6.25 0 110-12.5 6.25 6.25 0 010 12.5z"></path><path d="M12.825 11.535a.75.75 0 00-1.06-1.06l-1.47 1.47-1.47-1.47a.75.75 0 00-1.06 1.06L10.235 12.6l-1.47 1.47a.75.75 0 101.06 1.06l1.47-1.47 1.47 1.47a.75.75 0 001.06-1.06l-1.47-1.47 1.47-1.47z"></path></svg>
+                         WhatsApp
+                    </a>
+                     <a href="https://instagram.com/idhescobar_" target="_blank" class="contact-btn inline-flex items-center gap-2 bg-gray-500/20 text-gray-800 dark:text-gray-200 font-semibold px-5 py-2 rounded-full hover:bg-gray-500/40 transition-colors duration-300">
+                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 5a5 5 0 100 10 5 5 0 000-10zm-7 5a7 7 0 1114 0 7 7 0 01-14 0z" clip-rule="evenodd"></path><path fill-rule="evenodd" d="M14.003 5.5a.5.5 0 100-1 .5.5 0 000 1z" clip-rule="evenodd"></path></svg>
+                         Instagram
+                    </a>
                 </div>
             </section>
         </main>
@@ -429,7 +500,6 @@
     <!-- Project Modal Structure -->
     <div id="project-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none">
         <div id="modal-overlay" class="absolute inset-0 bg-black/60"></div>
-        <!-- MOBILE-OPTIMIZED: Responsive padding and width for modal -->
         <div id="modal-content" class="relative w-full max-w-lg sm:max-w-2xl rounded-2xl shadow-xl transform scale-95 overflow-hidden pt-12">
             <!-- macOS-style buttons -->
             <div class="absolute top-4 left-4 flex gap-2">
@@ -439,7 +509,6 @@
                 <div class="w-3.5 h-3.5 rounded-full bg-yellow-500"></div>
                 <div class="w-3.5 h-3.5 rounded-full bg-green-500"></div>
             </div>
-            <!-- MOBILE-OPTIMIZED: Responsive padding -->
             <div class="p-4 sm:p-6 md:p-8 pt-0">
                 <img id="modal-image" src="" alt="Deskripsi Proyek" class="w-full h-auto max-h-64 object-cover rounded-2xl mb-6">
                 <h3 id="modal-title" class="text-2xl sm:text-3xl font-bold mb-2" style="color: var(--header-color);"></h3>
@@ -698,15 +767,6 @@
                 }));
             });
 
-            // Listeners for contact buttons
-            document.querySelectorAll('.contact-btn').forEach(button => {
-                button.addEventListener('click', () => openModal({
-                    type: 'contact',
-                    platform: button.dataset.type,
-                    link: button.dataset.link
-                }));
-            });
-
             // Listener for education button
             document.getElementById('education-modal-trigger').addEventListener('click', () => {
                 const educationContent = `
@@ -786,6 +846,40 @@
                 }
             });
         }
+        
+        // --- FORM SUBMISSION LOGIC ---
+        function setupContactForm() {
+            const form = document.getElementById('contact-form');
+            const statusMessage = document.getElementById('form-status');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                statusMessage.textContent = 'Mengirim...';
+                statusMessage.classList.remove('hidden', 'text-red-500', 'text-green-500');
+                statusMessage.classList.add('block', 'text-gray-500');
+                
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+
+                // In a real-world scenario, you would send this data to a backend endpoint.
+                // For this example, we'll simulate a network request.
+                console.log("Form data submitted:", data);
+                
+                try {
+                    // Simulate a successful API call
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    
+                    statusMessage.textContent = 'Pesan Anda berhasil terkirim!';
+                    statusMessage.classList.remove('text-gray-500');
+                    statusMessage.classList.add('text-green-500');
+                    form.reset();
+                } catch (error) {
+                    statusMessage.textContent = 'Terjadi kesalahan saat mengirim pesan. Coba lagi nanti.';
+                    statusMessage.classList.remove('text-gray-500');
+                    statusMessage.classList.add('text-red-500');
+                }
+            });
+        }
 
         function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight;
@@ -802,12 +896,21 @@
             }, 100);
         }
 
-        // Initialize everything
-        init();
-        setupInteractivity();
-        setupThemeSwitcher();
-        setupModal(); // Initialize the unified modal logic
-        runEntryAnimations();
+        // --- MAIN INITIALIZATION ---
+        window.onload = function() {
+            // Hide loading screen after all content is loaded
+            const loadingScreen = document.getElementById('loading-screen');
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+            }, 1000); // 1-second delay for a smooth transition
+
+            init();
+            setupInteractivity();
+            setupThemeSwitcher();
+            setupModal(); // Initialize the unified modal logic
+            setupContactForm(); // Initialize the new contact form logic
+            runEntryAnimations();
+        }
 
     </script>
 </body>
