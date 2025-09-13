@@ -43,9 +43,7 @@
         #portfolio-modal.active > div {
             transform: scale(1);
         }
-        /* Hapus style gallery-grid dan gallery-item yang lama */
-        /* Kita akan menggunakan utility class dari Tailwind langsung di HTML */
-
+        
         /* Style for hover overlay */
         .overlay-container .overlay {
             opacity: 0;
@@ -73,6 +71,14 @@
         .nirmana-lines .line-1 { animation-delay: 0s; }
         .nirmana-lines .line-2 { animation-delay: -4s; animation-duration: 15s;}
         .nirmana-lines .line-3 { animation-delay: -8s; }
+
+        /* Performance Optimizations */
+        .overlay-container img {
+            will-change: transform, filter; /* Memberi tahu browser untuk optimasi animasi transform & filter */
+        }
+        .loader, .overlay {
+            will-change: opacity; /* Memberi tahu browser untuk optimasi transisi opacity */
+        }
     </style>
 </head>
 <body class="antaliases">
@@ -121,57 +127,68 @@
                 <div class="grid grid-cols-2 md:grid-cols-5 md:auto-rows-[250px] gap-4">
                     
                     <a href="#" class="overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-2 md:row-span-2" data-title="Sudut Pandang" data-description="Menemukan ketenangan di tengah hiruk pikuk kota. Sebuah momen refleksi yang tertangkap kamera.">
-                        <img src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2288.jpg" alt="Galeri foto 1" class="w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                        <div class="loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
+                        <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2288.jpg" alt="Galeri foto 1" class="opacity-0 w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
                         <div class="overlay absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="font-syne text-white text-lg font-bold">Sudut Pandang</h4></div>
                     </a>
 
                     <a href="#" class="overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-1" data-title="Siluet Senja" data-description="Permainan cahaya dan bayangan saat matahari terbenam, menciptakan potret yang dramatis.">
-                        <img src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2333.jpg" alt="Galeri foto 2" class="w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                        <div class="loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
+                        <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2333.jpg" alt="Galeri foto 2" class="opacity-0 w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
                         <div class="overlay absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="font-syne text-white text-lg font-bold">Siluet Senja</h4></div>
                     </a>
                     
                     <a href="#" class="overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-2" data-title="Tatapan Monokrom" data-description="Ekspresi yang lugas dalam balutan warna monokrom. Kekuatan sebuah potret tanpa distraksi warna.">
-                        <img src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2334.jpg" alt="Galeri foto 3" class="w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                        <div class="loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
+                        <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2334.jpg" alt="Galeri foto 3" class="opacity-0 w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
                         <div class="overlay absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="font-syne text-white text-lg font-bold">Tatapan Monokrom</h4></div>
                     </a>
                     
                     <a href="#" class="overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-2" data-title="Kontemplasi Urban" data-description="Sebuah jeda di tengah lanskap perkotaan. Momen tenang yang seringkali terlewatkan.">
-                        <img src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2335.jpg" alt="Galeri foto 4" class="w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                        <div class="loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
+                        <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2335.jpg" alt="Galeri foto 4" class="opacity-0 w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
                         <div class="overlay absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="font-syne text-white text-lg font-bold">Kontemplasi Urban</h4></div>
                     </a>
                     
                     <a href="#" class="overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-1" data-title="Melangkah" data-description="Menyusuri jalanan kota, mencari inspirasi dari setiap sudut dan pergerakan.">
-                       <img src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2336.jpg" alt="Galeri foto 5" class="w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                       <div class="loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
+                       <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2336.jpg" alt="Galeri foto 5" class="opacity-0 w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
                        <div class="overlay absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="font-syne text-white text-lg font-bold">Melangkah</h4></div>
                    </a>
 
                     <a href="#" class="overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-2 md:row-span-2" data-title="Cahaya Pagi" data-description="Potret dengan pencahayaan alami yang lembut, menonjolkan detail dan suasana yang tenang.">
-                       <img src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2372.jpg" alt="Galeri foto 7" class="w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                       <div class="loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
+                       <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2372.jpg" alt="Galeri foto 7" class="opacity-0 w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
                        <div class="overlay absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="font-syne text-white text-lg font-bold">Cahaya Pagi</h4></div>
                    </a>
 
                     <a href="#" class="overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-1" data-title="Gerak Kabur" data-description="Eksperimen dengan teknik panning untuk menangkap esensi pergerakan dan kecepatan.">
-                       <img src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2350.jpg" alt="Galeri foto 6" class="w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                       <div class="loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
+                       <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2350.jpg" alt="Galeri foto 6" class="opacity-0 w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
                        <div class="overlay absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="font-syne text-white text-lg font-bold">Gerak Kabur</h4></div>
                    </a>
                    
                    <a href="#" class="overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-2" data-title="Di Balik Lensa" data-description="Mencari cerita dari sisi lain. Setiap orang memiliki perspektif yang unik untuk dibagikan.">
-                       <img src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2429.jpg" alt="Galeri foto 8" class="w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                       <div class="loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
+                       <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2429.jpg" alt="Galeri foto 8" class="opacity-0 w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
                        <div class="overlay absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="font-syne text-white text-lg font-bold">Di Balik Lensa</h4></div>
                    </a>
                    
                     <a href="#" class="overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-1" data-title="Ruang Terbuka" data-description="Menemukan kebebasan di alam terbuka. Perpaduan antara subjek dan lanskap yang luas.">
-                       <img src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2477.JPG" alt="Galeri foto 9" class="w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                       <div class="loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
+                       <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2477.JPG" alt="Galeri foto 9" class="opacity-0 w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
                        <div class="overlay absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="font-syne text-white text-lg font-bold">Ruang Terbuka</h4></div>
                    </a>
                    
                     <a href="#" class="overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-2" data-title="Anatomi Struktur" data-description="Interaksi antara manusia dan arsitektur, menciptakan komposisi garis dan bentuk yang menarik.">
-                       <img src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2512.jpg" alt="Galeri foto 10" class="w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                       <div class="loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
+                       <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2512.jpg" alt="Galeri foto 10" class="opacity-0 w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
                        <div class="overlay absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="font-syne text-white text-lg font-bold">Anatomi Struktur</h4></div>
                    </a>
                    
                     <a href="#" class="overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-2" data-title="Introspeksi" data-description="Sebuah potret yang mencoba menangkap kedalaman emosi dan pikiran di balik tatapan.">
-                       <img src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2537.jpg" alt="Galeri foto 11" class="w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
+                       <div class="loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
+                       <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2537.jpg" alt="Galeri foto 11" class="opacity-0 w-full h-full object-cover transform transition-all duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0">
                        <div class="overlay absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="font-syne text-white text-lg font-bold">Introspeksi</h4></div>
                    </a>
                 </div>
@@ -214,6 +231,21 @@
             const closeModalBtn = document.getElementById('modal-close');
 
             galleryItems.forEach(item => {
+                // Image loading logic
+                const img = item.querySelector('img');
+                const loader = item.querySelector('.loader');
+
+                img.addEventListener('load', () => {
+                    loader.classList.add('opacity-0', 'pointer-events-none');
+                    img.classList.remove('opacity-0');
+                }, { once: true });
+                
+                // Handle cached images
+                if (img.complete) {
+                    img.dispatchEvent(new Event('load'));
+                }
+
+                // Modal trigger logic
                 item.addEventListener('click', function(e) {
                     e.preventDefault();
                     modalImg.src = this.querySelector('img').src;
@@ -236,4 +268,3 @@
     </script>
 </body>
 </html>
-
