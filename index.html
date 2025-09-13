@@ -183,11 +183,18 @@
         .nirmana-lines .line-5 { animation-delay: -8s; }
 
         /* Navigasi Autohide */
-        header {
-            transition: transform 0.4s ease-in-out;
+        header { 
+            transition: transform 0.4s ease-in-out; 
         }
-        header.header-hidden {
-            transform: translateY(-120%);
+        /* Animasi hide ke bawah untuk mobile */
+        header.header-hidden { 
+            transform: translateY(120%); 
+        }
+        /* Animasi hide ke atas untuk desktop */
+        @media (min-width: 768px) {
+            header.header-hidden {
+                transform: translateY(-120%);
+            }
         }
     </style>
 </head>
@@ -205,24 +212,48 @@
     </div>
 
     <!-- Header / Navigasi -->
-    <header class="fixed top-0 left-0 right-0 z-50">
+    <header class="fixed bottom-0 left-0 right-0 z-50 md:top-0 md:bottom-auto">
         <nav class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-center md:justify-between glass-effect rounded-3xl px-6 py-3">
-                <a href="#" class="font-syne text-xl font-bold tracking-wider">HADI PRASETIA.</a>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#about" class="hover:text-white transition-colors duration-300">Tentang</a>
-                    <a href="#works" class="hover:text-white transition-colors duration-300">Karya</a>
-                    <a href="galeri.html" class="hover:text-white transition-colors duration-300">Galeri</a>
-                    <a href="#contact" class="bg-gray-200 text-gray-900 font-bold px-5 py-2 rounded-full hover:bg-white transition-colors duration-300">Hubungi</a>
+            <div class="glass-effect rounded-3xl px-4 py-2 transition-all duration-300 ease-in-out">
+                <!-- Desktop View -->
+                <div class="hidden md:flex items-center justify-between">
+                    <a href="#" class="font-syne text-xl font-bold tracking-wider">HADI PRASETIA.</a>
+                    <div class="flex items-center space-x-8">
+                        <a href="#about" class="hover:text-white transition-colors duration-300">Tentang</a>
+                        <a href="#works" class="hover:text-white transition-colors duration-300">Karya</a>
+                        <a href="galeri.html" class="hover:text-white transition-colors duration-300">Galeri</a>
+                        <a href="#contact" class="bg-gray-200 text-gray-900 font-bold px-5 py-2 rounded-full hover:bg-white transition-colors duration-300">Hubungi</a>
+                    </div>
                 </div>
-                <div class="md:hidden">
-                    <!-- Mobile Menu Button can be added here -->
+
+                <!-- Mobile View -->
+                <div class="md:hidden flex justify-around items-center">
+                    <!-- Home Icon (Active) -->
+                    <a href="#" class="flex flex-col items-center text-white transition-colors p-2">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                        <span class="text-xs mt-1 font-bold">Home</span>
+                    </a>
+                    <!-- Works Icon -->
+                    <a href="#works" class="flex flex-col items-center text-gray-400 hover:text-white transition-colors p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                        <span class="text-xs mt-1">Karya</span>
+                    </a>
+                    <!-- Gallery Icon -->
+                    <a href="galeri.html" class="flex flex-col items-center text-gray-400 hover:text-white transition-colors p-2">
+                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <span class="text-xs mt-1">Galeri</span>
+                    </a>
+                    <!-- Contact Icon -->
+                    <a href="#contact" class="flex flex-col items-center text-gray-400 hover:text-white transition-colors p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        <span class="text-xs mt-1">Kontak</span>
+                    </a>
                 </div>
             </div>
         </nav>
     </header>
 
-    <main>
+    <main class="pb-28 md:pb-0">
 
         <!-- Hero Section -->
         <section id="hero" class="min-h-screen flex flex-col justify-center items-center overflow-hidden relative">
@@ -373,7 +404,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="py-8 border-t border-gray-800">
+    <footer class="py-8 border-t border-gray-800 mb-24 md:mb-0">
         <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
             <p class="text-gray-500 mb-4 md:mb-0">&copy; 2025 <span class="font-syne">Hadi Prasetia</span>. All Rights Reserved.</p>
             <div class="flex flex-wrap justify-center gap-x-6 gap-y-2">
@@ -490,5 +521,4 @@
     </script>
 </body>
 </html>
-
 
