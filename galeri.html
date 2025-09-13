@@ -81,13 +81,40 @@
     <!-- Header / Navigasi -->
     <header class="fixed bottom-0 left-0 right-0 z-50 md:top-0 md:bottom-auto">
         <nav class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-center md:justify-between glass-effect rounded-3xl px-6 py-3 transition-all duration-300 ease-in-out">
-                <a href="portfolio-desainer.html" class="font-syne text-xl font-bold tracking-wider">HADI PRASETIA.</a>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="portfolio-desainer.html#about" class="hover:text-white transition-colors duration-300">Tentang</a>
-                    <a href="portfolio-desainer.html#works" class="hover:text-white transition-colors duration-300">Karya</a>
-                    <a href="galeri.html" class="text-white font-bold">Galeri</a>
-                    <a href="portfolio-desainer.html#contact" class="bg-gray-200 text-gray-900 font-bold px-5 py-2 rounded-full hover:bg-white transition-colors duration-300">Hubungi</a>
+            <div class="glass-effect rounded-3xl px-4 py-2 transition-all duration-300 ease-in-out">
+                <!-- Desktop View -->
+                <div class="hidden md:flex items-center justify-between">
+                    <a href="portfolio-desainer.html" class="font-syne text-xl font-bold tracking-wider">HADI PRASETIA.</a>
+                    <div class="flex items-center space-x-8">
+                        <a href="index.html#about" class="hover:text-white transition-colors duration-300">Tentang</a>
+                        <a href="index.html#works" class="hover:text-white transition-colors duration-300">Karya</a>
+                        <a href="galeri.html" class="text-white font-bold">Galeri</a>
+                        <a href="index.html#contact" class="bg-gray-200 text-gray-900 font-bold px-5 py-2 rounded-full hover:bg-white transition-colors duration-300">Hubungi</a>
+                    </div>
+                </div>
+
+                <!-- Mobile View -->
+                <div class="md:hidden flex justify-around items-center">
+                    <!-- Home Icon -->
+                    <a href="portfolio-desainer.html" class="flex flex-col items-center text-gray-400 hover:text-white transition-colors p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        <span class="text-xs mt-1">Home</span>
+                    </a>
+                    <!-- Works Icon -->
+                    <a href="portfolio-desainer.html#works" class="flex flex-col items-center text-gray-400 hover:text-white transition-colors p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                        <span class="text-xs mt-1">Karya</span>
+                    </a>
+                    <!-- Gallery Icon (Active) -->
+                    <a href="galeri.html" class="flex flex-col items-center text-white transition-colors p-2">
+                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path></svg>
+                        <span class="text-xs mt-1 font-bold">Galeri</span>
+                    </a>
+                    <!-- Contact Icon -->
+                    <a href="portfolio-desainer.html#contact" class="flex flex-col items-center text-gray-400 hover:text-white transition-colors p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        <span class="text-xs mt-1">Kontak</span>
+                    </a>
                 </div>
             </div>
         </nav>
