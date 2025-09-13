@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri | Hadi Prasetia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111111;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 0);
+            background-size: 20px 20px;
+            color: #E5E7EB;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+        }
+        .font-syne { font-family: 'Syne', sans-serif; }
+        .glass-effect {
+            background: rgba(17, 17, 17, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        header { transition: transform 0.4s ease-in-out; }
+        header.header-hidden { transform: translateY(-120%); }
+        #portfolio-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #portfolio-modal.active > div {
+            transform: scale(1);
+        }
+        /* Style for gallery grid */
+        .gallery-grid {
+            column-count: 2;
+            column-gap: 1rem;
+        }
+        @media (min-width: 768px) {
+            .gallery-grid {
+                column-count: 3;
+            }
+        }
+        @media (min-width: 1024px) {
+            .gallery-grid {
+                column-count: 4;
+            }
+        }
+        .gallery-item {
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 1rem;
+            break-inside: avoid;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header / Navigasi -->
+    <header class="fixed top-0 left-0 right-0 z-50">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-center md:justify-between glass-effect rounded-3xl px-6 py-3">
+                <a href="portfolio-desainer.html" class="font-syne text-xl font-bold tracking-wider">HADI PRASETIA.</a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="portfolio-desainer.html#about" class="hover:text-white transition-colors duration-300">Tentang</a>
+                    <a href="portfolio-desainer.html#works" class="hover:text-white transition-colors duration-300">Karya</a>
+                    <a href="galeri.html" class="text-white font-bold">Galeri</a>
+                    <a href="portfolio-desainer.html#contact" class="bg-gray-200 text-gray-900 font-bold px-5 py-2 rounded-full hover:bg-white transition-colors duration-300">Hubungi</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="pt-32">
+        <!-- Gallery Section -->
+        <section id="gallery" class="py-10">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h1 class="font-syne text-5xl md:text-6xl font-bold">Galeri Inspirasi</h1>
+                    <p class="mt-4 text-lg text-gray-400">Kumpulan moodboard, eksperimen visual, dan hal-hal yang saya sukai.</p>
+                </div>
+
+                <!-- Pinterest/Instagram-like Grid -->
+                <div class="gallery-grid">
+                    <!-- Tambahkan item galeri sebanyak yang kamu mau di sini -->
+                    <div class="gallery-item">
+                        <a href="#" class="group block relative overflow-hidden rounded-2xl cursor-pointer" data-title="Komposisi Tipografi" data-description="Eksplorasi layout tipografi dengan gaya brutalist.">
+                            <img src="https://placehold.co/500x700/1E1E1E/FFFFFF?text=Project+1" alt="Galeri gambar 1" class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500">
+                        </a>
+                    </div>
+                    <div class="gallery-item">
+                        <a href="#" class="group block relative overflow-hidden rounded-2xl cursor-pointer" data-title="Palet Warna Senja" data-description="Kombinasi warna yang terinspirasi dari langit sore.">
+                            <img src="https://placehold.co/500x500/1E1E1E/FFFFFF?text=Project+2" alt="Galeri gambar 2" class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500">
+                        </a>
+                    </div>
+                    <div class="gallery-item">
+                         <a href="#" class="group block relative overflow-hidden rounded-2xl cursor-pointer" data-title="Poster Abstrak" data-description="Desain poster eksperimental menggunakan bentuk-bentuk geometris.">
+                            <img src="https://placehold.co/500x800/1E1E1E/FFFFFF?text=Project+3" alt="Galeri gambar 3" class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500">
+                        </a>
+                    </div>
+                    <div class="gallery-item">
+                        <a href="#" class="group block relative overflow-hidden rounded-2xl cursor-pointer" data-title="Studi Tekstur" data-description="Foto close-up dari berbagai tekstur di alam.">
+                            <img src="https://placehold.co/500x650/1E1E1E/FFFFFF?text=Project+4" alt="Galeri gambar 4" class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500">
+                        </a>
+                    </div>
+                    <div class="gallery-item">
+                        <a href="#" class="group block relative overflow-hidden rounded-2xl cursor-pointer" data-title="Desain Ikon" data-description="Serangkaian ikon minimalis untuk aplikasi cuaca.">
+                           <img src="https://placehold.co/500x500/1E1E1E/FFFFFF?text=Project+5" alt="Galeri gambar 5" class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500">
+                       </a>
+                   </div>
+                   <div class="gallery-item">
+                        <a href="#" class="group block relative overflow-hidden rounded-2xl cursor-pointer" data-title="Ilustrasi Vektor" data-description="Ilustrasi flat design untuk halaman website.">
+                           <img src="https://placehold.co/500x750/1E1E1E/FFFFFF?text=Project+6" alt="Galeri gambar 6" class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500">
+                       </a>
+                   </div>
+                    <div class="gallery-item">
+                        <a href="#" class="group block relative overflow-hidden rounded-2xl cursor-pointer" data-title="Pattern Nirmana" data-description="Pola berulang yang dibuat dari elemen garis dan titik.">
+                           <img src="https://placehold.co/500x600/1E1E1E/FFFFFF?text=Project+7" alt="Galeri gambar 7" class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500">
+                       </a>
+                   </div>
+                   <div class="gallery-item">
+                        <a href="#" class="group block relative overflow-hidden rounded-2xl cursor-pointer" data-title="UI Gradient" data-description="Eksplorasi penggunaan gradasi warna pada komponen UI.">
+                           <img src="https://placehold.co/500x550/1E1E1E/FFFFFF?text=Project+8" alt="Galeri gambar 8" class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500">
+                       </a>
+                   </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-gray-800 mt-20">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-500">&copy; 2025 <span class="font-syne">Hadi Prasetia</span>. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Modal/Lightbox Structure (Sama seperti halaman utama) -->
+    <div id="portfolio-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4 transition-opacity duration-300 opacity-0 pointer-events-none">
+        <div class="bg-[#1a1a1a] border border-gray-700 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row transform scale-95 transition-all duration-300 relative">
+            <div class="w-full md:w-3/5 bg-black flex items-center justify-center">
+                <img id="modal-img" src="" alt="Project Image" class="w-full h-auto max-h-[90vh] object-contain">
+            </div>
+            <div class="w-full md:w-2/5 p-8 overflow-y-auto">
+                <h3 id="modal-title" class="font-syne text-3xl font-bold text-white mb-4"></h3>
+                <p id="modal-description" class="text-gray-300 leading-relaxed"></p>
+            </div>
+            <button id="modal-close" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Script untuk Navigasi Autohide
+            const header = document.querySelector('header');
+            let lastScrollTop = 0;
+            window.addEventListener('scroll', function() {
+                let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                if (scrollTop > lastScrollTop && scrollTop > 100) {
+                    header.classList.add('header-hidden');
+                } else {
+                    header.classList.remove('header-hidden');
+                }
+                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+            });
+
+            // Script untuk Modal/Lightbox di halaman galeri
+            const galleryItems = document.querySelectorAll('.gallery-item a');
+            const modal = document.getElementById('portfolio-modal');
+            const modalImg = document.getElementById('modal-img');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDescription = document.getElementById('modal-description');
+            const closeModalBtn = document.getElementById('modal-close');
+
+            galleryItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    modalImg.src = this.querySelector('img').src;
+                    modalTitle.textContent = this.dataset.title;
+                    modalDescription.innerHTML = this.dataset.description;
+                    modal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+
+            const closeModal = () => {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            };
+
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => (e.target === modal) && closeModal());
+            window.addEventListener('keydown', (e) => (e.key === 'Escape') && modal.classList.contains('active') && closeModal());
+        });
+    </script>
+</body>
+</html>
