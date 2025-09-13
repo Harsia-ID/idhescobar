@@ -181,6 +181,14 @@
         .nirmana-lines .line-3 { animation-delay: -4s; }
         .nirmana-lines .line-4 { animation-delay: -6s; animation-duration: 10s;}
         .nirmana-lines .line-5 { animation-delay: -8s; }
+
+        /* Navigasi Autohide */
+        header {
+            transition: transform 0.4s ease-in-out;
+        }
+        header.header-hidden {
+            transform: translateY(-120%);
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -406,6 +414,21 @@
                 setTimeout(() => {
                     preloader.classList.add('preloader-hidden');
                 }, 300);
+            });
+
+            // Script untuk Navigasi Autohide
+            const header = document.querySelector('header');
+            let lastScrollTop = 0;
+            window.addEventListener('scroll', function() {
+                let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                if (scrollTop > lastScrollTop && scrollTop > 100) {
+                    // Scroll ke bawah
+                    header.classList.add('header-hidden');
+                } else {
+                    // Scroll ke atas
+                    header.classList.remove('header-hidden');
+                }
+                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
             });
 
             // Script untuk animasi fade-in saat scroll
