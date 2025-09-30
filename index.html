@@ -404,7 +404,7 @@
                 </div>
             </main>
 
-            <!-- [BARU] Experience & Education Section -->
+            <!-- Experience & Education Section -->
             <section class="mt-16 sm:mt-24 glass-card p-6 sm:p-8 rounded-3xl reveal-text">
                 <h2 class="text-3xl font-bold text-white mb-6">Pengalaman & Pendidikan</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
@@ -561,8 +561,6 @@
                 }, 2200); 
             });
 
-            // --- [DIHAPUS] Logika Tata Letak Acak ---
-            
             // --- Efek hover artistik pada kartu ---
             const cards = document.querySelectorAll('.glass-card');
             cards.forEach(card => {
@@ -581,9 +579,6 @@
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
-                    } else {
-                        // [BARU] Tambahkan ini untuk animasi menutup saat scroll ke atas/keluar viewport
-                        entry.target.classList.remove('visible');
                     }
                 });
             }, {
@@ -681,7 +676,4 @@
     </script>
 </body>
 </html>
-
-
-
 
