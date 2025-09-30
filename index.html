@@ -404,8 +404,45 @@
                 </div>
             </main>
 
+            <!-- [BARU] Experience & Education Section -->
+            <section class="mt-16 sm:mt-24 glass-card p-6 sm:p-8 rounded-3xl reveal-text">
+                <h2 class="text-3xl font-bold text-white mb-6">Pengalaman & Pendidikan</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
+                    <!-- Pengalaman Kerja -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-300 mb-4">Pengalaman Kerja</h3>
+                        <div class="space-y-6 border-l-2 border-white/10 pl-4">
+                            <div class="relative">
+                                <div class="absolute -left-[2.1rem] top-1 h-3 w-3 rounded-full bg-white"></div>
+                                <p class="font-semibold text-white">IT Research & Development (Intern)</p>
+                                <p class="text-sm text-gray-400">PT. Usaha Jayamas Bhakti</p>
+                                <p class="text-xs text-gray-500 mt-1">Januari 2025 - Maret 2025</p>
+                            </div>
+                            <div class="relative">
+                                 <div class="absolute -left-[2.1rem] top-1 h-3 w-3 rounded-full bg-white"></div>
+                                <p class="font-semibold text-white">HAR/INSTRUMENT (Intern)</p>
+                                <p class="text-sm text-gray-400">PT. PLN Indonesia Power</p>
+                                <p class="text-xs text-gray-500 mt-1">Oktober 2023 - Januari 2024</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Latar Belakang Pendidikan -->
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-300 mb-4">Latar Belakang Pendidikan</h3>
+                        <div class="space-y-6 border-l-2 border-white/10 pl-4">
+                             <div class="relative">
+                                <div class="absolute -left-[2.1rem] top-1 h-3 w-3 rounded-full bg-white"></div>
+                                <p class="font-semibold text-white">Teknik Komputer dan Jaringan (TKJ)</p>
+                                <p class="text-sm text-gray-400">SMK 1 Perguruan Cikini</p>
+                                <p class="text-xs text-gray-500 mt-1">Target Lulus: 2025</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Skills Section -->
-            <section class="mt-8 glass-card p-6 sm:p-8 rounded-3xl reveal-text">
+            <section class="mt-16 sm:mt-24 glass-card p-6 sm:p-8 rounded-3xl reveal-text">
                 <h2 class="text-3xl font-bold text-white mb-6">Keahlian & Teknologi</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-8">
                     <!-- Produksi Video & Visual -->
@@ -524,17 +561,8 @@
                 }, 2200); 
             });
 
-            // --- Logika Tata Letak Acak ---
-            const randomizeLayout = () => {
-                const mainGrid = document.querySelector('main.grid');
-                if (mainGrid && mainGrid.children.length === 2) {
-                    if (Math.random() > 0.5) {
-                        mainGrid.appendChild(mainGrid.children[0]);
-                    }
-                }
-            };
-            randomizeLayout();
-
+            // --- [DIHAPUS] Logika Tata Letak Acak ---
+            
             // --- Efek hover artistik pada kartu ---
             const cards = document.querySelectorAll('.glass-card');
             cards.forEach(card => {
@@ -652,4 +680,5 @@
     </script>
 </body>
 </html>
+
 
