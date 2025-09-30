@@ -1,522 +1,653 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Kreator visual dan video editor profesional, Hadi, menampilkan proyek-proyek unggulan dalam video editing, desain UI/UX, dan pengembangan web. Lihat portofolio lengkap di sini.">
-    <meta name="keywords" content="portofolio, Hadi, kreator visual, video editor, desain UI/UX, pengembang web, SMK, TKJ, proyek, video editing">
-    <meta property="og:title" content="Portfolio Digital - Hadi">
-    <meta property="og:description" content="Kreator visual dan video editor profesional, Hadi, menampilkan proyek-proyek unggulan dalam video editing, desain UI/UX, dan pengembangan web. Lihat portofolio lengkap di sini.">
-    <meta property="og:image" content="https://avatars.githubusercontent.com/u/68311980?v=4">
-    <meta property="og:url" content="https://idhesco.bar/">
-    <meta name="twitter:card" content="summary_large_image">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio | Hadi Prasetia</title>
+    <title>Portfolio - Hadi Prasetia</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Menambahkan font 'Syne' untuk heading yang lebih artistik -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
     <style>
-        /* Menggunakan font Syne untuk heading dan Inter untuk body text */
+        /* Custom styles untuk melengkapi Tailwind */
         body {
             font-family: 'Inter', sans-serif;
-            /* Latar belakang diubah dengan tekstur dot grid Nirmana */
-            background-color: #111111;
-            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 0);
+            background-color: #0A0A0A;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
             background-size: 20px 20px;
-            color: #E5E7EB;
+            color: #E0E0E0;
+            overflow-x: hidden;
+            cursor: none; /* [BARU] Sembunyikan kursor default */
         }
+
+        /* Menggunakan font 'Syne' untuk semua heading */
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Syne', sans-serif;
             font-weight: 700;
         }
-        .font-syne {
-            font-family: 'Syne', sans-serif;
+
+        /* [BARU] Styling untuk Kinetic Typography */
+        .kinetic-title {
+            background: linear-gradient(90deg, 
+                #a0a0a0 0%, 
+                #ffffff 25%, 
+                #c0c0c0 50%, 
+                #ffffff 75%, 
+                #a0a0a0 100%
+            );
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: kinetic-flow 5s linear infinite;
         }
 
-        /* Animasi untuk marquee text di hero section */
-        .marquee-container {
-            overflow: hidden;
-            position: relative;
-            width: 100%;
-        }
-        .marquee {
-            display: inline-block;
-            white-space: nowrap;
-            animation: marquee 30s linear infinite;
-        }
-        .marquee-item {
-            display: inline-block;
-            padding: 0 2rem;
-            font-size: 6rem;
-            line-height: 1;
-            font-weight: 800;
+        @keyframes kinetic-flow {
+            to {
+                background-position: -200% center;
+            }
         }
 
-        /* Elemen nirmana di hero section */
-        #hero::before {
+
+        /* Efek glassmorphism utama */
+        .glass-card {
+            background: rgba(18, 18, 18, 0.5);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative; 
+            overflow: hidden; 
+        }
+
+        /* Efek hover artistik ala DKV pada kartu */
+        .glass-card::before {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 700px;
-            height: 700px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.05), transparent 70%);
-            z-index: -1;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.15) 0%, transparent 40%);
+            opacity: 0;
+            transition: opacity 0.4s ease-out;
             pointer-events: none;
         }
 
-        @keyframes marquee {
-            0% { transform: translateX(0%); }
-            100% { transform: translateX(-50%); }
-        }
-
-        /* Styling untuk glassmorphism effect pada nav & project overlay */
-        .glass-effect {
-            background: rgba(17, 17, 17, 0.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Animasi fade-in saat scroll */
-        .fade-in-section {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .fade-in-section.is-visible {
+        .glass-card:hover::before {
             opacity: 1;
-            transform: translateY(0);
-        }
-        
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #111111;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #4A5568;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #718096;
         }
 
-        /* Preloader / Loading Screen Styles */
-        #preloader {
-            transition: opacity 0.75s ease-in-out, visibility 0.75s ease-in-out;
-        }
-
-        #preloader.preloader-hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        .nirmana-loader {
-            display: flex;
-            gap: 12px;
-        }
-
-        .nirmana-loader .dot {
-            width: 16px;
-            height: 16px;
-            background-color: #E5E7EB;
-            border-radius: 50%;
-            animation: pulse 1.5s infinite ease-in-out;
-        }
-
-        /* Memberi jeda animasi (ritme) pada setiap titik */
-        .nirmana-loader .dot:nth-child(1) { animation-delay: -0.30s; }
-        .nirmana-loader .dot:nth-child(2) { animation-delay: -0.15s; }
-        .nirmana-loader .dot:nth-child(3) { animation-delay: 0s; }
-        .nirmana-loader .dot:nth-child(4) { animation-delay: 0.15s; }
-        .nirmana-loader .dot:nth-child(5) { animation-delay: 0.30s; }
-
-        @keyframes pulse {
-            0%, 60%, 100% {
-                transform: scale(0.6);
-                opacity: 0.6;
-            }
-            30% {
-                transform: scale(1.0);
-                opacity: 1;
-            }
-        }
-
-        /* Modal / Lightbox Styles */
-        #portfolio-modal.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        #portfolio-modal.active > div {
-            transform: scale(1);
-        }
-
-        /* Nirmana Garis di Hero Section */
+        /* Styling untuk Nirmana Garis */
         .nirmana-lines path {
-            stroke: rgba(255, 255, 255, 0.2);
+            stroke: rgba(255, 255, 255, 0.1);
             stroke-width: 1px;
             fill: transparent;
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
-            animation: draw-line 12s ease-in-out infinite;
+            animation: draw-line 15s ease-in-out infinite;
         }
 
         @keyframes draw-line {
-            50% {
-                stroke-dashoffset: 0;
-            }
-            100% {
-                stroke-dashoffset: -1000;
-            }
+            50% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: -1000; }
         }
 
-        /* Memberi jeda dan durasi berbeda agar lebih dinamis */
         .nirmana-lines .line-1 { animation-delay: 0s; }
-        .nirmana-lines .line-2 { animation-delay: -2s; animation-duration: 15s;}
-        .nirmana-lines .line-3 { animation-delay: -4s; }
-        .nirmana-lines .line-4 { animation-delay: -6s; animation-duration: 10s;}
-        .nirmana-lines .line-5 { animation-delay: -8s; }
+        .nirmana-lines .line-2 { animation-delay: -3s; animation-duration: 18s;}
+        .nirmana-lines .line-3 { animation-delay: -6s; }
+        .nirmana-lines .line-4 { animation-delay: -9s; animation-duration: 12s;}
 
-        /* Navigasi Autohide */
-        header { 
-            transition: transform 0.4s ease-in-out; 
+        /* Animasi "Reveal" untuk teks */
+        .reveal-text {
+            clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+            transform: translateY(30px);
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-        /* Animasi hide ke bawah untuk mobile */
-        header.header-hidden { 
-            transform: translateY(120%); 
+
+        .reveal-text.visible {
+             clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+             transform: translateY(0);
+             opacity: 1;
         }
-        /* Animasi hide ke atas untuk desktop */
-        @media (min-width: 768px) {
-            header.header-hidden {
-                transform: translateY(-120%);
-            }
+        
+        /* Custom glowing button */
+        .glowing-btn {
+            position: relative;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
         }
+
+        .glowing-btn:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: conic-gradient(from 180deg at 50% 50%, #3B82F6 0%, #8B5CF6 25%, #EC4899 50%, #10B981 75%, #3B82F6 100%);
+            transform: translate(-50%, -50%) rotate(0deg);
+            transition: transform 1s ease;
+        }
+
+        .glowing-btn:hover:before {
+            transform: translate(-50%, -50%) rotate(360deg);
+        }
+
+        .glowing-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        
+        /* Styling untuk Kursor Kustom */
+        #custom-cursor {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background-color: #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 10000;
+            transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+            mix-blend-mode: difference;
+        }
+        #custom-cursor.grow {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Style untuk filter & project card */
+        .filter-btn, .project-card, .contact-icon {
+            cursor: none; /* Gunakan kursor kustom */
+        }
+        
+        .filter-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #a0a0a0;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            border: 1px solid transparent;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .filter-btn.active {
+            background-color: #fff;
+            color: #0A0A0A;
+            border-color: #fff;
+        }
+
+        .project-card {
+            background-color: rgba(36, 36, 36, 0.5);
+            padding: 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            background-color: rgba(48, 48, 48, 0.7);
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Styling untuk Preloader DKV */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background-color: #0A0A0A;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 0.75s ease, visibility 0.75s ease;
+        }
+
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .preloader-logo {
+            width: 80px;
+            height: 80px;
+        }
+
+        .preloader-logo path {
+            stroke: #ffffff;
+            stroke-width: 8;
+            stroke-dasharray: 500;
+            stroke-dashoffset: 500;
+            animation: draw-logo 2s ease-in-out forwards;
+        }
+
+        @keyframes draw-logo {
+            to { stroke-dashoffset: 0; }
+        }
+
     </style>
 </head>
 <body class="antialiased">
 
-    <!-- Preloader / Loading Screen -->
-    <div id="preloader" class="fixed inset-0 bg-[#111111] flex justify-center items-center z-[100]">
-        <div class="nirmana-loader">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
+    <!-- Preloader DKV -->
+    <div id="preloader">
+        <svg class="preloader-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <!-- Huruf H -->
+            <path d="M15 20 L15 80 M45 20 L45 80 M15 50 L45 50" fill="none"/>
+            <!-- Huruf P -->
+            <path d="M55 20 L55 80 M55 20 A 15 15, 0, 1, 1, 55, 50" fill="none"/>
+        </svg>
+    </div>
+
+    <!-- Kursor Kustom -->
+    <div id="custom-cursor"></div>
+
+    <!-- Kontainer untuk efek nirmana background -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute inset-0 nirmana-lines">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                <path d="M-100,10% L110%,10%" class="line-1"></path>
+                <path d="M10%,-20% L10%,120%" class="line-2"></path>
+                <path d="M-20%,80% L120%,80%" class="line-3"></path>
+                <path d="M90%,120% L90%,-20%" class="line-4"></path>
+            </svg>
         </div>
     </div>
 
-    <!-- Header / Navigasi -->
-    <header class="fixed bottom-0 left-0 right-0 z-50 md:top-0 md:bottom-auto">
-        <nav class="container mx-auto px-6 py-4">
-            <div class="glass-effect rounded-3xl px-4 py-2 transition-all duration-300 ease-in-out">
-                <!-- Desktop View -->
-                <div class="hidden md:flex items-center justify-between">
-                    <a href="#" class="font-syne text-xl font-bold tracking-wider">HADI PRASETIA.</a>
-                    <div class="flex items-center space-x-8">
-                        <a href="#about" class="hover:text-white transition-colors duration-300">Tentang</a>
-                        <a href="#works" class="hover:text-white transition-colors duration-300">Karya</a>
-                        <a href="galeri.html" class="hover:text-white transition-colors duration-300">Galeri</a>
-                        <a href="#contact" class="bg-gray-200 text-gray-900 font-bold px-5 py-2 rounded-full hover:bg-white transition-colors duration-300">Hubungi</a>
-                    </div>
-                </div>
 
-                <!-- Mobile View -->
-                <div class="md:hidden flex justify-around items-center">
-                    <!-- Home Icon (Active) -->
-                    <a href="#" class="flex flex-col items-center text-white transition-colors p-2">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-                        <span class="text-xs mt-1 font-bold">Home</span>
-                    </a>
-                    <!-- Works Icon -->
-                    <a href="#works" class="flex flex-col items-center text-gray-400 hover:text-white transition-colors p-2">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                        <span class="text-xs mt-1">Karya</span>
-                    </a>
-                    <!-- Gallery Icon -->
-                    <a href="galeri.html" class="flex flex-col items-center text-gray-400 hover:text-white transition-colors p-2">
-                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        <span class="text-xs mt-1">Galeri</span>
-                    </a>
-                    <!-- Contact Icon -->
-                    <a href="#contact" class="flex flex-col items-center text-gray-400 hover:text-white transition-colors p-2">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                        <span class="text-xs mt-1">Kontak</span>
-                    </a>
-                </div>
-            </div>
-        </nav>
-    </header>
+    <!-- Kontainer utama dengan padding -->
+    <div id="main-container" class="relative max-w-7xl mx-auto">
 
-    <main class="pb-28 md:pb-0">
-
-        <!-- Hero Section -->
-        <section id="hero" class="min-h-screen flex flex-col justify-center items-center overflow-hidden relative">
-            <div class="text-center mb-12 px-4 z-10">
-                <h1 class="font-syne text-4xl md:text-6xl font-bold leading-tight">
-                    Desainer Grafis & Visual
+        <!-- Header / Hero Section dengan Golden Ratio -->
+        <header class="min-h-screen grid grid-cols-1 md:grid-cols-8 items-center gap-8 px-4 sm:px-6 lg:px-8">
+            <!-- Kolom Teks (3/8) -->
+            <div class="md:col-span-3 text-center md:text-left reveal-text">
+                <span class="text-lg font-semibold text-gray-400">HALO, SAYA</span>
+                <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mt-2 kinetic-title">
+                    Hadi Prasetia
                 </h1>
-                <p class="mt-4 text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
-                    Mengubah ide kompleks menjadi karya visual yang indah, simpel, dan berkesan.
+                <p class="mt-4 text-lg sm:text-xl text-gray-300 max-w-md mx-auto md:mx-0">
+                   Seorang Desainer Grafis & Visual yang mengubah ide menjadi karya yang berkesan.
                 </p>
-            </div>
-            
-            <!-- Elemen Nirmana Garis (SVG) -->
-            <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden nirmana-lines">
-                <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                    <path d="M-100,15% L25%,15%" class="line-1"></path>
-                    <path d="M70%,5% L120%,5%" class="line-2"></path>
-                    <path d="M40%,95% L110%,95%" class="line-3"></path>
-                    <path d="M5%,-20% L5%,120%" class="line-4"></path>
-                    <path d="M95%,-20% L95%,120%" class="line-5"></path>
-                </svg>
-            </div>
-
-            <!-- Marquee/Scrolling Text -->
-            <div class="marquee-container w-full select-none">
-                <div class="marquee">
-                    <span class="marquee-item text-gray-700">BRANDING</span>
-                    <span class="marquee-item text-white">UI/UX DESIGN</span>
-                    <span class="marquee-item text-gray-700">ILUSTRASI</span>
-                    <span class="marquee-item text-white">MOTION GRAPHIC</span>
-                    <!-- Duplicate for seamless loop -->
-                    <span class="marquee-item text-gray-700">BRANDING</span>
-                    <span class="marquee-item text-white">UI/UX DESIGN</span>
-                    <span class="marquee-item text-gray-700">ILUSTRASI</span>
-                    <span class="marquee-item text-white">MOTION GRAPHIC</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Tentang Saya Section -->
-        <section id="about" class="py-20 md:py-32 fade-in-section">
-            <div class="container mx-auto px-6">
-                <div class="grid md:grid-cols-5 gap-12 items-center">
-                    <div class="md:col-span-2">
-                        <img src="https://avatars.githubusercontent.com/u/68311980" alt="Foto Hadi Prasetia" class="rounded-2xl w-full h-auto object-cover">
-                    </div>
-                    <div class="md:col-span-3">
-                        <h2 class="font-syne text-4xl md:text-5xl font-bold mb-6">Halo, Saya Hadi Prasetia</h2>
-                        <p class="text-lg text-gray-400 mb-4 leading-relaxed">
-                            Saya adalah seorang Mahasiswa Desain Komunikasi Visual di Universitas Bunda Mulia dengan hasrat mendalam untuk menciptakan identitas visual yang kuat dan pengalaman digital yang intuitif. Saya bersemangat membantu berbagai brand untuk berkomunikasi secara lebih efektif melalui desain.
-                        </p>
-                        <p class="text-lg text-gray-400 mb-8 leading-relaxed">
-                            Keahlian saya meliputi branding, desain antarmuka (UI/UX), dan ilustrasi. Saya percaya bahwa desain yang baik adalah perpaduan antara estetika yang menawan dan fungsionalitas yang cerdas.
-                        </p>
-                        <a href="#contact" class="inline-block bg-transparent border-2 border-gray-300 text-gray-300 font-bold px-8 py-3 rounded-full hover:bg-white hover:text-gray-900 transition-all duration-300">Mari Berkolaborasi</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Karya Pilihan Section -->
-        <section id="works" class="py-20 md:py-32 bg-gray-900/50 fade-in-section">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-16">
-                    <h2 class="font-syne text-4xl md:text-5xl font-bold">Karya Pilihan</h2>
-                    <p class="mt-4 text-lg text-gray-400">Klik pada gambar untuk melihat detail proyek.</p>
-                </div>
-                
-                <!-- Portfolio Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Project 1 (Wide) -->
-                    <a href="#" class="group block relative overflow-hidden rounded-2xl lg:col-span-2 cursor-pointer" 
-                       data-title="Desain Aplikasi Mobile" 
-                       data-description="Sebuah konsep desain antarmuka untuk aplikasi mobile banking yang berfokus pada kemudahan penggunaan dan tampilan yang bersih. Dibuat menggunakan Figma dengan pendekatan user-centered design.<br><br><strong>Tools:</strong> Figma, Adobe Illustrator.">
-                        <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/1.png" alt="Desain Aplikasi Mobile" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0">
-                        <div class="absolute inset-0 bg-black/40 flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                            <div>
-                                <h3 class="text-2xl font-bold text-white">Desain Aplikasi Mobile</h3>
-                                <p class="text-gray-300">UI/UX Design</p>
-                            </div>
-                        </div>
-                    </a>
-                    <!-- Project 2 -->
-                    <a href="#" class="group block relative overflow-hidden rounded-2xl cursor-pointer"
-                       data-title="Logo Penguin Ceria"
-                       data-description="Desain logo untuk sebuah brand anak-anak, mengusung konsep keceriaan dan minimalisme. Bentuk geometris sederhana digunakan untuk menciptakan karakter penguin yang mudah diingat. <br><br><strong>Tools:</strong> Adobe Illustrator.">
-                        <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/penguin%20white.png" alt="Ilustrasi Logo Penguin" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0">
-                        <div class="absolute inset-0 bg-black/40 flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                            <div>
-                                <h3 class="text-2xl font-bold text-white">Logo Penguin Ceria</h3>
-                                <p class="text-gray-300">Ilustrasi & Branding</p>
-                            </div>
-                        </div>
-                    </a>
-                    <!-- Project 3 -->
-                    <a href="#" class="group block relative overflow-hidden rounded-2xl cursor-pointer"
-                       data-title="Ilustrasi Karakter Focalors"
-                       data-description="Fan-art ilustrasi karakter Focalors dari game populer Genshin Impact. Dibuat dengan gaya anime yang detail, fokus pada pencahayaan dan komposisi warna yang dramatis.<br><br><strong>Tools:</strong> Procreate, iPad Pro.">
-                        <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/focalor.png" alt="Ilustrasi Karakter Focalors" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0">
-                        <div class="absolute inset-0 bg-black/40 flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                            <div>
-                                <h3 class="text-2xl font-bold text-white">Ilustrasi Karakter Focalors</h3>
-                                <p class="text-gray-300">Ilustrasi Digital</p>
-                            </div>
-                        </div>
-                    </a>
-                    <!-- Project 4 -->
-                    <a href="#" class="group block relative overflow-hidden rounded-2xl cursor-pointer"
-                       data-title="Desain Karakter Anime"
-                       data-description="Sebuah desain karakter original (OC) dengan gaya anime. Eksplorasi desain kostum dan ekspresi untuk proyek komik pribadi. <br><br><strong>Tools:</strong> Clip Studio Paint.">
-                        <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/anime.png" alt="Desain Karakter Anime" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0">
-                        <div class="absolute inset-0 bg-black/40 flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                           <div>
-                                <h3 class="text-2xl font-bold text-white">Desain Karakter Anime</h3>
-                                <p class="text-gray-300">Ilustrasi</p>
-                            </div>
-                        </div>
-                    </a>
-                    <!-- Project 5 -->
-                    <a href="#" class="group block relative overflow-hidden rounded-2xl cursor-pointer"
-                       data-title="Personal Branding 'P'"
-                       data-description="Konsep logo monogram 'P' untuk personal branding. Desain ini menggabungkan kesan modern, simpel, dan elegan, cocok untuk materi promosi seorang profesional kreatif.<br><br><strong>Tools:</strong> Adobe Illustrator.">
-                        <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/pblack.png" alt="Personal Branding P" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0">
-                        <div class="absolute inset-0 bg-black/40 flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                           <div>
-                                <h3 class="text-2xl font-bold text-white">Personal Branding 'P'</h3>
-                                <p class="text-gray-300">Logo Design</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Kontak Section -->
-        <section id="contact" class="py-20 md:py-40 text-center fade-in-section">
-            <div class="container mx-auto px-6">
-                 <h2 class="font-syne text-4xl md:text-6xl font-extrabold mb-4">Punya Ide Menarik?</h2>
-                 <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10">
-                    Saya selalu terbuka untuk proyek baru dan kolaborasi. Mari kita ciptakan sesuatu yang luar biasa bersama.
-                </p>
-                <a href="mailto:hadiprasetia7@gmail.com" class="text-2xl md:text-4xl font-syne font-bold text-gray-200 hover:text-white transition-colors duration-300 border-b-2 border-gray-500/50 hover:border-white pb-2">
-                    hadiprasetia7@gmail.com
+                <a href="#projects" class="inline-block mt-8">
+                    <button class="glowing-btn px-8 py-3 rounded-full font-semibold">
+                        <span class="glass-card absolute inset-0.5 rounded-full"></span>
+                        <span>Lihat Karya Saya</span>
+                    </button>
                 </a>
             </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="py-8 border-t border-gray-800 mb-24 md:mb-0">
-        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
-            <p class="text-gray-500 mb-4 md:mb-0">&copy; 2025 <span class="font-syne">Hadi Prasetia</span>. All Rights Reserved.</p>
-            <div class="flex flex-wrap justify-center gap-x-6 gap-y-2">
-                <a href="#" target="_blank" class="text-gray-500 hover:text-white transition-colors duration-300">Behance</a>
-                <a href="#" target="_blank" class="text-gray-500 hover:text-white transition-colors duration-300">Dribbble</a>
-                <a href="https://instagram.com/idhescobar_" target="_blank" class="text-gray-500 hover:text-white transition-colors duration-300">Instagram</a>
-                <a href="#" target="_blank" class="text-gray-500 hover:text-white transition-colors duration-300">LinkedIn</a>
-                <a href="https://wa.me/6287821991710" target="_blank" class="text-gray-500 hover:text-white transition-colors duration-300">WhatsApp</a>
+            <!-- Kolom Gambar (5/8) -->
+            <div class="md:col-span-5 w-full h-[60vh] md:h-[75vh] glass-card rounded-3xl reveal-text group relative">
+                 <img class="w-full h-full object-cover rounded-3xl filter grayscale group-hover:grayscale-0 transition-all duration-500 ease-in-out" src="https://avatars.githubusercontent.com/u/68311980" alt="Foto Profil Hadi Prasetia">
+                 <!-- Golden Spiral Overlay -->
+                 <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                    <svg viewBox="0 0 1618 1000" xmlns="http://www.w3.org/2000/svg" class="w-full h-full" preserveAspectRatio="xMidYMid slice">
+                        <path d="M 1000,0 A 1000,1000 0 0 0 0,1000 M 0,1000 H 1618 V 0 H 1000 M 1000,618 A 382,382 0 0 1 618,1000 M 618,1000 V 618 H 1000 M 618,618 A 236,236 0 0 0 382,382 M 382,382 H 618 V 618 M 382,618 A 146,146 0 0 1 528,472 M 528,472 V 618 H 382 M 528,472 A 90,90 0 0 0 438,382 M 438,382 H 528 V 472 M 438,472 A 56,56 0 0 1 494,416 M 494,416 V 472 H 438" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+                    </svg>
+                </div>
             </div>
-        </div>
-    </footer>
+        </header>
+        
+        <div id="main-content" class="px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
+            <!-- Main Content Grid dengan Golden Ratio -->
+            <main class="grid grid-cols-1 md:grid-cols-5 gap-8">
 
-    <!-- Modal/Lightbox Structure -->
-    <div id="portfolio-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4 transition-opacity duration-300 opacity-0 pointer-events-none">
-        <div class="bg-[#1a1a1a] border border-gray-700 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row transform scale-95 transition-all duration-300 relative">
-            <!-- Content -->
-            <div class="w-full md:w-3/5 bg-black flex items-center justify-center">
-                <img id="modal-img" src="" alt="Project Image" class="w-full h-auto max-h-[90vh] object-contain">
-            </div>
-            <div class="w-full md:w-2/5 p-8 overflow-y-auto">
-                <h3 id="modal-title" class="font-syne text-3xl font-bold text-white mb-4"></h3>
-                <p id="modal-description" class="text-gray-300 leading-relaxed"></p>
-            </div>
-            <!-- Close Button -->
-            <button id="modal-close" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
+                <!-- Kolom Kiri (2/5) -->
+                <div class="md:col-span-2 space-y-8">
+                    <!-- About Me Card -->
+                    <section class="glass-card p-6 rounded-3xl reveal-text">
+                        <h2 class="text-2xl font-bold text-white mb-4">Tentang Saya</h2>
+                        <p class="text-gray-300">
+                            Saya adalah seorang Mahasiswa Desain Komunikasi Visual di Universitas Bunda Mulia dengan hasrat mendalam untuk menciptakan identitas visual yang kuat dan pengalaman digital yang intuitif. Saya bersemangat membantu berbagai brand untuk berkomunikasi secara lebih efektif melalui desain.
+                        </p>
+                    </section>
+                </div>
+
+                <!-- Kolom Kanan (3/5) -->
+                <div class="md:col-span-3 space-y-8">
+                    <!-- Projects Section -->
+                    <section id="projects" class="glass-card p-6 sm:p-8 rounded-3xl reveal-text">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+                            <h2 class="text-3xl font-bold text-white mb-4 sm:mb-0">Proyek Unggulan</h2>
+                            <div id="filters" class="flex items-center gap-2 flex-wrap">
+                                <button class="filter-btn active" data-filter="all">Semua</button>
+                                <button class="filter-btn" data-filter="video">Video</button>
+                                <button class="filter-btn" data-filter="uiux">UI/UX</button>
+                                <button class="filter-btn" data-filter="seni">Seni</button>
+                            </div>
+                        </div>
+
+                        <!-- Project Grid -->
+                        <div id="project-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            
+                            <!-- Project 1: UI/UX -->
+                            <div class="project-card" data-category="uiux" data-image="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/1.png" data-title="Desain Aplikasi Mobile" data-description="Sebuah konsep desain antarmuka untuk aplikasi mobile banking yang berfokus pada kemudahan penggunaan dan tampilan yang bersih. Dibuat menggunakan Figma dengan pendekatan user-centered design. Tools: Figma, Adobe Illustrator.">
+                                <div class="flex items-start gap-3">
+                                    <div class="text-purple-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v12a2 2 0 01-2 2H7a2 2 0 01-2-2V4zm2 0v12h6V4H7zm6 2h-4a1 1 0 000 2h4a1 1 0 100-2z" /></svg></div>
+                                    <div>
+                                        <h3 class="font-semibold text-white">Desain Aplikasi Mobile</h3>
+                                        <p class="text-sm text-gray-400">Studi kasus UI/UX.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Project 2: Seni -->
+                            <div class="project-card" data-category="seni" data-image="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/penguin%20white.png" data-title="Logo Penguin Ceria" data-description="Desain logo untuk sebuah brand anak-anak, mengusung konsep keceriaan dan minimalisme. Bentuk geometris sederhana digunakan untuk menciptakan karakter penguin yang mudah diingat. Tools: Adobe Illustrator.">
+                                <div class="flex items-start gap-3">
+                                    <div class="text-cyan-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 10a6 6 0 1112 0 6 6 0 01-12 0zM10 18a8 8 0 100-16 8 8 0 000 16z" clip-rule="evenodd" /></svg></div>
+                                    <div>
+                                        <h3 class="font-semibold text-white">Logo Penguin Ceria</h3>
+                                        <p class="text-sm text-gray-400">Ilustrasi & Branding.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Project 3: Seni -->
+                            <div class="project-card" data-category="seni" data-image="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/focalor.png" data-title="Ilustrasi Karakter Focalors" data-description="Fan-art ilustrasi karakter Focalors dari game populer Genshin Impact. Dibuat dengan gaya anime yang detail, fokus pada pencahayaan dan komposisi warna yang dramatis. Tools: Procreate, iPad Pro.">
+                                 <div class="flex items-start gap-3">
+                                    <div class="text-green-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg></div>
+                                    <div>
+                                        <h3 class="font-semibold text-white">Ilustrasi Karakter Focalors</h3>
+                                        <p class="text-sm text-gray-400">Ilustrasi Digital.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Project 4: Seni -->
+                            <div class="project-card" data-category="seni" data-image="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/anime.png" data-title="Desain Karakter Anime" data-description="Sebuah desain karakter original (OC) dengan gaya anime. Eksplorasi desain kostum dan ekspresi untuk proyek komik pribadi. Tools: Clip Studio Paint.">
+                                 <div class="flex items-start gap-3">
+                                    <div class="text-yellow-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg></div>
+                                    <div>
+                                        <h3 class="font-semibold text-white">Desain Karakter Anime</h3>
+                                        <p class="text-sm text-gray-400">Ilustrasi.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Project 5: Seni -->
+                            <div class="project-card" data-category="seni" data-image="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/pblack.png" data-title="Personal Branding 'P'" data-description="Konsep logo monogram 'P' untuk personal branding. Desain ini menggabungkan kesan modern, simpel, dan elegan, cocok untuk materi promosi seorang profesional kreatif. Tools: Adobe Illustrator.">
+                                 <div class="flex items-start gap-3">
+                                    <div class="text-pink-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3V3z" /></svg></div>
+                                    <div>
+                                        <h3 class="font-semibold text-white">Personal Branding 'P'</h3>
+                                        <p class="text-sm text-gray-400">Logo Design.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Project 6: Video (Placeholder) -->
+                            <div class="project-card" data-category="video" data-image="https://placehold.co/800x450/1A1A1A/FFFFFF?text=Video+Profil" data-title="Video Profil V3" data-description="Sebuah pendekatan sinematik untuk video profil perusahaan yang menonjolkan nilai-nilai inti dan budaya kerja. Menggunakan teknik penceritaan visual yang kuat untuk membangun koneksi emosional dengan audiens.">
+                                <div class="flex items-start gap-3">
+                                    <div class="text-blue-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" /></svg></div>
+                                    <div>
+                                        <h3 class="font-semibold text-white">Video Profil V3</h3>
+                                        <p class="text-sm text-gray-400">Pendekatan sinematik.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+                </div>
+            </main>
+
+            <!-- Skills Section -->
+            <section class="mt-8 glass-card p-6 sm:p-8 rounded-3xl reveal-text">
+                <h2 class="text-3xl font-bold text-white mb-6">Keahlian & Teknologi</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-8">
+                    <!-- Produksi Video & Visual -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-300 mb-3">Produksi Video & Visual</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-blue-500/20 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">Adobe Premiere Pro</span>
+                            <span class="bg-cyan-500/20 text-cyan-300 text-sm font-medium px-3 py-1 rounded-full">CapCut</span>
+                            <span class="bg-orange-500/20 text-orange-300 text-sm font-medium px-3 py-1 rounded-full">Adobe Illustrator</span>
+                            <span class="bg-sky-500/20 text-sky-300 text-sm font-medium px-3 py-1 rounded-full">Adobe Photoshop</span>
+                            <span class="bg-emerald-500/20 text-emerald-300 text-sm font-medium px-3 py-1 rounded-full">Canva</span>
+                        </div>
+                    </div>
+                    <!-- Desain UI/UX -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-300 mb-3">Desain UI/UX</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-fuchsia-500/20 text-fuchsia-300 text-sm font-medium px-3 py-1 rounded-full">UI/UX Design</span>
+                            <span class="bg-pink-500/20 text-pink-300 text-sm font-medium px-3 py-1 rounded-full">Figma</span>
+                            <span class="bg-purple-500/20 text-purple-300 text-sm font-medium px-3 py-1 rounded-full">Adobe XD</span>
+                        </div>
+                    </div>
+                    <!-- Pengembangan Web -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-300 mb-3">Pengembangan Web</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-orange-600/20 text-orange-400 text-sm font-medium px-3 py-1 rounded-full">HTML</span>
+                            <span class="bg-blue-500/20 text-blue-300 text-sm font-medium px-3 py-1 rounded-full">CSS</span>
+                            <span class="bg-yellow-400/20 text-yellow-200 text-sm font-medium px-3 py-1 rounded-full">JavaScript</span>
+                            <span class="bg-indigo-400/20 text-indigo-300 text-sm font-medium px-3 py-1 rounded-full">PHP</span>
+                            <span class="bg-sky-400/20 text-sky-300 text-sm font-medium px-3 py-1 rounded-full">Python</span>
+                            <span class="bg-cyan-400/20 text-cyan-300 text-sm font-medium px-3 py-1 rounded-full">MySQL</span>
+                            <span class="bg-red-500/20 text-red-300 text-sm font-medium px-3 py-1 rounded-full">Laravel</span>
+                            <span class="bg-green-500/20 text-green-300 text-sm font-medium px-3 py-1 rounded-full">Responsive Design</span>
+                        </div>
+                    </div>
+                    <!-- IT & Jaringan -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-300 mb-3">IT & Jaringan</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-rose-500/20 text-rose-300 text-sm font-medium px-3 py-1 rounded-full">Basic Server Config</span>
+                            <span class="bg-amber-500/20 text-amber-300 text-sm font-medium px-3 py-1 rounded-full">Server Management</span>
+                            <span class="bg-teal-500/20 text-teal-300 text-sm font-medium px-3 py-1 rounded-full">Mikrotik Config</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Contact Section -->
+            <section id="contact" class="mt-16 sm:mt-24 glass-card p-6 sm:p-8 rounded-3xl reveal-text">
+                <h2 class="text-4xl font-bold text-center text-white">Hubungi Saya</h2>
+                <p class="text-center text-gray-300 max-w-xl mx-auto mt-2">
+                    Punya ide menarik? Saya selalu terbuka untuk proyek baru dan kolaborasi. Mari kita ciptakan sesuatu yang luar biasa bersama.
+                </p>
+                <div class="mt-10 max-w-lg mx-auto grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-4">
+                    <!-- Komunikasi Langsung -->
+                    <div class="text-center">
+                        <h3 class="text-sm font-semibold tracking-widest text-gray-400 uppercase">Komunikasi Langsung</h3>
+                        <div class="flex justify-center items-center gap-4 mt-4">
+                            <a href="mailto:hadi.prasetia.cr@gmail.com" class="contact-icon w-14 h-14 rounded-full bg-slate-700 hover:bg-slate-600 flex items-center justify-center transition-transform" aria-label="Email" title="Email">
+                                <svg class="w-7 h-7 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
+                            </a>
+                             <a href="https://wa.me/6287821991710" target="_blank" rel="noopener noreferrer" class="contact-icon w-14 h-14 rounded-full bg-green-500 hover:bg-green-400 flex items-center justify-center transition-transform" aria-label="WhatsApp" title="WhatsApp">
+                                <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.905 6.101l-1.217 4.432 4.515-1.182z" /></svg>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Profil & Sosial -->
+                    <div class="text-center">
+                        <h3 class="text-sm font-semibold tracking-widest text-gray-400 uppercase">Profil & Sosial</h3>
+                        <div class="flex justify-center items-center gap-4 mt-4">
+                            <a href="https://instagram.com/idhescobar_" target="_blank" rel="noopener noreferrer" class="contact-icon w-14 h-14 rounded-full bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center transition-transform" aria-label="Instagram" title="Instagram">
+                                <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.585-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.585-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.585.069-4.85c.149-3.225 1.664-4.771 4.919 4.919 1.266-.057 1.645-.069 4.85-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.947s-.014-3.667-.072-4.947c-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.441 1.441 1.441 1.441-.645 1.441-1.441-.645-1.44-1.441-1.44z" /></svg>
+                            </a>
+                            <a href="#" target="_blank" rel="noopener noreferrer" class="contact-icon w-14 h-14 rounded-full bg-gray-900 hover:bg-gray-800 flex items-center justify-center transition-transform" aria-label="GitHub" title="GitHub">
+                                <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.165 6.837 9.49.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd" /></svg>
+                            </a>
+                            <a href="#" target="_blank" rel="noopener noreferrer" class="contact-icon w-14 h-14 rounded-full bg-blue-600 hover:bg-blue-500 flex items-center justify-center transition-transform" aria-label="LinkedIn" title="LinkedIn">
+                               <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.206v4.248H8.014V8.588h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 7.405a1.2 1.2 0 100-2.4 1.2 1.2 0 000 2.4zM6.275 8.588H3.725V16.34h2.55V8.588zM17.638 2H6.362A4.362 4.362 0 002 6.362v11.276A4.362 4.362 0 006.362 22h11.276A4.362 4.362 0 0022 17.638V6.362A4.362 4.362 0 0017.638 2z" clip-rule="evenodd" /></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="text-center mt-16 sm:mt-24 text-gray-500">
+                <p>&copy; 2025 Hadi Prasetia. Didesain dan dikembangkan dengan sepenuh hati.</p>
+            </footer>
         </div>
     </div>
 
+    <!-- Project Modal -->
+    <div id="project-modal" class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div id="modal-content" class="glass-card rounded-3xl max-w-2xl w-full p-4 sm:p-6 relative transform scale-95 transition-transform duration-300">
+             <button id="close-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+             </button>
+             <div class="max-h-[80vh] overflow-y-auto pr-2">
+                 <img id="modal-img" src="" alt="Detail Proyek" class="rounded-2xl w-full h-auto mb-4">
+                 <h2 id="modal-title" class="text-2xl font-bold text-white"></h2>
+                 <p id="modal-description" class="mt-2 text-gray-300"></p>
+             </div>
+        </div>
+    </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Script untuk Preloader
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Logika Preloader ---
             const preloader = document.getElementById('preloader');
             window.addEventListener('load', () => {
                 setTimeout(() => {
-                    preloader.classList.add('preloader-hidden');
-                }, 300);
+                    preloader.classList.add('hidden');
+                }, 2200); 
             });
 
-            // Script untuk Navigasi Autohide
-            const header = document.querySelector('header');
-            let lastScrollTop = 0;
-            window.addEventListener('scroll', function() {
-                let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                if (scrollTop > lastScrollTop && scrollTop > 100) {
-                    // Scroll ke bawah
-                    header.classList.add('header-hidden');
-                } else {
-                    // Scroll ke atas
-                    header.classList.remove('header-hidden');
+            // --- Logika Tata Letak Acak ---
+            const randomizeLayout = () => {
+                const mainGrid = document.querySelector('main.grid');
+                if (mainGrid && mainGrid.children.length === 2) {
+                    if (Math.random() > 0.5) {
+                        mainGrid.appendChild(mainGrid.children[0]);
+                    }
                 }
-                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+            };
+            randomizeLayout();
+
+            // --- Efek hover artistik pada kartu ---
+            const cards = document.querySelectorAll('.glass-card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
             });
 
-            // Script untuk animasi fade-in saat scroll
-            const sections = document.querySelectorAll('.fade-in-section');
-            const observer = new IntersectionObserver(entries => {
+            // --- Logika Animasi Reveal Text ---
+            const revealElements = document.querySelectorAll('.reveal-text');
+            const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
+                        entry.target.classList.add('visible');
+                    } else {
+                        // [BARU] Tambahkan ini untuk animasi menutup saat scroll ke atas/keluar viewport
+                        entry.target.classList.remove('visible');
                     }
                 });
-            }, { threshold: 0.1 });
-            sections.forEach(section => {
-                observer.observe(section);
+            }, {
+                threshold: 0.1
+            });
+            revealElements.forEach(el => { observer.observe(el); });
+
+            // --- Project Filter and Modal Logic ---
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const projectCards = document.querySelectorAll('.project-card');
+            const projectGrid = document.getElementById('project-grid');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    const filter = button.dataset.filter;
+                    projectGrid.style.opacity = '0';
+                    setTimeout(() => {
+                        projectCards.forEach(card => {
+                            if (filter === 'all' || card.dataset.category === filter) {
+                                card.style.display = 'block';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+                         projectGrid.style.opacity = '1';
+                    }, 300);
+                });
             });
 
-            // Script untuk Portfolio Modal/Lightbox
-            const portfolioItems = document.querySelectorAll('#works .group');
-            const modal = document.getElementById('portfolio-modal');
+            // Modal Logic
+            const modal = document.getElementById('project-modal');
+            const modalContent = document.getElementById('modal-content');
+            const closeModalBtn = document.getElementById('close-modal');
             const modalImg = document.getElementById('modal-img');
             const modalTitle = document.getElementById('modal-title');
             const modalDescription = document.getElementById('modal-description');
-            const closeModalBtn = document.getElementById('modal-close');
-
-            portfolioItems.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    const imgSrc = this.querySelector('img').src;
-                    const title = this.dataset.title;
-                    const description = this.dataset.description;
-
-                    modalImg.src = imgSrc;
-                    modalTitle.textContent = title;
-                    modalDescription.innerHTML = description;
-
-                    modal.classList.add('active');
-                    document.body.style.overflow = 'hidden';
+            
+            projectCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    modalImg.src = card.dataset.image;
+                    modalTitle.textContent = card.dataset.title;
+                    modalDescription.textContent = card.dataset.description;
+                    modal.classList.remove('opacity-0', 'pointer-events-none');
+                    modalContent.classList.remove('scale-95');
                 });
             });
 
             const closeModal = () => {
-                modal.classList.remove('active');
-                document.body.style.overflow = '';
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                modalContent.classList.add('scale-95');
             };
 
             closeModalBtn.addEventListener('click', closeModal);
             modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal();
-                }
+                if (e.target === modal) closeModal();
             });
-            window.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modal.classList.contains('active')) {
-                    closeModal();
-                }
-            });
+
+            // --- Logika Kursor Kustom & Efek Magnetik ---
+            const cursor = document.getElementById('custom-cursor');
+            const magneticIcons = document.querySelectorAll('.contact-icon');
+            const hoverableElements = document.querySelectorAll('a, button, .filter-btn, .project-card, .contact-icon');
+            const canHover = window.matchMedia('(hover: hover)').matches;
+
+            if (canHover) {
+                document.addEventListener('mousemove', (e) => {
+                    cursor.style.left = `${e.clientX}px`;
+                    cursor.style.top = `${e.clientY}px`;
+
+                    // Magnetic effect
+                    magneticIcons.forEach(icon => {
+                        const rect = icon.getBoundingClientRect();
+                        const x = rect.left + rect.width / 2;
+                        const y = rect.top + rect.height / 2;
+                        const distance = Math.sqrt((e.clientX - x) ** 2 + (e.clientY - y) ** 2);
+
+                        if (distance < 50) { // Jarak aktivasi magnet
+                            icon.style.transform = `translate(${(e.clientX - x) * 0.3}px, ${(e.clientY - y) * 0.3}px)`;
+                        } else {
+                            icon.style.transform = 'translate(0,0)';
+                        }
+                    });
+                });
+
+                hoverableElements.forEach(el => {
+                    el.addEventListener('mouseenter', () => cursor.classList.add('grow'));
+                    el.addEventListener('mouseleave', () => cursor.classList.remove('grow'));
+                });
+            } else {
+                cursor.style.display = 'none';
+            }
         });
     </script>
 </body>
