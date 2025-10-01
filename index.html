@@ -258,11 +258,11 @@
     <!-- Kontainer untuk efek nirmana background -->
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div class="absolute inset-0 nirmana-lines">
-            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                <path d="M-100,10% L110%,10%" class="line-1"></path>
-                <path d="M10%,-20% L10%,120%" class="line-2"></path>
-                <path d="M-20%,80% L120%,80%" class="line-3"></path>
-                <path d="M90%,120% L90%,-20%" class="line-4"></path>
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1000 1000">
+                <path d="M-100 100 L1100 100" class="line-1"></path>
+                <path d="M100 -200 L100 1200" class="line-2"></path>
+                <path d="M-200 800 L1200 800" class="line-3"></path>
+                <path d="M900 1200 L900 -200" class="line-4"></path>
             </svg>
         </div>
     </div>
@@ -553,13 +553,22 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Logika Preloader ---
+            // --- [DIPERBAIKI] Logika Preloader yang Lebih Tangguh ---
             const preloader = document.getElementById('preloader');
-            window.addEventListener('load', () => {
-                setTimeout(() => {
+            const hidePreloader = () => {
+                // Pastikan fungsi ini hanya berjalan sekali
+                if (!preloader.classList.contains('hidden')) {
                     preloader.classList.add('hidden');
-                }, 2200); 
+                }
+            };
+            
+            // Pemicu utama: Sembunyikan setelah halaman selesai loading + animasi
+            window.addEventListener('load', () => {
+                setTimeout(hidePreloader, 2200); 
             });
+
+            // Pemicu failsafe: Paksa sembunyikan setelah 4 detik jika 'load' event gagal
+            setTimeout(hidePreloader, 4000);
 
             // --- Efek hover artistik pada kartu ---
             const cards = document.querySelectorAll('.glass-card');
@@ -676,4 +685,6 @@
     </script>
 </body>
 </html>
+
+
 
