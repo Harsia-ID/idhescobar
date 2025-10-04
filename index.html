@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hadi Prasetia | Graphic & Visual Designer</title>
+    <title>Hadi Prasetia | Visual Data Weaver</title>
     
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -17,15 +17,26 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        /* [MERGED STYLE] Hybrid: Post-Apocalypse Foundation + DKV Polish */
+        /* [NEW THEME] The Data Weaver: Holographic & Analytical */
+        :root {
+            --bg-color: #050816;
+            --primary-accent: #00FFFF; /* Cyan */
+            --secondary-accent: #9333ea; /* Purple */
+            --text-primary: #E0E0E0;
+            --text-secondary: #a0a0a0;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0A0A0A;
-            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-            background-size: 25px 25px;
-            color: #E0E0E0;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(var(--primary-accent) 0.5px, transparent 0.5px),
+                radial-gradient(var(--secondary-accent) 0.5px, transparent 0.5px);
+            background-size: 30px 30px, 90px 90px;
+            background-position: 0 0, 15px 15px;
+            color: var(--text-primary);
             overflow-x: hidden;
-            cursor: none; /* Sembunyikan kursor default */
+            cursor: none;
         }
 
         h1, h2, h3, h4, h5, h6 {
@@ -33,52 +44,51 @@
             font-weight: 700;
         }
 
-        /* [FROM OLD PORTFOLIO] Kinetic Typography */
-        .kinetic-title {
-            background: linear-gradient(90deg, #a0a0a0 0%, #ffffff 25%, #c0c0c0 50%, #ffffff 75%, #a0a0a0 100%);
-            background-size: 200% auto;
-            color: transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            animation: kinetic-flow 5s linear infinite;
+        /* [NEW] Glitching/Decoding Title Effect */
+        .glitch-title {
+            position: relative;
+            color: var(--text-primary);
+            letter-spacing: 0.1em;
         }
-        @keyframes kinetic-flow { to { background-position: -200% center; } }
 
-        /* [FROM OLD PORTFOLIO] Glassmorphism Effect */
-        .glass-card {
-            background: rgba(18, 18, 18, 0.5);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        /* [NEW] Holographic Card Effect */
+        .holo-card {
+            background: linear-gradient(135deg, rgba(10, 25, 47, 0.4), rgba(147, 51, 234, 0.1));
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
-        .glass-card::before {
+        .holo-card:before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.1) 0%, transparent 40%);
-            opacity: 0;
-            transition: opacity 0.4s ease-out;
-            pointer-events: none;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(110deg, transparent 20%, rgba(0, 255, 255, 0.2) 50%, transparent 80%);
+            transition: transform 0.6s ease;
+            transform: skewX(-25deg);
         }
-        .glass-card:hover::before { opacity: 1; }
-        .project-card:hover { transform: translateY(-4px); border-color: rgba(255, 255, 255, 0.2); }
-
-        /* [FROM OLD PORTFOLIO] Animated Background Lines */
-        .nirmana-lines path {
-            stroke: rgba(255, 255, 255, 0.07); stroke-width: 1px; fill: transparent;
-            stroke-dasharray: 1000; stroke-dashoffset: 1000;
-            animation: draw-line 15s ease-in-out infinite;
+        .holo-card:hover:before {
+            transform: translateX(200%) skewX(-25deg);
         }
-        @keyframes draw-line { 50% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -1000; } }
-        .nirmana-lines .line-1 { animation-delay: 0s; }
-        .nirmana-lines .line-2 { animation-delay: -3s; animation-duration: 18s;}
-        .nirmana-lines .line-3 { animation-delay: -6s; }
-        .nirmana-lines .line-4 { animation-delay: -9s; animation-duration: 12s;}
+        .project-card:hover { transform: translateY(-4px); border-color: var(--primary-accent); }
 
-        /* [FROM OLD PORTFOLIO] Reveal Animation on Scroll */
+
+        /* [MODIFIED] Animated Background Lines - More Abstract/Data-like */
+        .data-stream path {
+            stroke: rgba(0, 255, 255, 0.08); stroke-width: 1px; fill: transparent;
+            stroke-dasharray: 1500; stroke-dashoffset: 1500;
+            animation: draw-stream 20s linear infinite;
+        }
+        @keyframes draw-stream { 50% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -1500; } }
+        .data-stream .stream-1 { animation-delay: -2s; animation-duration: 22s; }
+        .data-stream .stream-2 { animation-delay: -5s; }
+        .data-stream .stream-3 { animation-delay: -10s; animation-duration: 18s; }
+        .data-stream .stream-4 { animation-delay: -15s; }
+
+        /* Reveal Animation - Unchanged, works well */
         .reveal-text {
             clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
             transform: translateY(30px); opacity: 0;
@@ -89,46 +99,46 @@
             transform: translateY(0); opacity: 1;
         }
 
-        /* [FROM OLD PORTFOLIO] Custom Cursor */
+        /* [MODIFIED] Custom Cursor - Glow Effect */
         #custom-cursor {
-            position: fixed; width: 12px; height: 12px;
-            background-color: #fff; border-radius: 50%;
+            position: fixed; width: 10px; height: 10px;
+            background-color: var(--primary-accent);
+            border-radius: 50%;
             transform: translate(-50%, -50%);
             pointer-events: none; z-index: 10000;
-            transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
-            mix-blend-mode: difference;
+            transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+            box-shadow: 0 0 15px var(--primary-accent), 0 0 25px var(--primary-accent);
+            opacity: 0.7;
         }
         #custom-cursor.grow {
             width: 40px; height: 40px;
-            background-color: rgba(255, 255, 255, 0.5);
+            opacity: 0.2;
         }
         
+        /* Filter Buttons - Reskinned */
         .filter-btn, .project-card, .contact-icon { cursor: none; }
         .filter-btn {
-            background-color: rgba(255, 255, 255, 0.1); color: #a0a0a0;
+            background-color: rgba(0, 255, 255, 0.1); color: var(--text-secondary);
             padding: 6px 14px; border-radius: 9999px; border: 1px solid transparent;
             font-size: 0.875rem; font-weight: 500; transition: all 0.3s ease;
         }
-        .filter-btn:hover { background-color: rgba(255, 255, 255, 0.2); color: #fff; }
-        .filter-btn.active { background-color: #fff; color: #0A0A0A; border-color: #fff; }
+        .filter-btn:hover { background-color: rgba(0, 255, 255, 0.2); color: var(--primary-accent); }
+        .filter-btn.active { background-color: var(--primary-accent); color: var(--bg-color); border-color: var(--primary-accent); }
 
-        /* [FROM OLD PORTFOLIO] Preloader */
+        /* Preloader - Reskinned */
         #preloader {
-            position: fixed; inset: 0; background-color: #0A0A0A;
+            position: fixed; inset: 0; background-color: var(--bg-color);
             display: flex; justify-content: center; align-items: center;
             z-index: 100; transition: opacity 0.75s ease, visibility 0.75s ease;
         }
         #preloader.hidden { opacity: 0; visibility: hidden; }
         .preloader-logo { width: 80px; height: 80px; }
         .preloader-logo path {
-            stroke: #ffffff; stroke-width: 8;
+            stroke: var(--primary-accent); stroke-width: 8;
             stroke-dasharray: 500; stroke-dashoffset: 500;
             animation: draw-logo 2s ease-in-out forwards;
         }
         @keyframes draw-logo { to { stroke-dashoffset: 0; } }
-
-        /* Accent color from post-apocalypse theme for subtle highlights */
-        .text-accent { color: #FF4F00; }
     </style>
 </head>
 <body class="antialiased">
@@ -143,61 +153,57 @@
     <div id="custom-cursor"></div>
 
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-        <div class="absolute inset-0 nirmana-lines">
+        <div class="absolute inset-0 data-stream">
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1000 1000">
-                <path d="M-100 100 L1100 100" class="line-1"></path>
-                <path d="M100 -200 L100 1200" class="line-2"></path>
-                <path d="M-200 800 L1200 800" class="line-3"></path>
-                <path d="M900 1200 L900 -200" class="line-4"></path>
+                <path d="M-100,50 C 250,200 750,-100 1100,150" class="stream-1"></path>
+                <path d="M1100,250 C 750,400 250,200 -100,350" class="stream-2"></path>
+                <path d="M-100,850 C 250,700 750,1000 1100,750" class="stream-3"></path>
+                <path d="M1100,950 C 750,1100 250,800 -100,900" class="stream-4"></path>
             </svg>
         </div>
     </div>
     
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Header (simplified, for navigation anchor links) -->
         <header class="fixed top-0 left-0 right-0 z-50 bg-black/30 backdrop-blur-md font-sans">
              <div class="container mx-auto px-6 py-4">
                  <div class="flex justify-between items-center">
                      <a href="#" class="font-bold text-xl tracking-widest uppercase">Hadi Prasetia</a>
-                     <nav class="hidden md:flex space-x-8 text-sm tracking-wider">
-                         <a href="#proyek" class="hover:text-white transition-colors duration-300">Proyek</a>
-                         <a href="#tentang" class="hover:text-white transition-colors duration-300">Tentang</a>
-                         <a href="#kontak" class="hover:text-white transition-colors duration-300">Kontak</a>
+                     <nav class="hidden md:flex space-x-8 text-sm tracking-wider text-gray-300">
+                         <a href="#proyek" class="hover:text-cyan-400 transition-colors duration-300">Proyek</a>
+                         <a href="#tentang" class="hover:text-cyan-400 transition-colors duration-300">Tentang</a>
+                         <a href="#kontak" class="hover:text-cyan-400 transition-colors duration-300">Kontak</a>
                      </nav>
                  </div>
              </div>
         </header>
 
-        <!-- Hero Section -->
         <main>
             <section id="home" class="min-h-screen flex items-center justify-center text-center relative">
                 <div class="reveal-text">
-                    <span class="text-lg font-semibold text-gray-400">GRAPHIC & VISUAL DESIGNER</span>
-                    <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mt-2 kinetic-title">
-                        Hadi Prasetia
+                    <span class="text-lg font-semibold text-cyan-400">VISUAL DATA WEAVER</span>
+                    <h1 id="hero-title" class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mt-2 glitch-title">
+                        HADI PRASETIA
                     </h1>
                     <p class="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-gray-300">
-                        Saya merekayasa identitas visual dan pengalaman digital yang berkesan dari ide-ide kompleks.
+                        Saya menerjemahkan data yang kompleks menjadi cerita visual yang jernih dan berkesan.
                     </p>
                     <a href="#proyek" class="mt-12 inline-block">
-                        <i data-lucide="arrow-down-circle" class="h-10 w-10 text-gray-500 animate-bounce hover:text-white transition-colors duration-300"></i>
+                        <i data-lucide="arrow-down-circle" class="h-10 w-10 text-gray-600 animate-bounce hover:text-cyan-400 transition-colors duration-300"></i>
                     </a>
                 </div>
             </section>
 
-            <!-- About Section (Tentang) -->
             <section id="tentang" class="py-20 md:py-24">
-                 <div class="glass-card p-6 sm:p-8 rounded-3xl reveal-text max-w-4xl mx-auto">
+                 <div class="holo-card p-6 sm:p-8 rounded-3xl reveal-text max-w-4xl mx-auto">
                     <h2 class="text-3xl font-bold text-white text-center mb-4">Tentang Saya</h2>
                     <p class="text-gray-300 text-center text-lg leading-relaxed">
-                        Saya adalah seorang Mahasiswa Desain Komunikasi Visual di Universitas Bunda Mulia dengan hasrat mendalam untuk menciptakan identitas visual yang kuat dan pengalaman digital yang intuitif. Saya bersemangat membantu berbagai brand untuk berkomunikasi secara lebih efektif melalui desain.
+                        Sebagai seorang Mahasiswa Desain Komunikasi Visual, saya terpesona oleh persimpangan antara data dan desain. Hasrat saya adalah mengubah informasi mentah menjadi visual yang tidak hanya indah, tetapi juga intuitif dan mencerahkan. Saya membantu brand menemukan dan menceritakan kisah mereka melalui data.
                     </p>
                 </div>
             </section>
             
-            <!-- Projects Section -->
             <section id="proyek" class="py-20 md:py-24">
-                <div class="glass-card p-6 sm:p-8 rounded-3xl reveal-text">
+                <div class="holo-card p-6 sm:p-8 rounded-3xl reveal-text">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
                         <h2 class="text-3xl font-bold text-white mb-4 sm:mb-0">Proyek Unggulan</h2>
                         <div id="filters" class="flex items-center gap-2 flex-wrap">
@@ -208,28 +214,27 @@
                     </div>
 
                     <div id="project-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 transition-opacity duration-300">
-                        <div class="project-card glass-card p-4 rounded-2xl" data-category="web" data-image="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/a/wed.png" data-title="Undangan Pernikahan Digital" data-description="Desain antarmuka yang elegan dan modern untuk website undangan pernikahan, mengutamakan estetika dan pengalaman pengguna yang lancar.">
+                        <div class="project-card holo-card p-4 rounded-2xl" data-category="web" data-image="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/a/wed.png" data-title="Undangan Pernikahan Digital" data-description="Desain antarmuka yang elegan dan modern untuk website undangan pernikahan, mengutamakan estetika dan pengalaman pengguna yang lancar.">
                             <h3 class="font-semibold text-white">Undangan Digital</h3><p class="text-sm text-gray-400">Web Design</p>
                         </div>
-                        <div class="project-card glass-card p-4 rounded-2xl" data-category="branding" data-image="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/a/tmline.png" data-title="Desain Infografis Timeline" data-description="Infografis yang jelas dan menarik secara visual untuk memaparkan timeline sebuah acara atau progres proyek. Fokus pada keterbacaan dan hierarki informasi.">
+                        <div class="project-card holo-card p-4 rounded-2xl" data-category="branding" data-image="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/a/tmline.png" data-title="Desain Infografis Timeline" data-description="Infografis yang jelas dan menarik secara visual untuk memaparkan timeline sebuah acara atau progres proyek. Fokus pada keterbacaan dan hierarki informasi.">
                             <h3 class="font-semibold text-white">Infografis Timeline</h3><p class="text-sm text-gray-400">Visual Identity</p>
                         </div>
-                        <div class="project-card glass-card p-4 rounded-2xl" data-category="branding" data-image="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/a/corpo.png" data-title="Desain Visual Korporat" data-description="Desain visual untuk materi promosi korporat, menciptakan tampilan yang profesional, konsisten, dan sesuai dengan identitas brand perusahaan.">
+                        <div class="project-card holo-card p-4 rounded-2xl" data-category="branding" data-image="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/a/corpo.png" data-title="Desain Visual Korporat" data-description="Desain visual untuk materi promosi korporat, menciptakan tampilan yang profesional, konsisten, dan sesuai dengan identitas brand perusahaan.">
                             <h3 class="font-semibold text-white">Desain Korporat</h3><p class="text-sm text-gray-400">Branding</p>
                         </div>
-                         <div class="project-card glass-card p-4 rounded-2xl" data-category="web" data-image="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/1.png" data-title="Desain Aplikasi Mobile" data-description="Sebuah konsep desain antarmuka untuk aplikasi mobile banking yang berfokus pada kemudahan penggunaan dan tampilan yang bersih. Dibuat menggunakan Figma.">
+                         <div class="project-card holo-card p-4 rounded-2xl" data-category="web" data-image="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/1.png" data-title="Desain Aplikasi Mobile" data-description="Sebuah konsep desain antarmuka untuk aplikasi mobile banking yang berfokus pada kemudahan penggunaan dan tampilan yang bersih. Dibuat menggunakan Figma.">
                             <h3 class="font-semibold text-white">Aplikasi Mobile</h3><p class="text-sm text-gray-400">UI/UX Design</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Contact Section -->
             <section id="kontak" class="py-20 md:py-24">
-                <div class="glass-card p-6 sm:p-8 rounded-3xl reveal-text">
+                <div class="holo-card p-6 sm:p-8 rounded-3xl reveal-text">
                     <h2 class="text-4xl font-bold text-center text-white">Hubungi Saya</h2>
                     <p class="text-center text-gray-300 max-w-xl mx-auto mt-2">
-                        Punya ide menarik? Saya selalu terbuka untuk proyek baru dan kolaborasi. Mari kita ciptakan sesuatu yang luar biasa bersama.
+                        Punya data untuk divisualisasikan atau ide untuk dikolaborasikan? Mari kita terhubung dan menenun masa depan bersama.
                     </p>
                     <div class="mt-10 max-w-lg mx-auto flex justify-center items-center gap-4">
                         <a href="mailto:hadi.prasetia@example.com" class="contact-icon w-14 h-14 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-transform" title="Email"><i data-lucide="mail" class="w-7 h-7 text-white"></i></a>
@@ -241,13 +246,12 @@
         </main>
         
         <footer class="text-center py-12 text-gray-500">
-            <p>&copy; 2025 Hadi Prasetia. Didesain dan dikembangkan dengan sepenuh hati.</p>
+            <p>&copy; 2025 Hadi Prasetia. Woven with data and design.</p>
         </footer>
     </div>
     
-    <!-- Project Modal -->
     <div id="project-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
-        <div id="modal-content" class="glass-card rounded-3xl max-w-2xl w-full p-4 sm:p-6 relative transform scale-95 transition-all duration-300">
+        <div id="modal-content" class="holo-card rounded-3xl max-w-2xl w-full p-4 sm:p-6 relative transform scale-95 transition-all duration-300">
              <button id="close-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10"><i data-lucide="x" class="h-6 w-6"></i></button>
              <div class="max-h-[80vh] overflow-y-auto pr-2">
                  <img id="modal-img" src="" alt="Detail Proyek" class="rounded-2xl w-full h-auto mb-4">
@@ -259,7 +263,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Initialize Lucide Icons
             lucide.createIcons();
             
             // Preloader Logic
@@ -267,9 +270,38 @@
             const hidePreloader = () => { if (!preloader.classList.contains('hidden')) { preloader.classList.add('hidden'); } };
             window.addEventListener('load', () => { setTimeout(hidePreloader, 2200); });
             setTimeout(hidePreloader, 4000);
+            
+            // [NEW] Decoding/Glitch Effect for Hero Title
+            const heroTitle = document.getElementById('hero-title');
+            const originalText = heroTitle.innerText;
+            const chars = '!<>-_\\/[]{}—=+*^?#________';
+            let interval = null;
+            
+            const decodeEffect = () => {
+                let iteration = 0;
+                clearInterval(interval);
+                
+                interval = setInterval(() => {
+                    heroTitle.innerText = originalText.split("")
+                        .map((letter, index) => {
+                            if(index < iteration) {
+                                return originalText[index];
+                            }
+                            return chars[Math.floor(Math.random() * chars.length)]
+                        })
+                        .join("");
+                    
+                    if(iteration >= originalText.length){ 
+                        clearInterval(interval);
+                    }
+                    
+                    iteration += 1 / 3;
+                }, 30);
+            };
+            setTimeout(decodeEffect, 2500); // Start after preloader
 
-            // Glass Card Mouse Effect
-            const cards = document.querySelectorAll('.glass-card');
+            // Holo Card Mouse Effect
+            const cards = document.querySelectorAll('.holo-card, .glass-card'); // Support old class if any
             cards.forEach(card => {
                 card.addEventListener('mousemove', e => {
                     const rect = card.getBoundingClientRect();
