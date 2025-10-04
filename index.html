@@ -12,14 +12,14 @@
         /* Menggunakan font Inter sebagai standar dan Cinzel untuk aksen fantasi */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Cinzel:wght@400;700&display=swap');
         
-        /* Definisi Warna Grayscale & Cyan Aksen */
+        /* Definisi Warna Complementary (Deep Dark Blue/Black + Amber/Orange) */
         :root {
-            --accent-color: #e0f2f1; /* Light Cyan/White for subtle glow */
-            --glow-strong: rgba(224, 242, 241, 0.7); /* Stronger glow color */
-            --glow-soft: rgba(224, 242, 241, 0.2);  /* Softer glow color */
+            --accent-color: #ff9900; /* Vibrant Amber/Orange for main accent */
+            --glow-strong: rgba(255, 153, 0, 0.8); /* Stronger Amber glow */
+            --glow-soft: rgba(255, 153, 0, 0.3);  /* Softer Amber glow */
             --border-color: #4b5563; /* Darker gray for subtle borders */
-            --ethereal-dust: rgba(189, 212, 255, 0.5); /* Subtle blue-gray for cursor trail */
-            --fib-color: rgba(189, 212, 255, 0.1); /* Subtle color for fib spiral */
+            --ethereal-dust: rgba(255, 190, 80, 0.5); /* Light Amber/Gold for cursor trail */
+            --fib-color: rgba(255, 153, 0, 0.15); /* Subtle Amber for fib spiral */
             --progress-color: #64748b; /* Slate-500 for progress bar background */
         }
 
@@ -29,6 +29,20 @@
             color: #d1d5db; /* Light gray text for contrast */
             overflow-x: hidden; /* Prevent horizontal scroll */
             padding-bottom: 0; 
+        }
+
+        /* NEW: Dark Vignette Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Radial gradient creates the vignette effect */
+            box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.9);
+            pointer-events: none;
+            z-index: 100; 
         }
         
         /* Gaya untuk judul yang lebih fantastis */
@@ -55,30 +69,41 @@
             will-change: transform, opacity;
         }
 
-        /* --- GRAYSCALE GLOW EFFECT --- */
+        /* --- AMBER GLOW EFFECT --- */
         .neon-glow {
-            /* Fokus pada warna putih/cyan tipis untuk efek terminal yang canggih */
+            /* Fokus pada warna Amber/Orange untuk efek canggih */
             text-shadow: 0 0 5px var(--glow-strong), 0 0 15px var(--glow-soft); 
+        }
+        
+        /* NEW: Enhanced Title Glow with Pulse Animation */
+        .title-glow {
+            text-shadow: 0 0 10px var(--glow-strong), 0 0 30px var(--glow-soft), 0 0 50px rgba(255, 153, 0, 0.1); 
+            animation: pulse-glow 3s infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            from { opacity: 0.9; }
+            to { opacity: 1; }
         }
 
         .border-glow {
-            /* Consistent gray/white shadow for borders */
-            box-shadow: 0 0 8px var(--glow-soft), 0 0 15px rgba(255, 255, 255, 0.1);
+            /* Consistent Amber shadow for borders */
+            box-shadow: 0 0 8px var(--glow-soft), 0 0 15px rgba(255, 153, 0, 0.1);
             transition: all 0.3s ease;
         }
 
         .border-glow:hover {
-            box-shadow: 0 0 10px var(--glow-strong), 0 0 20px rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 10px var(--glow-strong), 0 0 20px rgba(255, 153, 0, 0.4);
             transform: translateY(-2px);
         }
 
-        /* Subtle Background Animation (Smoke/Magic) - Grayscale */
+        /* Subtle Background Animation (Smoke/Magic) - Amber */
         .hero-bg-dark {
-            /* Disesuaikan untuk gradien abu-abu/hitam */
-            background-image: radial-gradient(at 27% 37%, hsla(210,10%,70%,0.15) 0px, transparent 40%),
-                              radial-gradient(at 97% 21%, hsla(0,0%,50%,0.15) 0px, transparent 40%),
+            /* Disesuaikan untuk gradien Amber/hitam */
+            background-image: radial-gradient(at 27% 37%, hsla(38, 100%, 50%, 0.15) 0px, transparent 40%),
+                              radial-gradient(at 97% 21%, hsla(38, 100%, 40%, 0.15) 0px, transparent 40%),
                               radial-gradient(at 19% 87%, hsla(0,0%,4%,1) 0px, transparent 50%),
-                              radial-gradient(at 66% 63%, hsla(0,0%,70%,0.2) 0px, transparent 50%);
+                              radial-gradient(at 66% 63%, hsla(38, 100%, 70%, 0.2) 0px, transparent 50%);
             background-size: 200% 200%;
             animation: move-bg 60s infinite alternate;
         }
@@ -127,7 +152,7 @@
         .progress-bar {
             height: 100%;
             width: 0; /* Initial state for animation */
-            background-color: var(--accent-color); /* Light Cyan */
+            background-color: var(--accent-color); /* Amber */
             transition: width 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
             box-shadow: 0 0 8px var(--glow-strong);
         }
@@ -137,9 +162,31 @@
             transition: transform 0.1s ease-out;
         }
         
-        /* Ikon Tengkorak Kustom menggunakan SVG */
-        .skull-icon {
+        /* Ikon Jam Saku Kustom */
+        .pocket-watch-icon {
             filter: drop-shadow(0 0 5px var(--glow-strong));
+            color: var(--accent-color); /* Apply amber color to the icon */
+        }
+
+        /* NEW: Clock Box Style (Retained for visual structure) */
+        .chrono-box {
+            padding: 0.75rem 1.5rem;
+            background-color: rgba(31, 41, 55, 0.7); /* gray-800/70 */
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            backdrop-filter: blur(5px);
+            display: inline-block;
+        }
+        
+        /* NEW: Particle styles for Hero */
+        .particle {
+            position: absolute;
+            background: var(--ethereal-dust);
+            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
+            will-change: transform, opacity;
+            box-shadow: 0 0 5px var(--glow-soft);
         }
 
         /* Styling Kustom untuk Kartu Proyek */
@@ -160,8 +207,8 @@
             position: absolute;
             border-radius: 9999px; 
             
-            /* Latar Belakang Glow - Grayscale */
-            background-color: rgba(224, 242, 241, 0.1); /* Very subtle light background */
+            /* Latar Belakang Glow - Amber */
+            background-color: rgba(255, 153, 0, 0.1); /* Very subtle Amber background */
             box-shadow: 0 0 10px var(--glow-strong); 
             
             transition: all 0.35s ease-in-out; 
@@ -184,7 +231,7 @@
         }
 
         .nav-link-item.active {
-            color: var(--accent-color) !important; /* Warna putih cemerlang untuk ikon aktif */
+            color: var(--accent-color) !important; /* Warna Amber cemerlang untuk ikon aktif */
             text-shadow: 0 0 5px var(--glow-strong); 
         }
 
@@ -216,7 +263,7 @@
             border-radius: 9999px; /* rounded-full */
         }
         .filter-btn.active {
-            background-color: #e0f2f1; /* accent-color */
+            background-color: var(--accent-color); /* accent-color */
             color: #030712; /* dark text */
             font-weight: 700;
             box-shadow: 0 0 10px var(--glow-strong);
@@ -364,6 +411,9 @@
 <body>
     <!-- Container for Cursor Trail Dots -->
     <div id="cursor-trail-container"></div>
+    
+    <!-- NEW: Canvas for Particle Dust -->
+    <canvas id="particle-canvas" class="fixed inset-0 z-0 pointer-events-none"></canvas>
 
     <!-- Menu Toggle Button (The Activation Sigil) -->
     <button id="nav-toggle-button" class="fixed top-8 left-8 z-50 p-3 rounded-full bg-gray-800/80 text-white border-glow border border-gray-600/50 shadow-lg hover:bg-gray-700 transition duration-300">
@@ -405,10 +455,15 @@
                     <i data-lucide="layout-grid" class="w-6 h-6"></i>
                     <span class="absolute left-full ml-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap top-1/2 -translate-y-1/2">THE ARMORY (VISUALS)</span>
                 </a>
-                 <!-- NEW MENU: THE ORACLE'S CHAMBER -->
+                <!-- NEW MENU: THE ORACLE'S CHAMBER -->
                 <a href="#ai-ritual" data-target="ai-ritual" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
                     <i data-lucide="sparkles" class="w-6 h-6"></i>
                     <span class="absolute left-full ml-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap top-1/2 -translate-y-1/2">ORACLE'S CHAMBER</span>
+                </a>
+                <!-- NEW MENU: COSMIC ALIGNMENT -->
+                <a href="#cosmic-alignment" data-target="cosmic-alignment" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
+                    <i data-lucide="pocket-watch" class="w-6 h-6"></i>
+                    <span class="absolute left-full ml-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap top-1/2 -translate-y-1/2">COSMIC ALIGNMENT</span>
                 </a>
                 <!-- END NEW MENU -->
                 <a href="#contact" data-target="contact" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
@@ -431,29 +486,26 @@
         
         <!-- Parallax Elements - creating depth and a "living" effect -->
         <div id="parallax-layer-1" class="absolute inset-0 z-0 opacity-10 parallax-element" data-depth="10">
-            <div class="w-full h-full bg-contain bg-repeat opacity-10" style="background-image: url('https://placehold.co/1000x1000/030712/e0f2f1?text=Magic+Runes'); filter: grayscale(100%);"></div>
+            <div class="w-full h-full bg-contain bg-repeat opacity-10" style="background-image: url('https://placehold.co/1000x1000/030712/ff9900?text=Magic+Runes'); filter: grayscale(100%);"></div>
         </div>
         <div id="parallax-layer-2" class="absolute inset-0 z-0 opacity-5 parallax-element" data-depth="20">
-            <div class="w-full h-full bg-contain bg-repeat opacity-10" style="background-image: url('https://placehold.co/1000x1000/030712/94a3b8?text=Blood+Sigil'); filter: grayscale(100%);"></div>
+            <div class="w-full h-full bg-contain bg-repeat opacity-10" style="background-image: url('https://placehold.co/1000x1000/030712/f9a826?text=Blood+Sigil'); filter: grayscale(100%);"></div>
         </div>
 
         <div class="z-20 max-w-4xl mx-auto">
-            <!-- Main Dark Fantasy Symbol (Skull/Sigil) -->
-            <svg class="w-20 h-20 mx-auto mb-6 text-gray-400 skull-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 2L9 6H3V18H9L12 22L15 18H21V6H15L12 2Z" fill="#1f1a26" stroke="#94a3b8"/>
-                <circle cx="9" cy="11" r="1.5" fill="#e0f2f1" stroke="#94a3b8"/>
-                <circle cx="15" cy="11" r="1.5" fill="#e0f2f1" stroke="#94a3b8"/>
-                <path d="M10 16c.5.5 1 1 2 1s1.5-.5 2-1" stroke="#94a3b8"/>
-                <path d="M12 2v20" stroke-dasharray="2 3"/>
-            </svg>
+            <!-- Main Dark Fantasy Symbol (Burning Sigil) -->
+            <i data-lucide="flame" class="w-20 h-20 mx-auto mb-6 pocket-watch-icon"></i>
             
-            <h1 class="fantasy-title text-6xl sm:text-7xl lg:text-8xl font-extrabold mb-4 text-gray-200 neon-glow">
+            <h1 class="fantasy-title text-6xl sm:text-7xl lg:text-8xl font-extrabold mb-4 text-gray-200 title-glow">
                 HADI PRASETIA
             </h1>
             <p class="text-xl sm:text-2xl text-gray-300 mb-8 neon-glow">
                 KEEPER OF THE LOST REALMS: MASTER OF DIGITAL LORE
             </p>
-            <a href="#karya" class="inline-block px-8 py-3 text-lg font-bold fantasy-title rounded-lg bg-gray-800 hover:bg-gray-700 text-white transition duration-300 border-glow border-2 border-gray-600/50">
+            
+            <!-- Removed the chrono-visual div -->
+
+            <a href="#karya" class="inline-block px-8 py-3 text-lg font-bold fantasy-title rounded-lg bg-gray-800 hover:bg-gray-700 text-white transition duration-300 border-glow border-2 border-gray-600/50 mt-8">
                 HARK! THE LOST ARTIFACTS &rarr;
             </a>
         </div>
@@ -544,14 +596,14 @@
                 <h3 class="fantasy-title text-2xl font-bold mb-6 text-gray-300 neon-glow border-b border-gray-800 pb-2">
                     ARCANE METRICS (POWER LEVELS)
                 </h3>
-                <p class="text-gray-400 text-sm mb-6">Visualisasi tingkat penguasaan mantra digital (Keahlian) berdasarkan pengujian internal dan *field experience*.</p>
+                <p class="text-gray-400 text-sm mb-6">Visualisasi tingkat penguasaan mantra digital (Keahlian) berdasarkan pengujian internal dan field experience.</p>
                 
                 <div class="space-y-6" data-animate-on-scroll>
                     <!-- Metric 1: Web Forging -->
                     <div class="metric-item">
                         <div class="flex justify-between mb-1 text-sm text-gray-300">
                             <span class="fantasy-title">Web Forging (HTML/CSS/JS)</span>
-                            <span class="metric-value">90%</span>
+                            <span class="metric-value" style="color: var(--accent-color);">90%</span>
                         </div>
                         <div class="progress-bar-container">
                             <div class="progress-bar" data-progress="90"></div>
@@ -562,7 +614,7 @@
                     <div class="metric-item">
                         <div class="flex justify-between mb-1 text-sm text-gray-300">
                             <span class="fantasy-title">Artistry of the Moving Image (Video/Motion)</span>
-                            <span class="metric-value">85%</span>
+                            <span class="metric-value" style="color: var(--accent-color);">85%</span>
                         </div>
                         <div class="progress-bar-container">
                             <div class="progress-bar" data-progress="85"></div>
@@ -573,7 +625,7 @@
                     <div class="metric-item">
                         <div class="flex justify-between mb-1 text-sm text-gray-300">
                             <span class="fantasy-title">Rites of Sigil Crafting (UI/UX Design)</span>
-                            <span class="metric-value">80%</span>
+                            <span class="metric-value" style="color: var(--accent-color);">80%</span>
                         </div>
                         <div class="progress-bar-container">
                             <div class="progress-bar" data-progress="80"></div>
@@ -584,7 +636,7 @@
                     <div class="metric-item">
                         <div class="flex justify-between mb-1 text-sm text-gray-300">
                             <span class="fantasy-title">Technical Lore of Network & Server</span>
-                            <span class="metric-value">75%</span>
+                            <span class="metric-value" style="color: var(--accent-color);">75%</span>
                         </div>
                         <div class="progress-bar-container">
                             <div class="progress-bar" data-progress="75"></div>
@@ -627,7 +679,8 @@
                         <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700/50 border-glow">HTML/CSS</span>
                         <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700/50 border-glow">JavaScript</span>
                         <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700/50 border-glow">PHP & Laravel (Backend Lore)</span>
-                        <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700/50 border-glow">Responsive Design</span>
+                        <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700/50 border-glow">Python (Scripting & Automation)</span>
+                        <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700/50 border-glow">MySQL (Database Scroll Storage)</span>
                     </div>
                 </div>
 
@@ -715,7 +768,7 @@
                     <div class="flex flex-wrap gap-4">
                         <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">HTML / CSS / JavaScript (Core Runes)</span>
                         <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">Tailwind CSS (Aesthetic Augmentation)</span>
-                        <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">PHP / Laravel (Backend Framework)</span>
+                        <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">PHP & Laravel (Backend Lore)</span>
                         <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">Python (Scripting & Automation)</span>
                         <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">MySQL (Database Scroll Storage)</span>
                     </div>
@@ -847,8 +900,49 @@
 
         </div>
     </section>
-    
-    <!-- 7. AI Ritual Section (New: Lore Weaver) -->
+
+    <!-- 7. Cosmic Alignment Section -->
+    <section id="cosmic-alignment" class="py-20 lg:py-32 bg-gray-900 border-t border-b border-gray-800/50">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="fantasy-title text-4xl font-bold mb-6 text-gray-400 neon-glow">
+                Cosmic Alignment (The Fabric of Time and Space)
+            </h2>
+            <p class="text-lg mb-12 text-gray-400">
+                [THE UNENDING CYCLE] Every creation is a point in the vast expanse of time and code. This Lore Keeper operates across the dimensional rift, ensuring continuity between realms.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8 text-left">
+                <!-- Element 1: Temporal Focus -->
+                <div class="p-6 rounded-xl border border-gray-800 bg-gray-950/50 border-glow">
+                    <h3 class="fantasy-title text-2xl font-bold mb-3 text-gray-300 flex items-center space-x-3">
+                        <i data-lucide="pocket-watch" class="w-6 h-6"></i>
+                        The Temporal Focus
+                    </h3>
+                    <p class="text-gray-400">
+                        Understanding project history (Chronicles) and future trajectories is paramount. My work integrates past knowledge to forge timeless solutions.
+                    </p>
+                </div>
+
+                <!-- Element 2: Dimensional Rift -->
+                <div class="p-6 rounded-xl border border-gray-800 bg-gray-950/50 border-glow">
+                    <h3 class="fantasy-title text-2xl font-bold mb-3 text-gray-300 flex items-center space-x-3">
+                        <i data-lucide="globe" class="w-6 h-6"></i>
+                        Dimensional Rift
+                    </h3>
+                    <p class="text-gray-400">
+                        Design must transcend physical and digital boundaries, adapting seamlessly from the vast Desktop Realm to the confined Mobile Plane.
+                    </p>
+                </div>
+            </div>
+            
+            <p class="text-sm text-gray-500 italic mt-8">
+                "Time is the truest test of Lore; only the resilient code survives the infinite cycle."
+            </p>
+        </div>
+    </section>
+
+
+    <!-- 8. AI Ritual Section (New: Lore Weaver) -->
     <section id="ai-ritual" class="py-20 lg:py-32 bg-gray-950 border-t border-b border-gray-800/50">
         <div class="max-w-4xl mx-auto px-4">
             <h2 class="fantasy-title text-4xl font-bold text-center mb-6 text-gray-400 neon-glow">
@@ -881,7 +975,7 @@
         </div>
     </section>
 
-    <!-- 8. Kontak Section (Transmit Signal) - Renumbered to 8 -->
+    <!-- 9. Kontak Section (Transmit Signal) - Renumbered to 9 -->
     <section id="contact" class="py-20 lg:py-32 bg-gray-900">
         <div class="max-w-4xl mx-auto px-4">
             <h2 class="fantasy-title text-4xl font-bold text-center mb-6 text-gray-400 neon-glow">
@@ -1067,6 +1161,9 @@
             
             // Metrics/Infographics Elements
             metricItems: document.querySelectorAll('.metric-item'),
+            
+            // NEW Chrono Element (No longer used for display, kept for easy removal from JS)
+            chronoVisualSpan: null, // Removed element
         };
 
         // --- Functions ---
@@ -1134,6 +1231,85 @@
             requestAnimationFrame(animateDots);
         }
         animateDots();
+        
+        // --- Particle Dust Fall Logic (NEW) ---
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const particleCount = 50;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1; // 1 to 3
+                this.speedY = Math.random() * 0.5 + 0.1; // Slow vertical fall
+                this.speedX = (Math.random() - 0.5) * 0.2; // Slight horizontal drift
+                this.alpha = Math.random() * 0.5 + 0.5; // Opacity 0.5 to 1.0
+                this.color = 'rgba(255, 153, 0, ' + this.alpha + ')'; // Amber color
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                if (this.y > canvas.height) {
+                    this.reset();
+                    this.y = 0; // Reset to top
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = 'rgba(255, 153, 0, 0.5)';
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+            
+            // Only draw particles within the Hero section boundaries
+            const heroRect = document.getElementById('hero').getBoundingClientRect();
+            
+            particles.forEach(particle => {
+                particle.update();
+                
+                // Only draw if particle is within the Hero section's viewport
+                if (particle.y >= heroRect.top && particle.y <= heroRect.bottom &&
+                    particle.x >= heroRect.left && particle.x <= heroRect.right) {
+                    particle.draw();
+                }
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        
+        // Start particles animation only after window load
+        window.onload = function() {
+            initParticles();
+            animateParticles();
+        };
+
 
         // --- Gemini AI Logic ---
 
@@ -1238,6 +1414,7 @@
                 };
 
                 feedbackBox.classList.remove('hidden');
+                // Note: Changed text color to green-400 for success signal
                 feedbackBox.innerHTML = `
                     <p class="font-bold text-green-400 neon-glow">TRANSMISSION RECEIVED!</p>
                     <p class="text-sm text-gray-400 mt-1">The Lore Keeper has received the scroll titled: "${data.subject}". A response shall follow from the shadow realm.</p>
