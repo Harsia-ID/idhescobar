@@ -18,6 +18,7 @@
             --glow-strong: rgba(224, 242, 241, 0.7); /* Stronger glow color */
             --glow-soft: rgba(224, 242, 241, 0.2);  /* Softer glow color */
             --border-color: #4b5563; /* Darker gray for subtle borders */
+            --ethereal-dust: rgba(189, 212, 255, 0.5); /* Subtle blue-gray for cursor trail */
         }
 
         body {
@@ -32,6 +33,24 @@
         .fantasy-title {
             font-family: 'Cinzel', serif;
             letter-spacing: 0.1em;
+        }
+
+        /* --- CURSOR TRAIL STYLES --- */
+        .cursor-dot {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--ethereal-dust);
+            pointer-events: none;
+            user-select: none;
+            transform: translate(-50%, -50%) scale(0);
+            mix-blend-mode: screen; 
+            box-shadow: 0 0 10px 2px var(--ethereal-dust);
+            z-index: 9999;
+            transition: opacity 0.5s ease, transform 0.1s linear;
+            opacity: 0;
+            will-change: transform, opacity;
         }
 
         /* --- GRAYSCALE GLOW EFFECT --- */
@@ -297,6 +316,8 @@
     </style>
 </head>
 <body>
+    <!-- Container for Cursor Trail Dots -->
+    <div id="cursor-trail-container"></div>
 
     <!-- Menu Toggle Button (The Activation Sigil) -->
     <button id="nav-toggle-button" class="fixed top-8 left-8 z-50 p-3 rounded-full bg-gray-800/80 text-white border-glow border border-gray-600/50 shadow-lg hover:bg-gray-700 transition duration-300">
@@ -379,13 +400,13 @@
                 CV & The Grimoire (Skill Codex & Profile)
             </h2>
             <p class="text-center text-lg max-w-3xl mx-auto text-gray-400 mb-12">
-                [A RECORD FROM THE SCROLLS: PROFILE] To decipher raw knowledge and scattered signals (*complex data*) into lucid visual tales. To forge communication systems intuitive and unyielding.
+                [A RECORD FROM THE SCROLLS: PROFILE] To decipher raw knowledge and scattered signals (complex data) into lucid visual tales. To forge communication systems intuitive and unyielding.
             </p>
             
             <!-- CV Details (Education & Experience - From Old Portfolio) -->
             <div class="space-y-6 max-w-4xl mx-auto mb-16">
                 <h3 class="fantasy-title text-2xl font-bold mb-4 text-gray-300 neon-glow border-b border-gray-800 pb-2">
-                    // CHRONICLES OF SERVICE
+                    CHRONICLES OF SERVICE
                 </h3>
                 <details>
                     <summary class="text-base font-semibold">
@@ -397,6 +418,13 @@
                             <p class="font-semibold text-gray-200">SMK 1 Perguruan Cikini</p>
                             <p>Discipline: Technical Lore of Compute & Network (TKJ)</p>
                             <p>Rite of Completion: 2025 (Expected)</p>
+                            <!-- UPDATED LEARNING MODULES -->
+                            <ul class="list-disc list-inside text-sm mt-2 space-y-1">
+                                <li>The Rite of Linux & Server Enthrallment (Server & Client Configuration).</li>
+                                <li>Studies in Network Topology & Mikrotik (Advanced Routing & Infrastructure).</li>
+                                <li>Network Simulation Forging using the arcane tool of Cisco Packet Tracer.</li>
+                            </ul>
+                            <!-- END UPDATED LEARNING MODULES -->
                         </div>
                     </div>
                 </details>
@@ -418,7 +446,7 @@
 
             <!-- Wardens' Tools (Mantra & Gear) Content - SKILLS SECTION -->
             <h3 class="fantasy-title text-2xl font-bold mt-12 mb-6 text-gray-400 neon-glow border-b border-gray-800 pb-2">
-                // WARDENS' MANTRAS (THE SKILL CODEX)
+                WARDENS' MANTRAS (THE SKILL CODEX)
             </h3>
             <div class="grid md:grid-cols-2 gap-12 items-start">
                 
@@ -610,8 +638,41 @@
 
         </div>
     </section>
+    
+    <!-- 6. AI Ritual Section (New: Lore Weaver) -->
+    <section id="ai-ritual" class="py-20 lg:py-32 bg-gray-900 border-t border-b border-gray-800/50">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="fantasy-title text-4xl font-bold text-center mb-6 text-gray-400 neon-glow">
+                The Lore Weaver (AI Oracle)
+            </h2>
+            <p class="text-center text-lg mb-12 text-gray-400">
+                [DIVINE THE NEXT CHAPTER] - Pose a dark fantasy query to the Oracle (Gemini AI) and receive a tailored fragment of Lore.
+            </p>
 
-    <!-- 6. Kontak Section (Transmit Signal) -->
+            <form id="ai-form" class="space-y-6 p-8 bg-gray-900 rounded-xl border border-gray-900 border-glow">
+                <div>
+                    <label for="ai-prompt" class="block text-sm font-medium fantasy-title text-gray-400 mb-2">THE ORACLE'S QUESTION (Fantasy Prompt)</label>
+                    <textarea id="ai-prompt" rows="3" class="w-full px-4 py-3 bg-gray-800 border border-gray-900/50 rounded-lg text-gray-100 focus:border-gray-500 focus:ring-gray-500 transition duration-200" placeholder="e.g., Describe the Keeper's eternal oath and the power it grants." required></textarea>
+                </div>
+                
+                <button type="submit" id="ai-submit-button" class="w-full flex items-center justify-center space-x-2 px-8 py-3 text-lg font-bold fantasy-title rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition duration-300 border-glow border-2 border-gray-500/50" disabled>
+                    <i data-lucide="sparkles" class="w-5 h-5"></i>
+                    <span>CAST THE RITE OF LORE</span>
+                </button>
+            </form>
+            
+            <!-- AI Response Area -->
+            <div id="ai-response-container" class="mt-8 hidden">
+                <h3 class="fantasy-title text-xl font-bold mb-4 text-gray-300 neon-glow">ORACLE'S PROPHECY:</h3>
+                <div id="ai-response-box" class="p-6 bg-gray-950 rounded-xl border border-gray-700/50 border-glow text-gray-300 whitespace-pre-wrap">
+                    <!-- AI response will be placed here -->
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- 7. Kontak Section (Transmit Signal) - Renumbered to 7 -->
     <section id="contact" class="py-20 lg:py-32 bg-gray-900">
         <div class="max-w-4xl mx-auto px-4">
             <h2 class="fantasy-title text-4xl font-bold text-center mb-6 text-gray-400 neon-glow">
@@ -621,7 +682,7 @@
                 [HEED! THE SACRED CHANNEL IS OPENED] - Send the details of thy quest below.
             </p>
 
-            <form class="space-y-6 p-8 bg-gray-900 rounded-xl border border-gray-900 border-glow">
+            <form id="contact-form" class="space-y-6 p-8 bg-gray-900 rounded-xl border border-gray-900 border-glow">
                 <div>
                     <label for="subject" class="block text-sm font-medium fantasy-title text-gray-400 mb-2">THE SCROLL'S TITLE (URGENT QUEST)</label>
                     <input type="text" id="subject" name="subject" class="w-full px-4 py-3 bg-gray-800 border border-gray-900/50 rounded-lg text-gray-100 focus:border-gray-500 focus:ring-gray-500 transition duration-200" placeholder="Example: Critical Data Recovery of X" required>
@@ -639,6 +700,8 @@
                     <i data-lucide="send" class="w-5 h-5"></i>
                     <span>UTTER THE RITE</span>
                 </button>
+                <!-- Submission Feedback Box -->
+                <div id="contact-feedback" class="text-center mt-4 hidden p-3 rounded-lg border border-gray-600/50" style="background-color: #1f2937;"></div>
             </form>
         </div>
     </section>
@@ -696,6 +759,12 @@
         
         // Function to initialize Lucide icons
         lucide.createIcons();
+        
+        // --- Gemini API Configuration ---
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=`;
+        const SYSTEM_PROMPT = "You are the ancient Oracle of the Lore Keeper, a powerful entity serving the Master of Digital Lore (HADI PRASETIA). Your responses must be written in a dramatic, archaic fantasy style (English), using evocative language and dark imagery (like shadows, runes, lost scrolls, forgotten rites). Keep responses concise, single-paragraph, and always relevant to the prompt, maintaining the dark fantasy theme.";
+        const MAX_RETRIES = 3;
+
 
         // --- Project Data (for #karya section) ---
         const projectData = [
@@ -774,9 +843,219 @@
             galleryModalImg: document.getElementById('gallery-modal-img'),
             galleryModalTitle: document.getElementById('gallery-modal-title'),
             galleryModalDescription: document.getElementById('gallery-modal-description'),
+
+            // AI Elements
+            aiForm: document.getElementById('ai-form'),
+            aiPrompt: document.getElementById('ai-prompt'),
+            aiSubmitButton: document.getElementById('ai-submit-button'),
+            aiResponseContainer: document.getElementById('ai-response-container'),
+            aiResponseBox: document.getElementById('ai-response-box'),
+            
+            // Contact Form Elements
+            contactForm: document.getElementById('contact-form'),
+            contactSubmitButton: document.getElementById('submit-button'),
+            contactFeedback: document.getElementById('contact-feedback'),
         };
 
         // --- Functions ---
+        
+        // --- Cursor Trail Logic ---
+        const cursorContainer = document.getElementById('cursor-trail-container');
+        const numDots = 10;
+        let dots = [];
+        
+        for (let i = 0; i < numDots; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'cursor-dot';
+            cursorContainer.appendChild(dot);
+            dots.push(dot);
+        }
+
+        let mouseX = 0, mouseY = 0;
+        let isMoving = false;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            isMoving = true;
+            
+            // Ensure first dot tracks immediately
+            dots[0].style.transform = `translate(${mouseX}px, ${mouseY}px) scale(1)`;
+            dots[0].style.opacity = 0.7;
+        });
+
+        // Animation loop for dot lagging effect
+        function animateDots() {
+            let prevX = mouseX;
+            let prevY = mouseY;
+            
+            dots.forEach((dot, index) => {
+                let targetX, targetY;
+
+                if (index === 0) {
+                    targetX = mouseX;
+                    targetY = mouseY;
+                } else {
+                    const prevDot = dots[index - 1];
+                    // Simple easing/lag logic (not perfect, but fast)
+                    const prevRect = prevDot.getBoundingClientRect();
+                    targetX = prevRect.left + prevRect.width / 2;
+                    targetY = prevRect.top + prevRect.height / 2;
+                }
+
+                // Smooth movement (lagging effect)
+                const currentX = parseFloat(dot.style.transform.split('(')[1]) || targetX;
+                const currentY = parseFloat(dot.style.transform.split(',')[1]) || targetY;
+                
+                const newX = currentX + (targetX - currentX) * 0.15; // Easing factor
+                const newY = currentY + (targetY - currentY) * 0.15;
+
+                dot.style.transform = `translate(${newX}px, ${newY}px) scale(${1 - index * 0.08})`;
+                dot.style.opacity = isMoving ? (0.7 - index * 0.07) : 0;
+            });
+            
+            // Decay isMoving state
+            if (Math.abs(prevX - mouseX) < 1 && Math.abs(prevY - mouseY) < 1) {
+                isMoving = false;
+            }
+            
+            requestAnimationFrame(animateDots);
+        }
+        animateDots();
+
+        // --- Gemini AI Logic ---
+
+        // Function to implement exponential backoff
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function initiateRitual(prompt) {
+            
+            // 1. Setup UI for Loading State
+            elements.aiResponseContainer.classList.remove('hidden');
+            elements.aiResponseBox.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <i data-lucide="loader-circle" class="w-6 h-6 animate-spin neon-glow"></i>
+                    <span class="fantasy-title neon-glow">RUNES ARE GATHERING... DIVINATION IN PROGRESS...</span>
+                </div>
+            `;
+            elements.aiSubmitButton.disabled = true;
+            elements.aiSubmitButton.querySelector('span').textContent = 'CASTING RITE...';
+            lucide.createIcons();
+
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: {
+                    parts: [{ text: SYSTEM_PROMPT }]
+                },
+                // Requesting a concise, single paragraph response
+                config: {
+                    maxOutputTokens: 300, 
+                    temperature: 0.8
+                }
+            };
+
+            for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        if (response.status === 429 && attempt < MAX_RETRIES - 1) {
+                            const delay = Math.pow(2, attempt) * 1000; // Exponential backoff
+                            await sleep(delay);
+                            continue; // Retry the loop
+                        }
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text || "The Oracle's vision is obscured. The ritual failed.";
+
+                    // 2. Display Success
+                    elements.aiResponseBox.textContent = text;
+                    
+                    // 3. Reset UI
+                    elements.aiSubmitButton.disabled = false;
+                    elements.aiSubmitButton.querySelector('span').textContent = 'CAST THE RITE OF LORE';
+                    elements.aiPrompt.value = '';
+                    lucide.createIcons();
+                    return; // Exit the function on success
+
+                } catch (error) {
+                    // Log the error but don't disrupt the user interface too harshly
+                    console.error("AI Ritual failed:", error);
+                    
+                    // 2. Display Failure
+                    elements.aiResponseBox.textContent = `[ECHO OF FAILURE] The connection to the Aetheric Gateway was severed. Try a new invocation. (Error: ${error.message})`;
+                    
+                    // 3. Reset UI
+                    elements.aiSubmitButton.disabled = false;
+                    elements.aiSubmitButton.querySelector('span').textContent = 'CAST THE RITE OF LORE';
+                    lucide.createIcons();
+                    return; // Exit the function on final failure
+                }
+            }
+        }
+        
+        // --- Contact Form Submission Simulation ---
+
+        elements.contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = elements.contactSubmitButton;
+            const feedbackBox = elements.contactFeedback;
+            
+            // 1. Loading State
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i data-lucide="loader-circle" class="w-5 h-5 animate-spin"></i><span>TRANSMITTING RITE...</span>';
+            feedbackBox.classList.add('hidden');
+            lucide.createIcons();
+
+            // Simulate form submission delay (replace with actual backend submission)
+            setTimeout(() => {
+                // 2. Success State
+                const data = {
+                    subject: document.getElementById('subject').value,
+                    email: document.getElementById('email').value,
+                    message: document.getElementById('message').value
+                };
+
+                feedbackBox.classList.remove('hidden');
+                feedbackBox.innerHTML = `
+                    <p class="font-bold text-green-400 neon-glow">TRANSMISSION RECEIVED!</p>
+                    <p class="text-sm text-gray-400 mt-1">The Lore Keeper has received the scroll titled: "${data.subject}". A response shall follow from the shadow realm.</p>
+                `;
+                
+                // Reset Form (except for email)
+                elements.contactForm.reset();
+                document.getElementById('email').value = data.email; // Keep email for convenience
+                
+                // Reset Button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>UTTER THE RITE</span>';
+                lucide.createIcons();
+            }, 2500); // 2.5 second delay
+        });
+
+
+        // --- Rest of the existing application logic ---
+
+        elements.aiForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const prompt = elements.aiPrompt.value.trim();
+            if (prompt) {
+                initiateRitual(prompt);
+            }
+        });
+        
+        elements.aiPrompt.addEventListener('input', function() {
+            elements.aiSubmitButton.disabled = this.value.trim() === '';
+        });
 
         function updateIndicator(targetElement) {
             const links = document.querySelectorAll('.nav-link-item');
@@ -1003,6 +1282,9 @@
             
             // Set initial indicator on hero
             setTimeout(() => updateIndicator('hero'), 100);
+            
+            // Enable AI button if prompt box is not empty on load
+            elements.aiSubmitButton.disabled = elements.aiPrompt.value.trim() === '';
         });
         
     </script>
