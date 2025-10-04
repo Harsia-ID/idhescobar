@@ -18,9 +18,8 @@
             color: #d1d5db; /* Light gray text for contrast */
             overflow-x: hidden; /* Prevent horizontal scroll */
             
-            /* --- VERTICAL NAV OFFSET --- */
+            /* Navigasi mengambang, jadi tidak perlu padding offset pada body */
             padding-bottom: 0; 
-            padding-left: 5rem; /* Offset for the w-20 nav bar */
         }
         
         /* Style for a more fantastical title */
@@ -131,17 +130,39 @@
             left: 100%; /* Start after the element */
             pointer-events: none; /* Ignore mouse events */
         }
+
+        /* --- Custom CSS for Toggle Menu Logic --- */
+
+        /* Base styles for the floating nav, defining open state transitions and positioning */
+        .floating-nav {
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            /* This is the visual open state (centered vertically) */
+            transform: translateX(0) translateY(-50%); 
+            opacity: 1;
+        }
+
+        /* Closed state: pushed left and hidden */
+        .floating-nav.closed {
+            /* Pushes the element 128px (approx w-20 + margin) to the left to hide it completely */
+            transform: translateX(-128px) translateY(-50%); 
+            opacity: 0;
+        }
         /* --- END NEW STYLES --- */
 
     </style>
 </head>
 <body>
 
-    <!-- Navigasi Bar (Fixed Left - Vertical Icon) -->
-    <nav class="fixed top-0 left-0 bottom-0 z-50 bg-gray-950/90 backdrop-blur-sm shadow-2xl shadow-red-900/50 w-20">
-        <div class="h-full flex items-center justify-center">
+    <!-- Menu Toggle Button (The Activation Sigil) -->
+    <button id="nav-toggle-button" class="fixed top-8 left-8 z-50 p-3 rounded-full bg-red-700/50 text-white border-glow border border-red-500/50 shadow-lg hover:bg-red-600 transition duration-300">
+        <i id="nav-toggle-icon" data-lucide="menu" class="w-6 h-6 neon-glow"></i>
+    </button>
+
+    <!-- Navigasi Bar (Fixed Left - Floating Icon, HIDDEN by default) -->
+    <nav id="main-nav" class="fixed top-1/2 left-8 z-50 bg-gray-950/90 backdrop-blur-sm shadow-2xl shadow-red-900/50 w-20 rounded-xl border border-red-900/50 floating-nav closed"> 
+        <div class="p-2 flex items-center justify-center">
             <!-- Menu Navigasi (Icon Only, Archaic Fantasy Terms) -->
-            <div class="nav-links-container flex flex-col space-y-6 text-sm font-medium relative h-5/6 justify-center">
+            <div class="nav-links-container flex flex-col space-y-4 text-sm font-medium relative justify-center">
                 <!-- Nav Indicator - The Sliding Capsule -->
                 <div id="nav-indicator"></div>
                 
@@ -492,13 +513,42 @@
             observer.observe(section);
         });
 
-        // Also handle link clicks to immediately move the indicator
+        // --- Nav Toggle Logic (Button -> Menu) ---
+        const nav = document.getElementById('main-nav');
+        const toggleButton = document.getElementById('nav-toggle-button');
+        const toggleIcon = document.getElementById('nav-toggle-icon');
+
+        function toggleNav() {
+            // Toggle the 'closed' class to control visibility and position
+            const isClosed = nav.classList.toggle('closed');
+            
+            // Update icon (Menu <-> X)
+            if (isClosed) {
+                toggleIcon.setAttribute('data-lucide', 'menu');
+            } else {
+                toggleIcon.setAttribute('data-lucide', 'x');
+            }
+            lucide.createIcons();
+        }
+
+        toggleButton.addEventListener('click', toggleNav);
+
+        // Close nav when a link is clicked (UX improvement)
         document.querySelectorAll('.nav-link-item').forEach(link => {
             link.addEventListener('click', (e) => {
                 const targetId = e.currentTarget.getAttribute('data-target');
                 updateIndicator(targetId);
+
+                // Only auto-close if the nav is currently open (does NOT contain the 'closed' class)
+                if (!nav.classList.contains('closed')) {
+                    // Slight delay to allow smooth scrolling before hiding
+                    setTimeout(() => {
+                        toggleNav();
+                    }, 500); 
+                }
             });
         });
+
 
         // --- Parallax Effect (Makes the Hero Section "Alive") ---
         const heroSection = document.getElementById('hero');
@@ -571,7 +621,8 @@
         window.addEventListener('load', () => {
             // Give a moment for the layout to settle before calculating position
             setTimeout(() => {
-                updateIndicator('hero'); 
+                // Since the nav is closed initially, we don't need to call updateIndicator('hero') here.
+                // It will be called by IntersectionObserver when the user scrolls or when they open the nav.
             }, 100);
         });
 
