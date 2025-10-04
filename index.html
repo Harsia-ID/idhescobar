@@ -1,314 +1,575 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HADI PRASETIA | RECOVERY SPECIALIST</title>
-    <!-- Load Tailwind CSS CDN -->
+    <title>HADI PRASETIA | KEEPER OF THE LOST REALMS</title>
+    <!-- Memuat Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Font: IBM Plex Mono (Monospace for terminal look) -->
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Memuat ikon Lucide untuk elemen fantasi -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Menggunakan font Inter sebagai fallback, dengan IBM Plex Mono untuk efek terminal */
-        :root {
-            --neon-color: #aaff00; /* Toxic Green */
-            --dark-bg: #0d0d0d; /* Slightly darker/cleaner background */
-            --glow-inner: rgba(170, 255, 0, 0.1);
-            --glow-border: rgba(170, 255, 0, 0.5);
-        }
-
+        /* Using Inter as standard and Cinzel for fantasy accents */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Cinzel:wght@400;700&display=swap');
+        
         body {
-            font-family: 'IBM Plex Mono', monospace;
-            background-color: var(--dark-bg);
-            color: #ccc;
-            /* Scanline effect is now much softer/subtler */
-            background-image: linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px);
-            background-size: 2px 2px;
-            /* Perspective untuk efek 3D tilt pada kartu proyek */
-            perspective: 1000px; 
-            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #030712; /* Deep dark background color */
+            color: #d1d5db; /* Light gray text for contrast */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            /* Add padding at the bottom to prevent fixed nav from hiding content */
+            padding-bottom: 6rem; 
+        }
+        
+        /* Style for a more fantastical title */
+        .fantasy-title {
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.1em;
         }
 
-        /* Kelas kustom untuk efek neon glow yang lebih bersih */
+        /* --- MONOCHROME RED GLOW EFFECT --- */
+        /* Red Neon Glow effect for Dark Fantasy elements */
         .neon-glow {
-            text-shadow: 0 0 4px var(--neon-color);
-            box-shadow: 0 0 5px var(--glow-border), inset 0 0 5px var(--glow-inner);
-            border-color: var(--neon-color);
-        }
-        
-        /* Animasi flicker dihapus untuk tampilan yang lebih modern */
-        
-        /* Card Proyek - Diperbarui untuk 3D */
-        .project-card {
-            background-color: #1a1a1a;
-            border: 1px solid #333;
-            /* Transform lebih cepat untuk respons tilt */
-            transition: transform 0.1s linear, box-shadow 0.3s ease; 
-            transform-style: preserve-3d; /* Memungkinkan anak elemen bergerak dalam 3D */
-            border-radius: 0.5rem; /* rounded-lg */
-        }
-        
-        /* Inner content dipindahkan ke depan agar terlihat 'melayang' */
-        .project-card-inner {
-            transform: translateZ(20px); 
+            /* Focus on red tones */
+            text-shadow: 0 0 5px rgba(220, 38, 38, 0.7), 0 0 15px rgba(248, 113, 113, 0.5); 
         }
 
-        .project-card:hover {
-            border-color: var(--neon-color);
+        .border-glow {
+            /* Consistent red shadow for borders */
+            box-shadow: 0 0 8px rgba(220, 38, 38, 0.5), 0 0 15px rgba(248, 113, 113, 0.3);
+            transition: all 0.3s ease;
         }
 
-        /* Scrollbar styling (for desktop aesthetic) */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #1a1a1a; }
-        ::-webkit-scrollbar-thumb { background: var(--neon-color); border-radius: 4px; }
+        .border-glow:hover {
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.8), 0 0 20px rgba(248, 113, 113, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* Subtle Background Animation (Smoke/Magic) - makes the website "alive" */
+        .hero-bg-dark {
+            /* Adjusted radial gradients to only use red/dark tones */
+            background-image: radial-gradient(at 27% 37%, hsla(350,78%,50%,0.15) 0px, transparent 40%),
+                              radial-gradient(at 97% 21%, hsla(0,83%,50%,0.15) 0px, transparent 40%),
+                              radial-gradient(at 19% 87%, hsla(0,0%,4%,1) 0px, transparent 50%),
+                              radial-gradient(at 66% 63%, hsla(350,83%,50%,0.2) 0px, transparent 50%);
+            background-size: 200% 200%;
+            animation: move-bg 60s infinite alternate;
+        }
+
+        @keyframes move-bg {
+            from { background-position: 0% 0%; }
+            to { background-position: 100% 100%; }
+        }
+
+        /* Parallax JS will adjust the transform property */
+        .parallax-element {
+            transition: transform 0.1s ease-out;
+        }
+        
+        /* Custom Skull Icon using SVG */
+        .skull-icon {
+            filter: drop-shadow(0 0 5px rgba(220, 38, 38, 0.8));
+        }
+
+        /* Custom styling for Project Card (blending the old terminal theme into dark fantasy) */
+        .project-card-fantasy {
+            transition: transform 0.1s linear, box-shadow 0.3s ease;
+        }
+
+        /* --- STYLES FOR SLIDING CAPSULE NAV INDICATOR (Fixed Bottom) --- */
+        .nav-links-container {
+            position: relative;
+            /* Ensure the indicator is contained within this element */
+            padding-top: 8px; /* Extra padding for capsule top/bottom */
+            padding-bottom: 8px;
+        }
+
+        #nav-indicator {
+            position: absolute;
+            border-radius: 9999px; /* Tailwind's rounded-full */
+            
+            /* Dark Fantasy Glow background - Monochrome Red */
+            background-color: rgba(220, 38, 38, 0.15); 
+            box-shadow: 0 0 10px rgba(248, 113, 113, 0.6); 
+            
+            /* Smooth transition for movement and size change */
+            transition: all 0.35s ease-in-out; 
+            z-index: 10; /* Place behind links but above nav background */
+            top: 0;
+            left: 0;
+            opacity: 0; /* Start invisible */
+        }
+
+        .nav-link-item {
+            /* Adjust padding for the icon-only bar */
+            padding: 8px 16px; 
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px; 
+            transition: color 0.3s;
+            z-index: 20; /* Ensure links/icons are above the indicator */
+            position: relative;
+        }
+
+        .nav-link-item.active {
+            color: #fff !important; /* White/bright color for active icon */
+            /* Add red text shadow for active icon */
+            text-shadow: 0 0 5px rgba(248, 113, 113, 0.7); 
+        }
+
+        /* Hide text labels, using group-hover to show a small tooltip above */
+        .nav-link-item span {
+            /* Position tooltip label */
+            transform: translateX(-50%);
+            left: 50%;
+            pointer-events: none; /* Ignore mouse events */
+        }
+        /* --- END NEW STYLES --- */
+
     </style>
 </head>
-<body class="min-h-screen p-4 sm:p-8">
+<body>
 
-    <!-- Header: System Boot / Access Log -->
-    <header class="text-center mb-16 border-b-2 border-dashed border-gray-700 pb-4">
-        <h1 class="text-3xl sm:text-5xl font-bold uppercase mb-2 text-white">
-            HADI PRASETIA: ACCESS LOG [VISUAL DATA WEAVER]
-        </h1>
-        <p class="text-xl sm:text-2xl neon-glow inline-block px-3 py-1 rounded-sm border-2">
-            RECOVERY SPECIALIST: COMMS & DATA INTERPRETER
-        </p>
-        <p class="mt-4 text-sm max-w-2xl mx-auto text-gray-400">
-            [DATA FRAGMENT: PROFILE] Menerjemahkan informasi mentah dan sinyal yang terfragmentasi (*complex data*) menjadi cerita visual yang jernih. Membangun kembali sistem komunikasi yang intuitif dan tahan banting.
-        </p>
-    </header>
+    <!-- Navigasi Bar (Fixed Bottom - Icon Only) -->
+    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-gray-950/90 backdrop-blur-sm shadow-2xl shadow-red-900/50">
+        <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-around h-16">
+                <!-- Menu Navigasi (Icon Only, Archaic Fantasy Terms) -->
+                <div class="nav-links-container flex space-x-2 text-sm font-medium w-full justify-around relative">
+                    <!-- Nav Indicator - The Sliding Capsule -->
+                    <div id="nav-indicator"></div>
+                    
+                    <!-- Links (Icons only for bottom bar, includes hover tooltip) -->
+                    <a href="#hero" data-target="hero" class="nav-link-item group active text-red-400 hover:text-white transition duration-300 relative">
+                        <i data-lucide="castle" class="w-6 h-6"></i>
+                        <span class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap">THE SANCTUARY</span>
+                    </a>
+                    <a href="#about" data-target="about" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
+                        <i data-lucide="scroll" class="w-6 h-6"></i>
+                        <span class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap">THE GRIMOIRE</span>
+                    </a>
+                    <a href="#karya" data-target="karya" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
+                        <i data-lucide="swords" class="w-6 h-6"></i>
+                        <span class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap">LOST ARTIFACTS</span>
+                    </a>
+                    <a href="#gallery" data-target="gallery" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
+                        <i data-lucide="layout-grid" class="w-6 h-6"></i>
+                        <span class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap">THE ARMORY</span>
+                    </a>
+                    <a href="#contact" data-target="contact" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
+                        <i data-lucide="send" class="w-6 h-6"></i>
+                        <span class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap">INITIATE RITUAL</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-    <!-- Main Content Container -->
-    <main class="max-w-7xl mx-auto">
+    <!-- 1. Hero Section (The Sancturary) -->
+    <section id="hero" class="hero-bg-dark min-h-screen flex items-center justify-center relative overflow-hidden text-center p-8">
+        <!-- Parallax Elements - creating depth and a "living" effect -->
+        <div id="parallax-layer-1" class="absolute inset-0 z-0 opacity-10 parallax-element" data-depth="10">
+            <div class="w-full h-full bg-contain bg-repeat opacity-10" style="background-image: url('https://placehold.co/1000x1000/030712/f87171?text=Magic+Runes');"></div>
+        </div>
+        <div id="parallax-layer-2" class="absolute inset-0 z-0 opacity-5 parallax-element" data-depth="20">
+            <div class="w-full h-full bg-contain bg-repeat opacity-10" style="background-image: url('https://placehold.co/1000x1000/030712/dc2626?text=Blood+Sigil');"></div>
+        </div>
 
-        <!-- Section 1: Data Fragments / Missions (Projects) -->
-        <section class="mb-20">
-            <h2 class="text-2xl sm:text-4xl font-bold mb-8 uppercase text-white border-l-4 border-l-yellow-400 pl-4">
-                // DATA FRAGMENTS (Critical Missions)
+        <div class="z-20 max-w-4xl mx-auto">
+            <!-- Main Dark Fantasy Symbol (Skull/Sigil) -->
+            <svg class="w-20 h-20 mx-auto mb-6 text-red-600 skull-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L9 6H3V18H9L12 22L15 18H21V6H15L12 2Z" fill="#1f1a26" stroke="#dc2626"/>
+                <circle cx="9" cy="11" r="1.5" fill="#fef2f2" stroke="#dc2626"/>
+                <circle cx="15" cy="11" r="1.5" fill="#fef2f2" stroke="#dc2626"/>
+                <path d="M10 16c.5.5 1 1 2 1s1.5-.5 2-1" stroke="#dc2626"/>
+                <path d="M12 2v20" stroke-dasharray="2 3"/>
+            </svg>
+            
+            <h1 class="fantasy-title text-6xl sm:text-7xl lg:text-8xl font-extrabold mb-4 text-red-500 neon-glow">
+                HADI PRASETIA
+            </h1>
+            <p class="text-xl sm:text-2xl text-red-300 mb-8 neon-glow">
+                KEEPER OF THE LOST REALMS: MASTER OF DIGITAL LORE
+            </p>
+            <a href="#karya" class="inline-block px-8 py-3 text-lg font-bold fantasy-title rounded-lg bg-red-700 hover:bg-red-800 text-white transition duration-300 border-glow border-2 border-red-500/50">
+                HARK! THE LOST ARTIFACTS &rarr;
+            </a>
+        </div>
+    </section>
+
+    <!-- 2. About Section (Blueprint & Gear / Skills) -->
+    <section id="about" class="py-20 lg:py-32 bg-gray-900 border-t border-b border-red-900/50">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="fantasy-title text-4xl font-bold text-center mb-12 text-red-400 neon-glow">
+                The Grimoire & Wardens' Tools (Mantra & Gear)
+            </h2>
+            <p class="text-center text-lg max-w-3xl mx-auto text-gray-400 mb-12">
+                [A RECORD FROM THE SCROLLS: PROFILE] To decipher raw knowledge and scattered signals (*complex data*) into lucid visual tales. To forge communication systems intuitive and unyielding.
+            </p>
+            <div class="grid md:grid-cols-2 gap-12 items-start">
+                
+                <!-- Core Systems (Hard Skills) -->
+                <div>
+                    <h3 class="fantasy-title text-2xl font-bold mb-6 text-red-400 neon-glow">
+                        // CORE MANTRAS (PRIMARY SPELLS)
+                    </h3>
+                    <div class="flex flex-wrap gap-3 text-sm">
+                        <span class="px-4 py-2 bg-red-900/50 text-red-300 rounded-full border border-red-700/50 border-glow">DATA VISUALIZATION</span>
+                        <span class="px-4 py-2 bg-red-900/50 text-red-300 rounded-full border border-red-700/50 border-glow">UI/UX DESIGN</span>
+                        <span class="px-4 py-2 bg-red-900/50 text-red-300 rounded-full border border-red-700/50 border-glow">FIGMA & ADOBE SUITE</span>
+                        <span class="px-4 py-2 bg-red-900/50 text-red-300 rounded-full border border-red-700/50 border-glow">WEB FORGING (HTML/CSS)</span>
+                        <span class="px-4 py-2 bg-red-900/50 text-red-300 rounded-full border border-red-700/50 border-glow">INFOGRAPHICS & BRANDING</span>
+                        <span class="px-4 py-2 bg-red-900/50 text-red-300 rounded-full border border-red-700/50 border-glow">PROTOTYPING RITES</span>
+                    </div>
+                </div>
+
+                <!-- Field Protocol (Soft Skills) -->
+                <div>
+                    <h3 class="fantasy-title text-2xl font-bold mb-6 text-red-400 neon-glow">
+                        // THE WARDEN'S OATH (CODE OF CONDUCT)
+                    </h3>
+                    <ul class="space-y-3 text-gray-300 text-lg">
+                        <li class="flex items-start">
+                            <i data-lucide="scroll" class="w-5 h-5 text-red-500 mr-3 mt-1 neon-glow"></i>
+                            Narratives Forged by Data (Chronicles of Lore)
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="shield-half" class="w-5 h-5 text-red-500 mr-3 mt-1 neon-glow"></i>
+                            The Great Hierarchy of Knowledge
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="eye" class="w-5 h-5 text-red-500 mr-3 mt-1 neon-glow"></i>
+                            Scrutiny of the Visual Sigils (Design Auditing)
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="swords" class="w-5 h-5 text-red-500 mr-3 mt-1 neon-glow"></i>
+                            Rites of Catastrophe Aversion (Recovery Planning)
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Karya Section (Projects - Data Fragments) -->
+    <section id="karya" class="py-20 lg:py-32 bg-gray-950">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="fantasy-title text-4xl font-bold text-center mb-16 text-red-400 neon-glow">
+                The Lost Artifacts (Critical Quests)
             </h2>
             
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <!-- Project 1: Undangan Pernikahan Digital -->
-                <article class="project-card p-6 shadow-xl">
-                    <div class="project-card-inner">
-                        <h3 class="text-xl font-bold mb-2 text-yellow-400">MISSION: SOCIAL LINKAGE R.E.D.</h3>
-                        <p class="text-xs uppercase text-gray-500 mb-4">Fragment ID: PJT-001 | Field: Web Design, UI/UX</p>
-                        <p class="text-gray-400 mb-4">
-                            **THE THREAT:** Keruntuhan sistem komunikasi sosial; data penting (acara/pernikahan) gagal diakses.
-                        </p>
-                        <p class="text-gray-300">
-                            **THE BLUEPRINT:** Mendesain dan membangun antarmuka web yang **sangat elegan dan modern** untuk transmisi data sosial yang sensitif.
-                        </p>
-                        <div class="mt-4 pt-4 border-t border-gray-700">
-                            <p class="text-sm font-bold neon-glow">
-                                IMPACT / SURVIVAL RATE:
-                            </p>
-                            <p class="text-2xl text-white font-extrabold mt-1">
-                                99% Data Reliability
-                            </p>
-                        </div>
+                <article class="bg-gray-900 p-6 rounded-xl border border-red-800 project-card-fantasy border-glow">
+                    <i data-lucide="heart-handshake" class="w-8 h-8 text-red-500 mb-4 neon-glow"></i>
+                    <h3 class="fantasy-title text-xl font-bold text-red-300 mb-2">MISSION: SOCIAL LINKAGE R.E.D.</h3>
+                    <p class="text-xs uppercase text-gray-500 mb-4">Artifact ID: PJT-001 | Field: Web Forging, Visual Sigil</p>
+                    <p class="text-gray-400 mb-4 text-sm">
+                        **THE AFFLICTION:** The collapse of social communication protocols; vital lore (event/wedding details) failing to be accessed.
+                    </p>
+                    <p class="text-gray-300 text-sm">
+                        **THE DESIGNATED RITE:** To forge and enchant an **elegant and modern web interface** for the secure transmission of sensitive social lore.
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-red-900/50">
+                        <p class="text-sm font-bold fantasy-title text-red-400">IMPACT / RELIABILITY:</p>
+                        <p class="text-2xl text-white font-extrabold mt-1 fantasy-title">99% Data Reliability</p>
                     </div>
                 </article>
 
                 <!-- Project 2: Infografis Timeline -->
-                <article class="project-card p-6 shadow-xl">
-                    <div class="project-card-inner">
-                        <h3 class="text-xl font-bold mb-2 text-yellow-400">MISSION: CHRONOS M.A.P.P.I.N.G.</h3>
-                        <p class="text-xs uppercase text-gray-500 mb-4">Fragment ID: PJT-002 | Field: Visual Identity, Infographics</p>
-                        <p class="text-gray-400 mb-4">
-                            **THE THREAT:** Kekacauan informasi; ketidakmampuan untuk melacak progres kritis atau jadwal kejadian.
-                        </p>
-                        <p class="text-gray-300">
-                            **THE BLUEPRINT:** Menciptakan Infografis Timeline yang jelas dan hierarkis untuk memulihkan kontrol atas data waktu.
-                        </p>
-                        <div class="mt-4 pt-4 border-t border-gray-700">
-                            <p class="text-sm font-bold neon-glow">
-                                IMPACT / SURVIVAL RATE:
-                            </p>
-                            <p class="text-2xl text-white font-extrabold mt-1">
-                                85% Reduction in Time Error
-                            </p>
-                        </div>
+                <article class="bg-gray-900 p-6 rounded-xl border border-red-800 project-card-fantasy border-glow">
+                    <i data-lucide="clock" class="w-8 h-8 text-red-500 mb-4 neon-glow"></i>
+                    <h3 class="fantasy-title text-xl font-bold text-red-300 mb-2">MISSION: CHRONOS M.A.P.P.I.N.G.</h3>
+                    <p class="text-xs uppercase text-gray-500 mb-4">Artifact ID: PJT-002 | Field: Visual Identity, Infographics</p>
+                    <p class="text-gray-400 mb-4 text-sm">
+                        **THE AFFLICTION:** Chaos of intelligence; inability to track critical progress or chronological events.
+                    </p>
+                    <p class="text-gray-300 text-sm">
+                        **THE DESIGNATED RITE:** To craft a clear, hierarchical Infographic Timeline to restore control over the lore of time.
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-red-900/50">
+                        <p class="text-sm font-bold fantasy-title text-red-400">IMPACT / RELIABILITY:</p>
+                        <p class="text-2xl text-white font-extrabold mt-1 fantasy-title">85% Reduction in Time Error</p>
                     </div>
                 </article>
 
                 <!-- Project 3: Desain Visual Korporat -->
-                <article class="project-card p-6 shadow-xl">
-                    <div class="project-card-inner">
-                        <h3 class="text-xl font-bold mb-2 text-yellow-400">MISSION: AUTHORITY RE-ESTABLISHMENT</h3>
-                        <p class="text-xs uppercase text-gray-500 mb-4">Fragment ID: PJT-003 | Field: Branding, Visual Comms</p>
-                        <p class="text-gray-400 mb-4">
-                            **THE THREAT:** Hilangnya kepercayaan dan identitas dalam unit-unit operasional (korporat).
-                        </p>
-                        <p class="text-gray-300">
-                            **THE BLUEPRINT:** Merancang sistem visual korporat yang profesional, konsisten, dan membangun kembali citra otoritas brand.
-                        </p>
-                        <div class="mt-4 pt-4 border-t border-gray-700">
-                            <p class="text-sm font-bold neon-glow">
-                                IMPACT / SURVIVAL RATE:
-                            </p>
-                            <p class="text-2xl text-white font-extrabold mt-1">
-                                100% Visual Consistency
-                            </p>
-                        </div>
+                <article class="bg-gray-900 p-6 rounded-xl border border-red-800 project-card-fantasy border-glow">
+                    <i data-lucide="shield-plus" class="w-8 h-8 text-red-500 mb-4 neon-glow"></i>
+                    <h3 class="fantasy-title text-xl font-bold text-red-300 mb-2">MISSION: AUTHORITY RE-ESTABLISHMENT</h3>
+                    <p class="text-xs uppercase text-gray-500 mb-4">Artifact ID: PJT-003 | Field: Branding, Visual Comms</p>
+                    <p class="text-gray-400 mb-4 text-sm">
+                        **THE AFFLICTION:** Loss of trust and identity within the operational units (corporate).
+                    </p>
+                    <p class="text-gray-300 text-sm">
+                        **THE DESIGNATED RITE:** To devise a visual corporate system that is professional, consistent, and rebuilds the brand's aura of authority.
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-red-900/50">
+                        <p class="text-sm font-bold fantasy-title text-red-400">IMPACT / RELIABILITY:</p>
+                        <p class="text-2xl text-white font-extrabold mt-1 fantasy-title">100% Visual Consistency</p>
                     </div>
                 </article>
 
                 <!-- Project 4: Desain Aplikasi Mobile -->
-                <article class="project-card p-6 shadow-xl">
-                    <div class="project-card-inner">
-                        <h3 class="text-xl font-bold mb-2 text-yellow-400">MISSION: MOBILE RESOURCE TERMINAL</h3>
-                        <p class="text-xs uppercase text-gray-500 mb-4">Fragment ID: PJT-004 | Field: UI/UX Design (Figma)</p>
-                        <p class="text-gray-400 mb-4">
-                            **THE THREAT:** Kegagalan antarmuka kritis pada perangkat mobile, menghambat manajemen sumber daya keuangan (mobile banking).
-                        </p>
-                        <p class="text-gray-300">
-                            **THE BLUEPRINT:** Konsep aplikasi mobile banking yang berfokus pada kemudahan pengguna, tampilan bersih, dan navigasi yang efisien.
-                        </p>
-                        <div class="mt-4 pt-4 border-t border-gray-700">
-                            <p class="text-sm font-bold neon-glow">
-                                IMPACT / SURVIVAL RATE:
-                            </p>
-                            <p class="text-2xl text-white font-extrabold mt-1">
-                                Minimal Operational Friction
-                            </p>
-                        </div>
+                <article class="bg-gray-900 p-6 rounded-xl border border-red-800 project-card-fantasy border-glow">
+                    <i data-lucide="smartphone" class="w-8 h-8 text-red-500 mb-4 neon-glow"></i>
+                    <h3 class="fantasy-title text-xl font-bold text-red-300 mb-2">MISSION: MOBILE RESOURCE TERMINAL</h3>
+                    <p class="text-xs uppercase text-gray-500 mb-4">Artifact ID: PJT-004 | Field: Visual Sigil Design (Figma)</p>
+                    <p class="text-gray-400 mb-4 text-sm">
+                        **THE AFFLICTION:** Failure of critical interface on mobile devices, impeding financial resource management (mobile banking).
+                    </p>
+                    <p class="text-gray-300 text-sm">
+                        **THE DESIGNATED RITE:** A concept for a mobile banking application focused on user ease, clean presentation, and efficient navigation.
+                    </p>
+                    <div class="mt-4 pt-4 border-t border-red-900/50">
+                        <p class="text-sm font-bold fantasy-title text-red-400">IMPACT / RELIABILITY:</p>
+                        <p class="text-2xl text-white font-extrabold mt-1 fantasy-title">Minimal Operational Friction</p>
                     </div>
                 </article>
             </div>
-        </section>
-
-        <!-- Section 2: Blueprint & Gear (Skills & Tech Stack) -->
-        <section class="mb-20">
-            <h2 class="text-2xl sm:text-4xl font-bold mb-8 uppercase text-white border-l-4 border-l-green-400 pl-4">
-                // BLUEPRINT & GEAR (Tech Stack & Protocol)
+        </div>
+    </section>
+    
+    <!-- 4. Galeri Section (Galeri Artefak) -->
+    <section id="gallery" class="py-20 lg:py-32 bg-gray-900 border-t border-b border-red-900/50">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="fantasy-title text-4xl font-bold text-center mb-16 text-red-400 neon-glow">
+                The Great Armory (Digital Artifacts)
             </h2>
-            
-            <div class="bg-gray-800 p-6 rounded-lg border-2 border-green-500/50">
-                <div class="grid md:grid-cols-2 gap-8">
-                    <!-- Core Systems (Hard Skills) -->
-                    <div>
-                        <h3 class="text-xl font-bold text-green-400 mb-3">CORE SYSTEMS (HARD SKILLS)</h3>
-                        <div class="flex flex-wrap gap-2 text-sm">
-                            <span class="px-3 py-1 bg-green-900/50 text-green-300 rounded-full border border-green-700/50">DATA VISUALIZATION</span>
-                            <span class="px-3 py-1 bg-green-900/50 text-green-300 rounded-full border border-green-700/50">UI/UX DESIGN</span>
-                            <span class="px-3 py-1 bg-green-900/50 text-green-300 rounded-full border border-green-700/50">FIGMA & ADOBE SUITE</span>
-                            <span class="px-3 py-1 bg-green-900/50 text-green-300 rounded-full border border-green-700/50">WEB DESIGN (HTML/CSS)</span>
-                            <span class="px-3 py-1 bg-green-900/50 text-green-300 rounded-full border border-green-700/50">INFOGRAPHICS & BRANDING</span>
-                            <span class="px-3 py-1 bg-green-900/50 text-green-300 rounded-full border border-green-700/50">PROTOTYPING</span>
-                        </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                <!-- Artefak 1 -->
+                <div class="group relative rounded-lg overflow-hidden border-2 border-red-900 hover:border-red-600 transition duration-300 border-glow">
+                    <img src="https://placehold.co/400x300/1f1a26/f87171?text=UI+Draft+1" alt="Ancient UI Sketch" class="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition duration-300">
+                    <div class="absolute inset-0 bg-black/70 flex items-end p-4 opacity-0 group-hover:opacity-100 transition duration-300">
+                        <p class="text-sm font-semibold fantasy-title text-red-400">Ancient UI Scroll</p>
                     </div>
-
-                    <!-- Field Protocol (Soft Skills) -->
-                    <div>
-                        <h3 class="text-xl font-bold text-green-400 mb-3">FIELD PROTOCOL (SOFT SKILLS)</h3>
-                        <ul class="list-disc list-inside text-gray-400 space-y-1 ml-4">
-                            <li>Data-Driven Storytelling (Narasi Data)</li>
-                            <li>Critical Information Hierarchy (Prioritas Informasi)</li>
-                            <li>Visual System Auditing (Audit Desain)</li>
-                            <li>Disaster Recovery Planning (Perencanaan Pemulihan Bencana)</li>
-                        </ul>
+                </div>
+                <!-- Artefak 2 -->
+                <div class="group relative rounded-lg overflow-hidden border-2 border-red-900 hover:border-red-600 transition duration-300 border-glow">
+                    <img src="https://placehold.co/400x300/1f1a26/dc2626?text=Wireframe+Sigil" alt="Wireframe Sigil" class="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition duration-300">
+                    <div class="absolute inset-0 bg-black/70 flex items-end p-4 opacity-0 group-hover:opacity-100 transition duration-300">
+                        <p class="text-sm font-semibold fantasy-title text-red-400">Wireframe Sigil</p>
+                    </div>
+                </div>
+                <!-- Artefak 3 -->
+                <div class="group relative rounded-lg overflow-hidden border-2 border-red-900 hover:border-red-600 transition duration-300 border-glow">
+                    <img src="https://placehold.co/400x300/1f1a26/f87171?text=Magic+Icon+Set" alt="Magic Icon Set" class="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition duration-300">
+                    <div class="absolute inset-0 bg-black/70 flex items-end p-4 opacity-0 group-hover:opacity-100 transition duration-300">
+                        <p class="text-sm font-semibold fantasy-title text-red-400">Set of Enchanted Glyphs</p>
+                    </div>
+                </div>
+                <!-- Artefak 4 -->
+                <div class="group relative rounded-lg overflow-hidden border-2 border-red-900 hover:border-red-600 transition duration-300 border-glow">
+                    <img src="https://placehold.co/400x300/1f1a26/dc2626?text=3D+Model+Fragment" alt="Fragment Model 3D" class="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition duration-300">
+                    <div class="absolute inset-0 bg-black/70 flex items-end p-4 opacity-0 group-hover:opacity-100 transition duration-300">
+                        <p class="text-sm font-semibold fantasy-title text-red-400">Fragment of the 3D Realm</p>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Section 3: Transmit Signal (Contact) -->
-        <section class="mb-16">
-            <h2 class="text-2xl sm:text-4xl font-bold mb-8 uppercase text-white border-l-4 border-l-red-500 pl-4">
-                // TRANSMIT SIGNAL (Initiate Secure Connection)
+    <!-- 5. Kontak Section (Transmit Signal) -->
+    <section id="contact" class="py-20 lg:py-32 bg-gray-950">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="fantasy-title text-4xl font-bold text-center mb-6 text-red-400 neon-glow">
+                Initiate Ritual (Transmit Lore)
             </h2>
-            
-            <div class="bg-black p-8 rounded-lg border-2 border-red-500/50 shadow-inner neon-glow">
-                <p class="text-red-400 text-lg mb-4">
-                    [SYSTEM ALERT] - DIRECT COMMUNICATION PROTOCOL INITIATED.
-                </p>
-                <!-- Disesuaikan dengan kontak Anda -->
-                <form class="space-y-4">
-                    <input type="text" placeholder="SUBJECT LINE (Top Priority Mission)" class="w-full p-3 bg-gray-900 border border-red-500/50 text-green-400 focus:outline-none focus:ring-1 focus:ring-red-400 rounded-none">
-                    <input type="email" placeholder="COORDINATES (Your Email Address)" value="hadi.prasetia@example.com" class="w-full p-3 bg-gray-900 border border-red-500/50 text-green-400 focus:outline-none focus:ring-1 focus:ring-red-400 rounded-none">
-                    <textarea placeholder="MESSAGE (Briefing Details for Collaboration)" rows="4" class="w-full p-3 bg-gray-900 border border-red-500/50 text-green-400 focus:outline-none focus:ring-1 focus:ring-red-400 rounded-none"></textarea>
-                    <button type="submit" class="w-full py-3 bg-red-800 text-white uppercase font-bold hover:bg-red-600 transition duration-200 border border-red-500 neon-glow">
-                        TRANSMIT SECURE DATA
-                    </button>
-                </form>
+            <p class="text-center text-lg mb-12 text-gray-400">
+                [HEED! THE SACRED CHANNEL IS OPENED] - Send the details of thy quest below.
+            </p>
+
+            <form class="space-y-6 p-8 bg-gray-900 rounded-xl border border-red-900 border-glow">
+                <div>
+                    <label for="subject" class="block text-sm font-medium fantasy-title text-red-400 mb-2">THE SCROLL'S TITLE (URGENT QUEST)</label>
+                    <input type="text" id="subject" name="subject" class="w-full px-4 py-3 bg-gray-800 border border-red-900/50 rounded-lg text-gray-100 focus:border-red-500 focus:ring-red-500 transition duration-200" placeholder="Example: Critical Data Recovery of X" required>
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-medium fantasy-title text-red-400 mb-2">YOUR REALM'S ADDRESS (EMAIL SCROLL)</label>
+                    <input type="email" id="email" name="email" class="w-full px-4 py-3 bg-gray-800 border border-red-900/50 rounded-lg text-gray-100 focus:border-red-500 focus:ring-red-500 transition duration-200" value="hadi.prasetia@example.com" placeholder="Example: entity@realm.com" required>
+                </div>
+                <div>
+                    <label for="message" class="block text-sm font-medium fantasy-title text-red-400 mb-2">THE VOW (THE OATH OF COLLABORATION)</label>
+                    <textarea id="message" name="message" rows="5" class="w-full px-4 py-3 bg-gray-800 border border-red-900/50 rounded-lg text-gray-100 focus:border-red-500 focus:ring-red-500 transition duration-200" placeholder="Describe thy digital quest here..." required></textarea>
+                </div>
+                
+                <button type="submit" id="submit-button" class="w-full flex items-center justify-center space-x-2 px-8 py-3 text-lg font-bold fantasy-title rounded-lg bg-red-700 hover:bg-red-800 text-white transition duration-300 border-glow border-2 border-red-500/50">
+                    <i data-lucide="send" class="w-5 h-5"></i>
+                    <span>UTTER THE RITE</span>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-8 border-t border-red-900/50">
+        <div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-500">
+            <p>[END OF LOG] - Lore Compiled by HADI PRASETIA. All Systems Reserved <span id="year"></span>.</p>
+            <div class="flex justify-center space-x-4 mt-2">
+                <a href="#" class="hover:text-red-500 transition"><i data-lucide="github" class="w-5 h-5"></i></a>
+                <a href="#" class="hover:text-red-500 transition"><i data-lucide="dribbble" class="w-5 h-5"></i></a>
+                <a href="#" class="hover:text-red-500 transition"><i data-lucide="twitter" class="w-5 h-5"></i></a>
             </div>
-        </section>
-
-    </main>
-
-    <!-- Footer: End of Log -->
-    <footer class="text-center mt-12 pt-6 border-t border-dashed border-gray-700">
-        <p class="text-sm text-gray-500">
-            [END OF LOG] - Data Compiled by HADI PRASETIA. All Systems Reserved 2024.
-        </p>
+        </div>
     </footer>
-    
+
+    <!-- Script JavaScript for Dynamic Effects (Parallax, Indicator & Form) -->
     <script>
-        // JS Tilt/Parallax Effect for Modern Touch
-        const tiltElements = document.querySelectorAll('.project-card');
+        document.getElementById('year').textContent = new Date().getFullYear();
+        
+        // Function to initialize Lucide icons
+        lucide.createIcons();
 
-        tiltElements.forEach(el => {
-            // Hanya aktifkan efek tilt di desktop/perangkat dengan kursor
-            if (window.matchMedia('(hover: hover)').matches) {
-                el.addEventListener('mousemove', handleMouseMove);
-                el.addEventListener('mouseleave', handleMouseLeave);
+        // --- Nav Indicator Logic ---
+        function updateIndicator(targetElement) {
+            const indicator = document.getElementById('nav-indicator');
+            const links = document.querySelectorAll('.nav-link-item');
+
+            // 1. Reset all links and find the target link element
+            let targetLink = null;
+            links.forEach(link => {
+                link.classList.remove('active', 'text-red-400');
+                link.classList.add('text-gray-400');
+                if (link.getAttribute('data-target') === targetElement) {
+                    targetLink = link;
+                }
+            });
+
+            if (targetLink) {
+                // 2. Set active class on the link (changes text color and shadow)
+                targetLink.classList.add('active', 'text-red-400');
+                targetLink.classList.remove('text-gray-400');
+                
+                // 3. Get position and dimensions relative to the container
+                const container = document.querySelector('.nav-links-container');
+                const containerRect = container.getBoundingClientRect();
+                const linkRect = targetLink.getBoundingClientRect();
+                
+                // Calculate relative position (adjusted for container padding)
+                const left = linkRect.left - containerRect.left;
+                const top = linkRect.top - containerRect.top;
+                
+                // 4. Apply the position and size to the indicator
+                indicator.style.opacity = 1;
+                indicator.style.width = `${linkRect.width}px`;
+                indicator.style.height = `${linkRect.height}px`;
+                // Use transform for smooth movement
+                indicator.style.transform = `translate(${left}px, ${top}px)`;
+            } else {
+                // Hide indicator if no element is clearly active
+                indicator.style.opacity = 0;
             }
+        }
+
+
+        // --- Intersection Observer Logic (for auto-detecting scroll position) ---
+        const sections = document.querySelectorAll('section[id]');
+        const observerOptions = {
+            root: null, // viewport
+            // Trigger when the section reaches 35% from the top (a bit higher than center)
+            rootMargin: '0px 0px -35% 0px', 
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const currentSectionId = entry.target.id;
+                    updateIndicator(currentSectionId);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        sections.forEach(section => {
+            observer.observe(section);
         });
 
-        function handleMouseMove(e) {
-            const card = e.currentTarget;
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left; // x position within the element.
-            const y = e.clientY - rect.top;  // y position within the element.
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
+        // Also handle link clicks to immediately move the indicator
+        document.querySelectorAll('.nav-link-item').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const targetId = e.currentTarget.getAttribute('data-target');
+                updateIndicator(targetId);
+            });
+        });
 
-            // Calculate tilt angle (-5 to 5 degrees max)
-            const tiltX = (y - centerY) / centerY * -5; // Tilt up/down
-            const tiltY = (x - centerX) / centerX * 5;  // Tilt left/right
+        // --- Parallax Effect (Makes the Hero Section "Alive") ---
+        const heroSection = document.getElementById('hero');
+        const layers = [
+            { id: 'parallax-layer-1', depth: 10 },
+            { id: 'parallax-layer-2', depth: 20 },
+        ];
 
-            // Terapkan transform 3D dan scale ringan saat hover
-            card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.02)`;
-            
-            // Tambahkan efek pencahayaan dinamis yang halus (modern touch)
-            const lightX = x / rect.width * 100;
-            const lightY = y / rect.height * 100;
-            const shadowColor = 'rgba(170, 255, 0, 0.4)'; // Neon green glow
-            const innerLight = 'rgba(170, 255, 0, 0.1)'; // Subtle inner light
-            
-            // Gabungkan shadow luar dan inner shadow yang dinamis
-            card.style.boxShadow = `
-                0 0 20px ${shadowColor}, 
-                inset ${lightX - 50}px ${lightY - 50}px 10px ${innerLight}
-            `;
-        }
+        heroSection.addEventListener('mousemove', (e) => {
+            const rect = heroSection.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
 
-        function handleMouseLeave(e) {
-            // Reset transform dan shadow saat kursor meninggalkan kartu
-            e.currentTarget.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
-            e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)'; 
-        }
+            const x = e.clientX - centerX;
+            const y = e.clientY - centerY;
 
-        // Simulasi fungsi submit form (hanya placeholder karena ini adalah single-file)
-        document.querySelector('form').addEventListener('submit', function(e) {
+            layers.forEach(layer => {
+                const element = document.getElementById(layer.id);
+                if (element) {
+                    const moveX = -(x / layer.depth) * 0.5;
+                    const moveY = -(y / layer.depth) * 0.5;
+
+                    element.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                }
+            });
+        });
+
+        // --- Form Submission Logic (Simulate Ritual Transmission) ---
+        const contactForm = document.querySelector('#contact form');
+        const submitButton = document.getElementById('submit-button');
+        const originalButtonText = '<i data-lucide="send" class="w-5 h-5"></i> <span>UTTER THE RITE</span>';
+        
+        contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            // Ganti dengan logika pengiriman data yang sesungguhnya (misalnya ke Firebase atau Formspree)
-            const submitButton = e.target.querySelector('button');
-            submitButton.textContent = "TRANSMISSION RECEIVED. STAND BY.";
-            submitButton.classList.remove('bg-red-800');
-            submitButton.classList.add('bg-green-800');
+            
+            // Visual change on button when transmission starts
+            submitButton.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> <span>RITE INITIATED...</span>';
+            submitButton.classList.remove('bg-red-700', 'hover:bg-red-800');
+            // Use a different shade of red for the 'loading' state
+            submitButton.classList.add('bg-red-900'); 
+            lucide.createIcons();
+
+            // Simulate data transmission
             setTimeout(() => {
-                // Reset form setelah simulasi pengiriman
-                e.target.reset();
-                // Reset nilai email
-                e.target.querySelector('input[type="email"]').value = "hadi.prasetia@example.com";
-                submitButton.textContent = "TRANSMIT SECURE DATA";
-                submitButton.classList.remove('bg-green-800');
-                submitButton.classList.add('bg-red-800');
-            }, 3000);
+                console.log("Contract prepared:", new FormData(this));
+                
+                // Visual change when transmission is received
+                submitButton.innerHTML = '<i data-lucide="check" class="w-5 h-5"></i> <span>RITE RECEIVED. AWAIT THY SCROLL.</span>';
+                submitButton.classList.remove('bg-red-700', 'bg-red-900');
+                submitButton.classList.add('bg-green-700'); /* Green for success is common, kept for clarity */
+                lucide.createIcons();
+                
+                // Reset form after simulated submission
+                setTimeout(() => {
+                    this.reset();
+                    // Ensure email value is restored
+                    document.getElementById('email').value = "hadi.prasetia@example.com"; 
+                    
+                    // Reset button to original state
+                    submitButton.innerHTML = originalButtonText;
+                    submitButton.classList.remove('bg-green-700');
+                    submitButton.classList.add('bg-red-700', 'hover:bg-red-800');
+                    lucide.createIcons();
+                }, 3000);
+
+            }, 2000);
         });
+        
+        // Initial Indicator setup on load
+        window.addEventListener('load', () => {
+            // Give a moment for the layout to settle before calculating position
+            setTimeout(() => {
+                updateIndicator('hero'); 
+            }, 100);
+        });
+
     </script>
 </body>
 </html>
