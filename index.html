@@ -1,388 +1,314 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hadi Prasetia | Visual Data Weaver</title>
-    
-    <!-- Tailwind CSS via CDN -->
+    <title>HADI PRASETIA | RECOVERY SPECIALIST</title>
+    <!-- Load Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts: Inter (Body) & Syne (Headings) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-    
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
+    <!-- Google Font: IBM Plex Mono (Monospace for terminal look) -->
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* [OPTIMIZED THEME] The Data Weaver: Lightweight & Analytical */
+        /* Menggunakan font Inter sebagai fallback, dengan IBM Plex Mono untuk efek terminal */
         :root {
-            --bg-color: #050816;
-            --primary-accent: #00FFFF; /* Cyan */
-            --secondary-accent: #9333ea; /* Purple */
-            --text-primary: #E0E0E0;
-            --text-secondary: #a0a0a0;
+            --neon-color: #aaff00; /* Toxic Green */
+            --dark-bg: #0d0d0d; /* Slightly darker/cleaner background */
+            --glow-inner: rgba(170, 255, 0, 0.1);
+            --glow-border: rgba(170, 255, 0, 0.5);
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            /* [OPTIMIZED] Simplified background to reduce paint cost */
-            background-image: radial-gradient(var(--primary-accent) 0.5px, transparent 0.5px);
-            background-size: 30px 30px;
-            background-position: 0 0;
-            color: var(--text-primary);
+            font-family: 'IBM Plex Mono', monospace;
+            background-color: var(--dark-bg);
+            color: #ccc;
+            /* Scanline effect is now much softer/subtler */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+            background-size: 2px 2px;
+            /* Perspective untuk efek 3D tilt pada kartu proyek */
+            perspective: 1000px; 
             overflow-x: hidden;
-            cursor: none;
         }
 
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Syne', sans-serif;
-            font-weight: 700;
-        }
-
-        /* Glitching/Decoding Title Effect */
-        .glitch-title {
-            position: relative;
-            color: var(--text-primary);
-            letter-spacing: 0.1em;
-        }
-
-        /* [OPTIMIZED] Holographic Card Effect without expensive backdrop-filter */
-        .holo-card {
-            background: linear-gradient(135deg, rgba(10, 25, 47, 0.8), rgba(147, 51, 234, 0.2));
-            /* backdrop-filter: blur(15px); - Removed for performance */
-            /* -webkit-backdrop-filter: blur(15px); - Removed for performance */
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        .holo-card:before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(110deg, transparent 20%, rgba(0, 255, 255, 0.15) 50%, transparent 80%);
-            transition: transform 0.6s ease;
-            transform: skewX(-25deg);
-        }
-        .holo-card:hover:before {
-            transform: translateX(200%) skewX(-25deg);
-        }
-        .project-card:hover { transform: translateY(-4px); border-color: var(--primary-accent); }
-
-
-        /* Animated Background Lines */
-        .data-stream path {
-            stroke: rgba(0, 255, 255, 0.08); stroke-width: 1px; fill: transparent;
-            stroke-dasharray: 1500; stroke-dashoffset: 1500;
-            animation: draw-stream 20s linear infinite;
-        }
-        @keyframes draw-stream { 50% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -1500; } }
-        .data-stream .stream-1 { animation-delay: -2s; animation-duration: 22s; }
-        .data-stream .stream-2 { animation-delay: -5s; }
-        .data-stream .stream-3 { animation-delay: -10s; animation-duration: 18s; }
-        .data-stream .stream-4 { animation-delay: -15s; }
-
-        /* Reveal Animation - Unchanged, works well */
-        .reveal-text {
-            clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
-            transform: translateY(30px); opacity: 0;
-            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        .reveal-text.visible {
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-            transform: translateY(0); opacity: 1;
-        }
-
-        /* [OPTIMIZED] Custom Cursor without expensive glow effect */
-        #custom-cursor {
-            position: fixed; width: 10px; height: 10px;
-            background-color: var(--primary-accent);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none; z-index: 10000;
-            transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
-            /* box-shadow: 0 0 15px var(--primary-accent), 0 0 25px var(--primary-accent); - Removed for performance */
-            opacity: 0.9;
-        }
-        #custom-cursor.grow {
-            width: 40px; height: 40px;
-            background-color: rgba(0, 255, 255, 0.3);
-            opacity: 0.5;
+        /* Kelas kustom untuk efek neon glow yang lebih bersih */
+        .neon-glow {
+            text-shadow: 0 0 4px var(--neon-color);
+            box-shadow: 0 0 5px var(--glow-border), inset 0 0 5px var(--glow-inner);
+            border-color: var(--neon-color);
         }
         
-        /* Filter Buttons - Reskinned */
-        .filter-btn, .project-card, .contact-icon { cursor: none; }
-        .filter-btn {
-            background-color: rgba(0, 255, 255, 0.1); color: var(--text-secondary);
-            padding: 6px 14px; border-radius: 9999px; border: 1px solid transparent;
-            font-size: 0.875rem; font-weight: 500; transition: all 0.3s ease;
+        /* Animasi flicker dihapus untuk tampilan yang lebih modern */
+        
+        /* Card Proyek - Diperbarui untuk 3D */
+        .project-card {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            /* Transform lebih cepat untuk respons tilt */
+            transition: transform 0.1s linear, box-shadow 0.3s ease; 
+            transform-style: preserve-3d; /* Memungkinkan anak elemen bergerak dalam 3D */
+            border-radius: 0.5rem; /* rounded-lg */
         }
-        .filter-btn:hover { background-color: rgba(0, 255, 255, 0.2); color: var(--primary-accent); }
-        .filter-btn.active { background-color: var(--primary-accent); color: var(--bg-color); border-color: var(--primary-accent); }
+        
+        /* Inner content dipindahkan ke depan agar terlihat 'melayang' */
+        .project-card-inner {
+            transform: translateZ(20px); 
+        }
 
-        /* Preloader - Reskinned */
-        #preloader {
-            position: fixed; inset: 0; background-color: var(--bg-color);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 100; transition: opacity 0.75s ease, visibility 0.75s ease;
+        .project-card:hover {
+            border-color: var(--neon-color);
         }
-        #preloader.hidden { opacity: 0; visibility: hidden; }
-        .preloader-logo { width: 80px; height: 80px; }
-        .preloader-logo path {
-            stroke: var(--primary-accent); stroke-width: 8;
-            stroke-dasharray: 500; stroke-dashoffset: 500;
-            animation: draw-logo 2s ease-in-out forwards;
-        }
-        @keyframes draw-logo { to { stroke-dashoffset: 0; } }
+
+        /* Scrollbar styling (for desktop aesthetic) */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1a1a1a; }
+        ::-webkit-scrollbar-thumb { background: var(--neon-color); border-radius: 4px; }
     </style>
 </head>
-<body class="antialiased">
+<body class="min-h-screen p-4 sm:p-8">
 
-    <div id="preloader">
-        <svg class="preloader-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15 20 L15 80 M45 20 L45 80 M15 50 L45 50" fill="none"/> <!-- H -->
-            <path d="M55 20 L55 80 M55 20 A 15 15, 0, 1, 1, 55, 50" fill="none"/> <!-- P -->
-        </svg>
-    </div>
+    <!-- Header: System Boot / Access Log -->
+    <header class="text-center mb-16 border-b-2 border-dashed border-gray-700 pb-4">
+        <h1 class="text-3xl sm:text-5xl font-bold uppercase mb-2 text-white">
+            HADI PRASETIA: ACCESS LOG [VISUAL DATA WEAVER]
+        </h1>
+        <p class="text-xl sm:text-2xl neon-glow inline-block px-3 py-1 rounded-sm border-2">
+            RECOVERY SPECIALIST: COMMS & DATA INTERPRETER
+        </p>
+        <p class="mt-4 text-sm max-w-2xl mx-auto text-gray-400">
+            [DATA FRAGMENT: PROFILE] Menerjemahkan informasi mentah dan sinyal yang terfragmentasi (*complex data*) menjadi cerita visual yang jernih. Membangun kembali sistem komunikasi yang intuitif dan tahan banting.
+        </p>
+    </header>
 
-    <div id="custom-cursor"></div>
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto">
 
-    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-        <div class="absolute inset-0 data-stream">
-            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1000 1000">
-                <path d="M-100,50 C 250,200 750,-100 1100,150" class="stream-1"></path>
-                <path d="M1100,250 C 750,400 250,200 -100,350" class="stream-2"></path>
-                <path d="M-100,850 C 250,700 750,1000 1100,750" class="stream-3"></path>
-                <path d="M1100,950 C 750,1100 250,800 -100,900" class="stream-4"></path>
-            </svg>
-        </div>
-    </div>
-    
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <header class="fixed top-0 left-0 right-0 z-50 bg-black/30 backdrop-blur-md font-sans">
-             <div class="container mx-auto px-6 py-4">
-                 <div class="flex justify-between items-center">
-                     <a href="#" class="font-bold text-xl tracking-widest uppercase">Hadi Prasetia</a>
-                     <nav class="hidden md:flex space-x-8 text-sm tracking-wider text-gray-300">
-                         <a href="#proyek" class="hover:text-cyan-400 transition-colors duration-300">Proyek</a>
-                         <a href="#tentang" class="hover:text-cyan-400 transition-colors duration-300">Tentang</a>
-                         <a href="#kontak" class="hover:text-cyan-400 transition-colors duration-300">Kontak</a>
-                     </nav>
-                 </div>
-             </div>
-        </header>
-
-        <main>
-            <section id="home" class="min-h-screen flex items-center justify-center text-center relative">
-                <div class="reveal-text">
-                    <span class="text-lg font-semibold text-cyan-400">VISUAL DATA WEAVER</span>
-                    <h1 id="hero-title" class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mt-2 glitch-title">
-                        HADI PRASETIA
-                    </h1>
-                    <p class="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-gray-300">
-                        Saya menerjemahkan data yang kompleks menjadi cerita visual yang jernih dan berkesan.
-                    </p>
-                    <a href="#proyek" class="mt-12 inline-block">
-                        <i data-lucide="arrow-down-circle" class="h-10 w-10 text-gray-600 animate-bounce hover:text-cyan-400 transition-colors duration-300"></i>
-                    </a>
-                </div>
-            </section>
-
-            <section id="tentang" class="py-20 md:py-24">
-                 <div class="holo-card p-6 sm:p-8 rounded-3xl reveal-text max-w-4xl mx-auto">
-                    <h2 class="text-3xl font-bold text-white text-center mb-4">Tentang Saya</h2>
-                    <p class="text-gray-300 text-center text-lg leading-relaxed">
-                        Sebagai seorang Mahasiswa Desain Komunikasi Visual, saya terpesona oleh persimpangan antara data dan desain. Hasrat saya adalah mengubah informasi mentah menjadi visual yang tidak hanya indah, tetapi juga intuitif dan mencerahkan. Saya membantu brand menemukan dan menceritakan kisah mereka melalui data.
-                    </p>
-                </div>
-            </section>
+        <!-- Section 1: Data Fragments / Missions (Projects) -->
+        <section class="mb-20">
+            <h2 class="text-2xl sm:text-4xl font-bold mb-8 uppercase text-white border-l-4 border-l-yellow-400 pl-4">
+                // DATA FRAGMENTS (Critical Missions)
+            </h2>
             
-            <section id="proyek" class="py-20 md:py-24">
-                <div class="holo-card p-6 sm:p-8 rounded-3xl reveal-text">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-                        <h2 class="text-3xl font-bold text-white mb-4 sm:mb-0">Proyek Unggulan</h2>
-                        <div id="filters" class="flex items-center gap-2 flex-wrap">
-                            <button class="filter-btn active" data-filter="all">Semua</button>
-                            <button class="filter-btn" data-filter="web">Web</button>
-                            <button class="filter-btn" data-filter="branding">Branding</button>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                
+                <!-- Project 1: Undangan Pernikahan Digital -->
+                <article class="project-card p-6 shadow-xl">
+                    <div class="project-card-inner">
+                        <h3 class="text-xl font-bold mb-2 text-yellow-400">MISSION: SOCIAL LINKAGE R.E.D.</h3>
+                        <p class="text-xs uppercase text-gray-500 mb-4">Fragment ID: PJT-001 | Field: Web Design, UI/UX</p>
+                        <p class="text-gray-400 mb-4">
+                            **THE THREAT:** Keruntuhan sistem komunikasi sosial; data penting (acara/pernikahan) gagal diakses.
+                        </p>
+                        <p class="text-gray-300">
+                            **THE BLUEPRINT:** Mendesain dan membangun antarmuka web yang **sangat elegan dan modern** untuk transmisi data sosial yang sensitif.
+                        </p>
+                        <div class="mt-4 pt-4 border-t border-gray-700">
+                            <p class="text-sm font-bold neon-glow">
+                                IMPACT / SURVIVAL RATE:
+                            </p>
+                            <p class="text-2xl text-white font-extrabold mt-1">
+                                99% Data Reliability
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project 2: Infografis Timeline -->
+                <article class="project-card p-6 shadow-xl">
+                    <div class="project-card-inner">
+                        <h3 class="text-xl font-bold mb-2 text-yellow-400">MISSION: CHRONOS M.A.P.P.I.N.G.</h3>
+                        <p class="text-xs uppercase text-gray-500 mb-4">Fragment ID: PJT-002 | Field: Visual Identity, Infographics</p>
+                        <p class="text-gray-400 mb-4">
+                            **THE THREAT:** Kekacauan informasi; ketidakmampuan untuk melacak progres kritis atau jadwal kejadian.
+                        </p>
+                        <p class="text-gray-300">
+                            **THE BLUEPRINT:** Menciptakan Infografis Timeline yang jelas dan hierarkis untuk memulihkan kontrol atas data waktu.
+                        </p>
+                        <div class="mt-4 pt-4 border-t border-gray-700">
+                            <p class="text-sm font-bold neon-glow">
+                                IMPACT / SURVIVAL RATE:
+                            </p>
+                            <p class="text-2xl text-white font-extrabold mt-1">
+                                85% Reduction in Time Error
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project 3: Desain Visual Korporat -->
+                <article class="project-card p-6 shadow-xl">
+                    <div class="project-card-inner">
+                        <h3 class="text-xl font-bold mb-2 text-yellow-400">MISSION: AUTHORITY RE-ESTABLISHMENT</h3>
+                        <p class="text-xs uppercase text-gray-500 mb-4">Fragment ID: PJT-003 | Field: Branding, Visual Comms</p>
+                        <p class="text-gray-400 mb-4">
+                            **THE THREAT:** Hilangnya kepercayaan dan identitas dalam unit-unit operasional (korporat).
+                        </p>
+                        <p class="text-gray-300">
+                            **THE BLUEPRINT:** Merancang sistem visual korporat yang profesional, konsisten, dan membangun kembali citra otoritas brand.
+                        </p>
+                        <div class="mt-4 pt-4 border-t border-gray-700">
+                            <p class="text-sm font-bold neon-glow">
+                                IMPACT / SURVIVAL RATE:
+                            </p>
+                            <p class="text-2xl text-white font-extrabold mt-1">
+                                100% Visual Consistency
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project 4: Desain Aplikasi Mobile -->
+                <article class="project-card p-6 shadow-xl">
+                    <div class="project-card-inner">
+                        <h3 class="text-xl font-bold mb-2 text-yellow-400">MISSION: MOBILE RESOURCE TERMINAL</h3>
+                        <p class="text-xs uppercase text-gray-500 mb-4">Fragment ID: PJT-004 | Field: UI/UX Design (Figma)</p>
+                        <p class="text-gray-400 mb-4">
+                            **THE THREAT:** Kegagalan antarmuka kritis pada perangkat mobile, menghambat manajemen sumber daya keuangan (mobile banking).
+                        </p>
+                        <p class="text-gray-300">
+                            **THE BLUEPRINT:** Konsep aplikasi mobile banking yang berfokus pada kemudahan pengguna, tampilan bersih, dan navigasi yang efisien.
+                        </p>
+                        <div class="mt-4 pt-4 border-t border-gray-700">
+                            <p class="text-sm font-bold neon-glow">
+                                IMPACT / SURVIVAL RATE:
+                            </p>
+                            <p class="text-2xl text-white font-extrabold mt-1">
+                                Minimal Operational Friction
+                            </p>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Section 2: Blueprint & Gear (Skills & Tech Stack) -->
+        <section class="mb-20">
+            <h2 class="text-2xl sm:text-4xl font-bold mb-8 uppercase text-white border-l-4 border-l-green-400 pl-4">
+                // BLUEPRINT & GEAR (Tech Stack & Protocol)
+            </h2>
+            
+            <div class="bg-gray-800 p-6 rounded-lg border-2 border-green-500/50">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Core Systems (Hard Skills) -->
+                    <div>
+                        <h3 class="text-xl font-bold text-green-400 mb-3">CORE SYSTEMS (HARD SKILLS)</h3>
+                        <div class="flex flex-wrap gap-2 text-sm">
+                            <span class="px-3 py-1 bg-green-900/50 text-green-300 rounded-full border border-green-700/50">DATA VISUALIZATION</span>
+                            <span class="px-3 py-1 bg-green-900/50 text-green-300 rounded-full border border-green-700/50">UI/UX DESIGN</span>
+                            <span class="px-3 py-1 bg-green-900/50 text-green-300 rounded-full border border-green-700/50">FIGMA & ADOBE SUITE</span>
+                            <span class="px-3 py-1 bg-green-900/50 text-green-300 rounded-full border border-green-700/50">WEB DESIGN (HTML/CSS)</span>
+                            <span class="px-3 py-1 bg-green-900/50 text-green-300 rounded-full border border-green-700/50">INFOGRAPHICS & BRANDING</span>
+                            <span class="px-3 py-1 bg-green-900/50 text-green-300 rounded-full border border-green-700/50">PROTOTYPING</span>
                         </div>
                     </div>
 
-                    <div id="project-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 transition-opacity duration-300">
-                        <div class="project-card holo-card p-4 rounded-2xl" data-category="web" data-image="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/a/wed.png" data-title="Undangan Pernikahan Digital" data-description="Desain antarmuka yang elegan dan modern untuk website undangan pernikahan, mengutamakan estetika dan pengalaman pengguna yang lancar.">
-                            <h3 class="font-semibold text-white">Undangan Digital</h3><p class="text-sm text-gray-400">Web Design</p>
-                        </div>
-                        <div class="project-card holo-card p-4 rounded-2xl" data-category="branding" data-image="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/a/tmline.png" data-title="Desain Infografis Timeline" data-description="Infografis yang jelas dan menarik secara visual untuk memaparkan timeline sebuah acara atau progres proyek. Fokus pada keterbacaan dan hierarki informasi.">
-                            <h3 class="font-semibold text-white">Infografis Timeline</h3><p class="text-sm text-gray-400">Visual Identity</p>
-                        </div>
-                        <div class="project-card holo-card p-4 rounded-2xl" data-category="branding" data-image="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/a/corpo.png" data-title="Desain Visual Korporat" data-description="Desain visual untuk materi promosi korporat, menciptakan tampilan yang profesional, konsisten, dan sesuai dengan identitas brand perusahaan.">
-                            <h3 class="font-semibold text-white">Desain Korporat</h3><p class="text-sm text-gray-400">Branding</p>
-                        </div>
-                         <div class="project-card holo-card p-4 rounded-2xl" data-category="web" data-image="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/1.png" data-title="Desain Aplikasi Mobile" data-description="Sebuah konsep desain antarmuka untuk aplikasi mobile banking yang berfokus pada kemudahan penggunaan dan tampilan yang bersih. Dibuat menggunakan Figma.">
-                            <h3 class="font-semibold text-white">Aplikasi Mobile</h3><p class="text-sm text-gray-400">UI/UX Design</p>
-                        </div>
+                    <!-- Field Protocol (Soft Skills) -->
+                    <div>
+                        <h3 class="text-xl font-bold text-green-400 mb-3">FIELD PROTOCOL (SOFT SKILLS)</h3>
+                        <ul class="list-disc list-inside text-gray-400 space-y-1 ml-4">
+                            <li>Data-Driven Storytelling (Narasi Data)</li>
+                            <li>Critical Information Hierarchy (Prioritas Informasi)</li>
+                            <li>Visual System Auditing (Audit Desain)</li>
+                            <li>Disaster Recovery Planning (Perencanaan Pemulihan Bencana)</li>
+                        </ul>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section id="kontak" class="py-20 md:py-24">
-                <div class="holo-card p-6 sm:p-8 rounded-3xl reveal-text">
-                    <h2 class="text-4xl font-bold text-center text-white">Hubungi Saya</h2>
-                    <p class="text-center text-gray-300 max-w-xl mx-auto mt-2">
-                        Punya data untuk divisualisasikan atau ide untuk dikolaborasikan? Mari kita terhubung dan menenun masa depan bersama.
-                    </p>
-                    <div class="mt-10 max-w-lg mx-auto flex justify-center items-center gap-4">
-                        <a href="mailto:hadi.prasetia@example.com" class="contact-icon w-14 h-14 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-transform" title="Email"><i data-lucide="mail" class="w-7 h-7 text-white"></i></a>
-                        <a href="https://wa.me/6287821991710" target="_blank" rel="noopener noreferrer" class="contact-icon w-14 h-14 rounded-full bg-green-600 hover:bg-green-500 flex items-center justify-center transition-transform" title="WhatsApp"><i data-lucide="message-circle" class="w-7 h-7 text-white"></i></a>
-                        <a href="https://instagram.com/idhescobar_" target="_blank" rel="noopener noreferrer" class="contact-icon w-14 h-14 rounded-full bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center transition-transform" title="Instagram"><i data-lucide="instagram" class="w-7 h-7 text-white"></i></a>
-                    </div>
-                </div>
-            </section>
-        </main>
-        
-        <footer class="text-center py-12 text-gray-500">
-            <p>&copy; 2025 Hadi Prasetia. Woven with data and design.</p>
-        </footer>
-    </div>
+        <!-- Section 3: Transmit Signal (Contact) -->
+        <section class="mb-16">
+            <h2 class="text-2xl sm:text-4xl font-bold mb-8 uppercase text-white border-l-4 border-l-red-500 pl-4">
+                // TRANSMIT SIGNAL (Initiate Secure Connection)
+            </h2>
+            
+            <div class="bg-black p-8 rounded-lg border-2 border-red-500/50 shadow-inner neon-glow">
+                <p class="text-red-400 text-lg mb-4">
+                    [SYSTEM ALERT] - DIRECT COMMUNICATION PROTOCOL INITIATED.
+                </p>
+                <!-- Disesuaikan dengan kontak Anda -->
+                <form class="space-y-4">
+                    <input type="text" placeholder="SUBJECT LINE (Top Priority Mission)" class="w-full p-3 bg-gray-900 border border-red-500/50 text-green-400 focus:outline-none focus:ring-1 focus:ring-red-400 rounded-none">
+                    <input type="email" placeholder="COORDINATES (Your Email Address)" value="hadi.prasetia@example.com" class="w-full p-3 bg-gray-900 border border-red-500/50 text-green-400 focus:outline-none focus:ring-1 focus:ring-red-400 rounded-none">
+                    <textarea placeholder="MESSAGE (Briefing Details for Collaboration)" rows="4" class="w-full p-3 bg-gray-900 border border-red-500/50 text-green-400 focus:outline-none focus:ring-1 focus:ring-red-400 rounded-none"></textarea>
+                    <button type="submit" class="w-full py-3 bg-red-800 text-white uppercase font-bold hover:bg-red-600 transition duration-200 border border-red-500 neon-glow">
+                        TRANSMIT SECURE DATA
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer: End of Log -->
+    <footer class="text-center mt-12 pt-6 border-t border-dashed border-gray-700">
+        <p class="text-sm text-gray-500">
+            [END OF LOG] - Data Compiled by HADI PRASETIA. All Systems Reserved 2024.
+        </p>
+    </footer>
     
-    <div id="project-modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
-        <div id="modal-content" class="holo-card rounded-3xl max-w-2xl w-full p-4 sm:p-6 relative transform scale-95 transition-all duration-300">
-             <button id="close-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10"><i data-lucide="x" class="h-6 w-6"></i></button>
-             <div class="max-h-[80vh] overflow-y-auto pr-2">
-                 <img id="modal-img" src="" alt="Detail Proyek" class="rounded-2xl w-full h-auto mb-4">
-                 <h2 id="modal-title" class="text-2xl font-bold text-white"></h2>
-                 <p id="modal-description" class="mt-2 text-gray-300"></p>
-             </div>
-        </div>
-    </div>
-
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-            
-            // Preloader Logic
-            const preloader = document.getElementById('preloader');
-            const hidePreloader = () => { if (!preloader.classList.contains('hidden')) { preloader.classList.add('hidden'); } };
-            window.addEventListener('load', () => { setTimeout(hidePreloader, 2200); });
-            setTimeout(hidePreloader, 4000);
-            
-            // [OPTIMIZED] Decoding/Glitch Effect for Hero Title
-            const heroTitle = document.getElementById('hero-title');
-            const originalText = heroTitle.innerText;
-            const chars = '!<>-_\\/[]{}—=+*^?#________';
-            let interval = null;
-            
-            const decodeEffect = () => {
-                let iteration = 0;
-                clearInterval(interval);
-                
-                interval = setInterval(() => {
-                    heroTitle.innerText = originalText.split("")
-                        .map((letter, index) => {
-                            if(index < iteration) {
-                                return originalText[index];
-                            }
-                            return chars[Math.floor(Math.random() * chars.length)]
-                        })
-                        .join("");
-                    
-                    if(iteration >= originalText.length){ 
-                        clearInterval(interval);
-                    }
-                    
-                    iteration += 1 / 2; // Slightly faster iteration
-                }, 40); // Slightly larger interval
-            };
-            setTimeout(decodeEffect, 2500); // Start after preloader
+        // JS Tilt/Parallax Effect for Modern Touch
+        const tiltElements = document.querySelectorAll('.project-card');
 
-            // Reveal on Scroll - Already performant with IntersectionObserver
-            const revealElements = document.querySelectorAll('.reveal-text');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
-            }, { threshold: 0.1, rootMargin: "0px 0px -5% 0px" });
-            revealElements.forEach(el => { observer.observe(el); });
-
-            // Project Filtering
-            const filterButtons = document.querySelectorAll('.filter-btn');
-            const projectCards = document.querySelectorAll('.project-card');
-            const projectGrid = document.getElementById('project-grid');
-            filterButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    const filter = button.dataset.filter;
-                    projectGrid.style.opacity = '0';
-                    setTimeout(() => {
-                        projectCards.forEach(card => {
-                            card.style.display = (filter === 'all' || card.dataset.category === filter) ? 'block' : 'none';
-                        });
-                        projectGrid.style.opacity = '1';
-                    }, 300);
-                });
-            });
-            
-            // Project Modal Logic
-            const modal = document.getElementById('project-modal');
-            const modalContent = document.getElementById('modal-content');
-            const closeModalBtn = document.getElementById('close-modal');
-            const modalImg = document.getElementById('modal-img');
-            const modalTitle = document.getElementById('modal-title');
-            const modalDescription = document.getElementById('modal-description');
-            projectCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    modalImg.src = card.dataset.image;
-                    modalTitle.textContent = card.dataset.title;
-                    modalDescription.textContent = card.dataset.description;
-                    modal.classList.remove('opacity-0', 'pointer-events-none');
-                    modalContent.classList.remove('scale-95');
-                });
-            });
-            const closeModal = () => {
-                modal.classList.add('opacity-0', 'pointer-events-none');
-                modalContent.classList.add('scale-95');
-            };
-            closeModalBtn.addEventListener('click', closeModal);
-            modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-
-            // [OPTIMIZED] Custom Cursor Logic with requestAnimationFrame
-            const cursor = document.getElementById('custom-cursor');
-            const hoverableElements = document.querySelectorAll('a, button, .filter-btn, .project-card, .contact-icon');
-            
+        tiltElements.forEach(el => {
+            // Hanya aktifkan efek tilt di desktop/perangkat dengan kursor
             if (window.matchMedia('(hover: hover)').matches) {
-                let mouseX = 0, mouseY = 0;
-                let cursorX = 0, cursorY = 0;
-                const speed = 0.1;
-
-                document.addEventListener('mousemove', (e) => {
-                    mouseX = e.clientX;
-                    mouseY = e.clientY;
-                });
-                
-                function animateCursor() {
-                    let distX = mouseX - cursorX;
-                    let distY = mouseY - cursorY;
-                    cursorX += distX * speed;
-                    cursorY += distY * speed;
-                    cursor.style.left = `${cursorX}px`;
-                    cursor.style.top = `${cursorY}px`;
-                    requestAnimationFrame(animateCursor);
-                }
-                animateCursor();
-
-                hoverableElements.forEach(el => {
-                    el.addEventListener('mouseenter', () => cursor.classList.add('grow'));
-                    el.addEventListener('mouseleave', () => cursor.classList.remove('grow'));
-                });
-            } else {
-                cursor.style.display = 'none';
+                el.addEventListener('mousemove', handleMouseMove);
+                el.addEventListener('mouseleave', handleMouseLeave);
             }
+        });
+
+        function handleMouseMove(e) {
+            const card = e.currentTarget;
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left; // x position within the element.
+            const y = e.clientY - rect.top;  // y position within the element.
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            // Calculate tilt angle (-5 to 5 degrees max)
+            const tiltX = (y - centerY) / centerY * -5; // Tilt up/down
+            const tiltY = (x - centerX) / centerX * 5;  // Tilt left/right
+
+            // Terapkan transform 3D dan scale ringan saat hover
+            card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.02)`;
+            
+            // Tambahkan efek pencahayaan dinamis yang halus (modern touch)
+            const lightX = x / rect.width * 100;
+            const lightY = y / rect.height * 100;
+            const shadowColor = 'rgba(170, 255, 0, 0.4)'; // Neon green glow
+            const innerLight = 'rgba(170, 255, 0, 0.1)'; // Subtle inner light
+            
+            // Gabungkan shadow luar dan inner shadow yang dinamis
+            card.style.boxShadow = `
+                0 0 20px ${shadowColor}, 
+                inset ${lightX - 50}px ${lightY - 50}px 10px ${innerLight}
+            `;
+        }
+
+        function handleMouseLeave(e) {
+            // Reset transform dan shadow saat kursor meninggalkan kartu
+            e.currentTarget.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+            e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)'; 
+        }
+
+        // Simulasi fungsi submit form (hanya placeholder karena ini adalah single-file)
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Ganti dengan logika pengiriman data yang sesungguhnya (misalnya ke Firebase atau Formspree)
+            const submitButton = e.target.querySelector('button');
+            submitButton.textContent = "TRANSMISSION RECEIVED. STAND BY.";
+            submitButton.classList.remove('bg-red-800');
+            submitButton.classList.add('bg-green-800');
+            setTimeout(() => {
+                // Reset form setelah simulasi pengiriman
+                e.target.reset();
+                // Reset nilai email
+                e.target.querySelector('input[type="email"]').value = "hadi.prasetia@example.com";
+                submitButton.textContent = "TRANSMIT SECURE DATA";
+                submitButton.classList.remove('bg-green-800');
+                submitButton.classList.add('bg-red-800');
+            }, 3000);
         });
     </script>
 </body>
 </html>
-
