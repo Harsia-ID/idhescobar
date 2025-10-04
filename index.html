@@ -19,6 +19,8 @@
             --glow-soft: rgba(224, 242, 241, 0.2);  /* Softer glow color */
             --border-color: #4b5563; /* Darker gray for subtle borders */
             --ethereal-dust: rgba(189, 212, 255, 0.5); /* Subtle blue-gray for cursor trail */
+            --fib-color: rgba(189, 212, 255, 0.1); /* Subtle color for fib spiral */
+            --progress-color: #64748b; /* Slate-500 for progress bar background */
         }
 
         body {
@@ -86,6 +88,50 @@
             to { background-position: 100% 100%; }
         }
 
+        /* --- FIBONACCI SPIRAL ANIMATION --- */
+        .fib-spiral {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100vw;
+            height: 100vh;
+            max-width: 800px;
+            max-height: 800px;
+            opacity: 0.1;
+            transform: translate(-50%, -50%) rotate(0deg);
+            animation: rotate-fib 120s linear infinite;
+        }
+
+        @keyframes rotate-fib {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .fib-spiral svg {
+            width: 100%;
+            height: 100%;
+            stroke: var(--fib-color);
+            fill: none;
+            stroke-width: 1;
+            stroke-linecap: round;
+        }
+        /* END FIBONACCI STYLES */
+
+        /* --- PROGRESS BAR STYLES --- */
+        .progress-bar-container {
+            background-color: #1f2937; /* Gray-800 */
+            height: 10px;
+            border-radius: 9999px;
+            overflow: hidden;
+            border: 1px solid #374151;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0; /* Initial state for animation */
+            background-color: var(--accent-color); /* Light Cyan */
+            transition: width 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 0 8px var(--glow-strong);
+        }
+        
         /* Parallax JS akan menyesuaikan properti transform */
         .parallax-element {
             transition: transform 0.1s ease-out;
@@ -363,6 +409,14 @@
 
     <!-- 1. Hero Section (The Sancturary) -->
     <section id="hero" class="hero-bg-dark min-h-screen flex items-center justify-center relative overflow-hidden text-center p-8">
+        <!-- Fibonacci Spiral Pattern (Z-index 0) -->
+        <div class="fib-spiral absolute inset-0 z-0 hidden md:block">
+            <!-- Fibonacci Golden Spiral SVG (Approximation) -->
+            <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M 50 50 L 50 100 A 50 50 0 0 1 0 50 L 0 50 A 30.9 30.9 0 0 0 30.9 19.1 L 30.9 19.1 A 19.1 19.1 0 0 1 50 0 L 50 0 A 11.8 11.8 0 0 0 61.8 11.8 L 61.8 11.8 A 7.3 7.3 0 0 1 54.5 19.1 L 54.5 19.1 A 4.5 4.5 0 0 0 50 14.6 L 50 14.6 A 2.8 2.8 0 0 1 52.8 17.4" style="stroke-width: 0.5;"/>
+            </svg>
+        </div>
+        
         <!-- Parallax Elements - creating depth and a "living" effect -->
         <div id="parallax-layer-1" class="absolute inset-0 z-0 opacity-10 parallax-element" data-depth="10">
             <div class="w-full h-full bg-contain bg-repeat opacity-10" style="background-image: url('https://placehold.co/1000x1000/030712/e0f2f1?text=Magic+Runes'); filter: grayscale(100%);"></div>
@@ -395,6 +449,7 @@
 
     <!-- 2. About Section (The Grimoire) - Now CV Focused -->
     <section id="about" class="py-20 lg:py-32 bg-gray-900 border-t border-b border-gray-800/50">
+        <!-- Content width set to golden ratio approximation: max-w-6xl for main container (approx 96rem) and max-w-4xl for central text (approx 64rem) -> 96/64 = 1.5, close to 1.618 -->
         <div class="max-w-6xl mx-auto px-4">
             <h2 class="fantasy-title text-4xl font-bold text-center mb-12 text-gray-400 neon-glow">
                 CV & The Grimoire (Skill Codex & Profile)
@@ -408,23 +463,46 @@
                 <h3 class="fantasy-title text-2xl font-bold mb-4 text-gray-300 neon-glow border-b border-gray-800 pb-2">
                     CHRONICLES OF SERVICE
                 </h3>
-                <details>
+                <details open>
                     <summary class="text-base font-semibold">
                         <i data-lucide="book-open-text" class="w-5 h-5 accordion-icon neon-glow"></i>
                         Scrolls of Academia (The Lore of Education)
                     </summary>
-                    <div class="accordion-content text-base space-y-3 pl-2" style="color: #a1a1a6;">
+                    <div class="accordion-content text-base space-y-4 pl-2" style="color: #a1a1a6;">
+                        
+                        <!-- NEW: MI Al-Khairiyah Pagi -->
+                        <div class="border-l-2 pl-4 ml-2 timeline-line">
+                            <p class="font-semibold text-gray-200">MI Al-Khairiyah Pagi</p>
+                            <p>Discipline: Foundational Lore (6 Years)</p>
+                            <ul class="list-disc list-inside text-sm mt-2 space-y-1">
+                                <li>The Rite of Script and Recitation (Baca Tulis Alquran).</li>
+                                <li>Studies in Fiqih and Sacred Law.</li>
+                                <li>Memorization of Alquran and Hadiths.</li>
+                                <li>Lore of the Earth, Social Order, and Ancient Chronicles (Sosial, IPA, Sejarah).</li>
+                            </ul>
+                        </div>
+
+                        <!-- NEW: MTs Al-Khairiyah -->
+                        <div class="border-l-2 pl-4 ml-2 timeline-line">
+                            <p class="font-semibold text-gray-200">MTs Al-Khairiyah</p>
+                            <p>Discipline: Intermediate Lore (3 Years)</p>
+                            <ul class="list-disc list-inside text-sm mt-2 space-y-1">
+                                <li>**Digital Sigil Crafting (Teknologi dan Informasi).**</li>
+                                <li>Advanced Studies in Fiqih.</li>
+                                <li>Lore of Natural Systems, Societal Structures, and Islamic History.</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Existing: SMK 1 Perguruan Cikini -->
                         <div class="border-l-2 pl-4 ml-2 timeline-line">
                             <p class="font-semibold text-gray-200">SMK 1 Perguruan Cikini</p>
                             <p>Discipline: Technical Lore of Compute & Network (TKJ)</p>
                             <p>Rite of Completion: 2025 (Expected)</p>
-                            <!-- UPDATED LEARNING MODULES -->
                             <ul class="list-disc list-inside text-sm mt-2 space-y-1">
                                 <li>The Rite of Linux & Server Enthrallment (Server & Client Configuration).</li>
                                 <li>Studies in Network Topology & Mikrotik (Advanced Routing & Infrastructure).</li>
                                 <li>Network Simulation Forging using the arcane tool of Cisco Packet Tracer.</li>
                             </ul>
-                            <!-- END UPDATED LEARNING MODULES -->
                         </div>
                     </div>
                 </details>
@@ -436,12 +514,73 @@
                     <div class="accordion-content space-y-4 text-base pl-2" style="color: #a1a1a6;">
                             <div class="border-l-2 pl-4 ml-2 timeline-line">
                                 <p class="font-semibold text-gray-200">PT. PLN Indonesia Power (Apprenticeship)</p>
-                                <p>Role: HAR/INSTRUMENT</p>
-                                <p>Tribute Period: October 2023 - January 2024</p>
+                                <p>Role: HAR/INSTRUMENT (Subsidiary of PT PLN (Persero))</p>
+                                <p>Tribute Period: October 2023 - January 2024 (3 Mo.)</p>
+                                <ul class="list-disc list-inside text-sm mt-2 space-y-1">
+                                    <li>Power Generation Lore: Studied the Power Plants in Tanjung Priok and the intricate Generating Process.</li>
+                                    <li>Optimization Rites: Delved into the REOC (Reliability, Efficiency, Optimization Center) system for process refinement.</li>
+                                    <li>Interface & Control: Mastered the Human Machine Interface (HMI) for operational command.</li>
+                                    <li>Structural Mapping: Analyzed the Network Topology and infrastructure at the plant.</li>
+                                </ul>
                             </div>
                     </div>
                 </details>
             </div>
+            
+            <!-- NEW: Arcane Metrics Infographics -->
+            <div id="metrics-infographics" class="max-w-4xl mx-auto mb-16 p-6 rounded-xl border border-gray-800 bg-gray-950">
+                <h3 class="fantasy-title text-2xl font-bold mb-6 text-gray-300 neon-glow border-b border-gray-800 pb-2">
+                    ARCANE METRICS (POWER LEVELS)
+                </h3>
+                <p class="text-gray-400 text-sm mb-6">Visualisasi tingkat penguasaan mantra digital (Keahlian) berdasarkan pengujian internal dan *field experience*.</p>
+                
+                <div class="space-y-6" data-animate-on-scroll>
+                    <!-- Metric 1: Web Forging -->
+                    <div class="metric-item">
+                        <div class="flex justify-between mb-1 text-sm text-gray-300">
+                            <span class="fantasy-title">Web Forging (HTML/CSS/JS)</span>
+                            <span class="metric-value">90%</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" data-progress="90"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Metric 2: Artistry of the Moving Image -->
+                    <div class="metric-item">
+                        <div class="flex justify-between mb-1 text-sm text-gray-300">
+                            <span class="fantasy-title">Artistry of the Moving Image (Video/Motion)</span>
+                            <span class="metric-value">85%</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" data-progress="85"></div>
+                        </div>
+                    </div>
+
+                    <!-- Metric 3: Rites of Sigil Crafting -->
+                    <div class="metric-item">
+                        <div class="flex justify-between mb-1 text-sm text-gray-300">
+                            <span class="fantasy-title">Rites of Sigil Crafting (UI/UX Design)</span>
+                            <span class="metric-value">80%</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" data-progress="80"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Metric 4: Technical Lore of Network -->
+                    <div class="metric-item">
+                        <div class="flex justify-between mb-1 text-sm text-gray-300">
+                            <span class="fantasy-title">Technical Lore of Network & Server</span>
+                            <span class="metric-value">75%</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" data-progress="75"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END NEW: Arcane Metrics Infographics -->
 
 
             <!-- Wardens' Tools (Mantra & Gear) Content - SKILLS SECTION -->
@@ -498,7 +637,7 @@
                 Principles of the Rite (Visual Communications DKV)
             </h2>
             <p class="text-center text-lg max-w-4xl mx-auto text-gray-400 mb-12">
-                The Lore Keeper masters the esoteric arts of **Visual Communication**, ensuring every sigil, scroll, and artifact speaks with clarity, power, and absolute authority.
+                The Lore Keeper masters the esoteric arts of Visual Communication, ensuring every sigil, scroll, and artifact speaks with clarity, power, and absolute authority.
             </p>
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
                 <!-- DKV Element 1: Typography -->
@@ -855,6 +994,9 @@
             contactForm: document.getElementById('contact-form'),
             contactSubmitButton: document.getElementById('submit-button'),
             contactFeedback: document.getElementById('contact-feedback'),
+            
+            // Metrics/Infographics Elements
+            metricItems: document.querySelectorAll('.metric-item'),
         };
 
         // --- Functions ---
@@ -1042,6 +1184,32 @@
             }, 2500); // 2.5 second delay
         });
 
+
+        // --- Infographics Animation Logic ---
+        const metricsObserverOptions = {
+            root: null, 
+            rootMargin: '0px 0px -20% 0px', // Trigger when 80% of the element is visible
+            threshold: 0.1
+        };
+
+        const metricsObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.querySelectorAll('.progress-bar').forEach(bar => {
+                        const progress = bar.getAttribute('data-progress');
+                        bar.style.width = `${progress}%`;
+                    });
+                    // Stop observing once animation has run
+                    observer.unobserve(entry.target); 
+                }
+            });
+        }, metricsObserverOptions);
+        
+        // Target the container for animation trigger
+        const metricsContainer = document.querySelector('#metrics-infographics .space-y-6');
+        if (metricsContainer) {
+            metricsObserver.observe(metricsContainer);
+        }
 
         // --- Rest of the existing application logic ---
 
