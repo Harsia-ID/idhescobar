@@ -17,8 +17,10 @@
             background-color: #030712; /* Deep dark background color */
             color: #d1d5db; /* Light gray text for contrast */
             overflow-x: hidden; /* Prevent horizontal scroll */
-            /* Add padding at the bottom to prevent fixed nav from hiding content */
-            padding-bottom: 6rem; 
+            
+            /* --- VERTICAL NAV OFFSET --- */
+            padding-bottom: 0; 
+            padding-left: 5rem; /* Offset for the w-20 nav bar */
         }
         
         /* Style for a more fantastical title */
@@ -76,12 +78,15 @@
             transition: transform 0.1s linear, box-shadow 0.3s ease;
         }
 
-        /* --- STYLES FOR SLIDING CAPSULE NAV INDICATOR (Fixed Bottom) --- */
+        /* --- STYLES FOR SLIDING CAPSULE NAV INDICATOR (Fixed Left) --- */
         .nav-links-container {
             position: relative;
             /* Ensure the indicator is contained within this element */
             padding-top: 8px; /* Extra padding for capsule top/bottom */
             padding-bottom: 8px;
+            /* Added padding-left/right to correctly contain the indicator horizontally */
+            padding-left: 8px;
+            padding-right: 8px;
         }
 
         #nav-indicator {
@@ -102,7 +107,8 @@
 
         .nav-link-item {
             /* Adjust padding for the icon-only bar */
-            padding: 8px 16px; 
+            padding: 8px 0px; /* Reduced horizontal padding, relying on container padding */
+            width: 100%; /* Make items take full width for consistent indicator size */
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -118,11 +124,11 @@
             text-shadow: 0 0 5px rgba(248, 113, 113, 0.7); 
         }
 
-        /* Hide text labels, using group-hover to show a small tooltip above */
+        /* Hide text labels, using group-hover to show a small tooltip on the RIGHT */
         .nav-link-item span {
-            /* Position tooltip label */
-            transform: translateX(-50%);
-            left: 50%;
+            /* Tooltips are now positioned relative to the icon, to the right */
+            transform: none; /* Reset transform */
+            left: 100%; /* Start after the element */
             pointer-events: none; /* Ignore mouse events */
         }
         /* --- END NEW STYLES --- */
@@ -131,37 +137,36 @@
 </head>
 <body>
 
-    <!-- Navigasi Bar (Fixed Bottom - Icon Only) -->
-    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-gray-950/90 backdrop-blur-sm shadow-2xl shadow-red-900/50">
-        <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-around h-16">
-                <!-- Menu Navigasi (Icon Only, Archaic Fantasy Terms) -->
-                <div class="nav-links-container flex space-x-2 text-sm font-medium w-full justify-around relative">
-                    <!-- Nav Indicator - The Sliding Capsule -->
-                    <div id="nav-indicator"></div>
-                    
-                    <!-- Links (Icons only for bottom bar, includes hover tooltip) -->
-                    <a href="#hero" data-target="hero" class="nav-link-item group active text-red-400 hover:text-white transition duration-300 relative">
-                        <i data-lucide="castle" class="w-6 h-6"></i>
-                        <span class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap">THE SANCTUARY</span>
-                    </a>
-                    <a href="#about" data-target="about" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
-                        <i data-lucide="scroll" class="w-6 h-6"></i>
-                        <span class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap">THE GRIMOIRE</span>
-                    </a>
-                    <a href="#karya" data-target="karya" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
-                        <i data-lucide="swords" class="w-6 h-6"></i>
-                        <span class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap">LOST ARTIFACTS</span>
-                    </a>
-                    <a href="#gallery" data-target="gallery" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
-                        <i data-lucide="layout-grid" class="w-6 h-6"></i>
-                        <span class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap">THE ARMORY</span>
-                    </a>
-                    <a href="#contact" data-target="contact" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
-                        <i data-lucide="send" class="w-6 h-6"></i>
-                        <span class="absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap">INITIATE RITUAL</span>
-                    </a>
-                </div>
+    <!-- Navigasi Bar (Fixed Left - Vertical Icon) -->
+    <nav class="fixed top-0 left-0 bottom-0 z-50 bg-gray-950/90 backdrop-blur-sm shadow-2xl shadow-red-900/50 w-20">
+        <div class="h-full flex items-center justify-center">
+            <!-- Menu Navigasi (Icon Only, Archaic Fantasy Terms) -->
+            <div class="nav-links-container flex flex-col space-y-6 text-sm font-medium relative h-5/6 justify-center">
+                <!-- Nav Indicator - The Sliding Capsule -->
+                <div id="nav-indicator"></div>
+                
+                <!-- Links (Icons only for vertical bar, includes hover tooltip to the RIGHT) -->
+                <a href="#hero" data-target="hero" class="nav-link-item group active text-red-400 hover:text-white transition duration-300 relative">
+                    <i data-lucide="castle" class="w-6 h-6"></i>
+                    <!-- Tooltip adjusted to appear on the right side of the icon -->
+                    <span class="absolute left-full ml-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap top-1/2 -translate-y-1/2">THE SANCTUARY</span>
+                </a>
+                <a href="#about" data-target="about" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
+                    <i data-lucide="scroll" class="w-6 h-6"></i>
+                    <span class="absolute left-full ml-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap top-1/2 -translate-y-1/2">THE GRIMOIRE</span>
+                </a>
+                <a href="#karya" data-target="karya" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
+                    <i data-lucide="swords" class="w-6 h-6"></i>
+                    <span class="absolute left-full ml-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap top-1/2 -translate-y-1/2">LOST ARTIFACTS</span>
+                </a>
+                <a href="#gallery" data-target="gallery" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
+                    <i data-lucide="layout-grid" class="w-6 h-6"></i>
+                    <span class="absolute left-full ml-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap top-1/2 -translate-y-1/2">THE ARMORY</span>
+                </a>
+                <a href="#contact" data-target="contact" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
+                    <i data-lucide="send" class="w-6 h-6"></i>
+                    <span class="absolute left-full ml-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap top-1/2 -translate-y-1/2">INITIATE RITUAL</span>
+                </a>
             </div>
         </div>
     </nav>
