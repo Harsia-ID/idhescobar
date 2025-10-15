@@ -146,41 +146,29 @@
             position: relative;
         }
 
-        /* --- Terminal --- */
+        /* --- UI Elements & States --- */
         #terminal-output { white-space: pre-wrap; }
         #terminal-cursor {
             display: inline-block;
             background-color: #f1f5f9;
-            width: 8px;
-            height: 1.2em;
+            width: 8px; height: 1.2em;
             animation: blink 1s step-end infinite;
         }
         @keyframes blink { 50% { background-color: transparent; } }
 
-        /* --- Calendar Widget --- */
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
         .calendar-day { text-align: center; padding: 4px; border-radius: 4px; }
         .today { background-color: var(--accent-color, #3b82f6); color: white; }
         
-        /* Music Player */
-        .music-progress-bar {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 100%;
-            height: 4px;
-            background: rgba(255,255,255,0.2);
-            outline: none;
-            border-radius: 2px;
+        .music-progress-bar { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; background: rgba(255,255,255,0.2); outline: none; border-radius: 2px; }
+        .music-progress-bar::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 12px; height: 12px; background: white; cursor: pointer; border-radius: 50%; }
+
+        #profile-pic-droptarget.drag-over {
+            box-shadow: 0 0 0 4px var(--accent-color-light);
+            transform: scale(1.05);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .music-progress-bar::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 12px;
-            height: 12px;
-            background: white;
-            cursor: pointer;
-            border-radius: 50%;
-        }
+        #notification { transition: opacity 0.5s, transform 0.5s; }
 
         /* Accent Color Variable */
         .accent-color-blue { --accent-color: #3b82f6; --accent-color-light: #60A5FA; }
@@ -191,17 +179,11 @@
         .folder-icon-secondary { fill: var(--accent-color-light, #60A5FA); }
         .text-accent { color: var(--accent-color-light, #60A5FA); }
         .bg-accent { background-color: var(--accent-color, #3b82f6); }
-        .hover\:bg-accent-hover:hover { background-color: var(--accent-color-light, #60A5FA); }
         
         /* --- Mobile Fallback --- */
         @media (max-width: 768px) {
             #desktop { display: none; }
-            #mobile-fallback {
-                display: block;
-                background-color: #020617; /* Dark BG for mobile */
-                min-height: 100vh;
-                padding: 16px;
-            }
+            #mobile-fallback { display: block; background-color: #020617; min-height: 100vh; padding: 16px; }
         }
     </style>
 </head>
@@ -212,112 +194,83 @@
         
         <!-- Top Menu Bar -->
         <header id="top-bar">
-            <div class="flex items-center gap-4">
-                <span class="font-bold">Portfolio</span>
-                <span>File</span>
-                <span>Edit</span>
-                <span>View</span>
-                <span>Go</span>
-            </div>
+            <div class="flex items-center gap-4"><span class="font-bold">Portfolio</span><span>File</span><span>Edit</span><span>View</span><span>Go</span></div>
             <div id="datetime" class="font-mono"></div>
         </header>
 
         <!-- Desktop Icons -->
         <div class="p-8 pt-12 space-y-4">
-            <div class="desktop-icon" data-window="about-window">
-                <div class="w-12 h-12">
-                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="4" width="32" height="40" rx="4" fill="white"/><path d="M16 16H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/><path d="M16 24H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/><path d="M16 32H24" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/></svg>
-                </div>
-                <span class="text-sm text-white font-semibold">About_Me.txt</span>
+            <div id="about-icon-draggable" class="desktop-icon" data-window="about-window" draggable="true">
+                <div class="w-12 h-12 pointer-events-none"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="4" width="32" height="40" rx="4" fill="white"/><path d="M16 16H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/><path d="M16 24H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/><path d="M16 32H24" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/></svg></div>
+                <span class="text-sm text-white font-semibold pointer-events-none">About_Me.txt</span>
             </div>
-            <div class="desktop-icon" data-window="projects-window">
-                 <div class="w-12 h-12">
-                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 18C2 15.7909 3.79086 14 6 14H18L22 10H42C44.2091 10 46 11.7909 46 14V38C46 40.2091 44.2091 42 42 42H6C3.79086 42 2 40.2091 2 38V18Z" class="folder-icon-primary"/><rect x="0" y="20" width="48" height="20" rx="4" class="folder-icon-secondary"/></svg>
-                </div>
-                <span class="text-sm text-white font-semibold">Projects</span>
+            <div id="projects-icon-draggable" class="desktop-icon" data-window="projects-window" draggable="true">
+                 <div class="w-12 h-12 pointer-events-none"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 18C2 15.7909 3.79086 14 6 14H18L22 10H42C44.2091 10 46 11.7909 46 14V38C46 40.2091 44.2091 42 42 42H6C3.79086 42 2 40.2091 2 38V18Z" class="folder-icon-primary"/><rect x="0" y="20" width="48" height="20" rx="4" class="folder-icon-secondary"/></svg></div>
+                <span class="text-sm text-white font-semibold pointer-events-none">Projects</span>
             </div>
-             <div class="desktop-icon" data-window="terminal-window">
-                <div class="w-12 h-12 p-1.5 bg-black rounded-lg border border-slate-700">
-                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 7L10 12L5 17" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 17H19" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </div>
+            <div class="desktop-icon" data-window="notes-window">
+                 <div class="w-12 h-12"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="4" width="36" height="40" rx="4" fill="#FBBF24"/><rect x="6" y="4" width="36" height="12" rx="4" fill="#F59E0B"/><path d="M14 16H34" stroke="#A16207" stroke-width="2" stroke-linecap="round"/><path d="M14 24H34" stroke="#A16207" stroke-width="2" stroke-linecap="round"/><path d="M14 32H24" stroke="#A16207" stroke-width="2" stroke-linecap="round"/></svg></div>
+                <span class="text-sm text-white font-semibold">Notes.app</span>
+            </div>
+            <div class="desktop-icon" data-window="terminal-window">
+                <div class="w-12 h-12 p-1.5 bg-black rounded-lg border border-slate-700"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 7L10 12L5 17" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 17H19" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 <span class="text-sm text-white font-semibold">Terminal</span>
-            </div>
-            <div class="desktop-icon" data-window="contact-window">
-                <div class="w-12 h-12">
-                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="12" class="folder-icon-primary"/><path d="M12 18L24 28L36 18" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 30V18H36V30H12Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </div>
-                <span class="text-sm text-white font-semibold">Contact.app</span>
             </div>
         </div>
 
         <!-- All Windows -->
         <div id="windows-container">
-            <!-- About Me -->
             <div class="window" id="about-window" style="top: 10%; left: 15%; width: 600px; height: 450px;">
                 <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">About_Me.txt</span></div>
-                <div class="window-content text-slate-300"><div class="flex gap-6 items-start"><img src="https://avatars.githubusercontent.com/u/68311980" alt="Foto profil Hadi Prasetia" class="w-24 h-24 rounded-full border-2 border-slate-600 shadow-md"><div><h1 class="text-2xl font-bold text-white mb-1">Hadi Prasetia</h1><p class="text-slate-400">Digital Product Designer & Developer</p></div></div><hr class="my-4 border-slate-700"><p class="mb-4">Saya adalah seorang desainer dan developer dengan fokus pada UI/UX dan pengembangan front-end. Saya percaya bahwa desain yang baik adalah perpaduan antara estetika yang indah dan fungsionalitas yang mulus.</p><p>Dengan pengalaman magang di PT. PLN Indonesia Power dan berbagai proyek akademis, saya terbiasa menerjemahkan data kompleks menjadi cerita visual yang menarik.</p><h2 class="text-lg font-bold text-white mt-6 mb-3">Keahlian Utama</h2><div class="flex flex-wrap gap-2 text-sm"><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">UI/UX Design</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">Figma</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">HTML & CSS</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">JavaScript</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">Tailwind CSS</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">PHP & Laravel</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">Video Editing</span></div></div>
+                <div class="window-content text-slate-300"><div class="flex gap-6 items-start"><img id="profile-pic-droptarget" src="https://avatars.githubusercontent.com/u/68311980" alt="Foto profil Hadi Prasetia" class="w-24 h-24 rounded-full border-2 border-slate-600 shadow-md relative transition-all"><div><h1 class="text-2xl font-bold text-white mb-1">Hadi Prasetia</h1><p class="text-slate-400">Digital Product Designer & Developer</p></div></div><hr class="my-4 border-slate-700"><p class="mb-4">Saya adalah seorang desainer dan developer dengan fokus pada UI/UX dan pengembangan front-end. Saya percaya bahwa desain yang baik adalah perpaduan antara estetika yang indah dan fungsionalitas yang mulus.</p><p>Dengan pengalaman magang di PT. PLN Indonesia Power dan berbagai proyek akademis, saya terbiasa menerjemahkan data kompleks menjadi cerita visual yang menarik.</p><h2 class="text-lg font-bold text-white mt-6 mb-3">Keahlian Utama</h2><div class="flex flex-wrap gap-2 text-sm"><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">UI/UX Design</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">Figma</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">HTML & CSS</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">JavaScript</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">Tailwind CSS</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">PHP & Laravel</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">Video Editing</span></div></div>
             </div>
-            <!-- Projects -->
             <div class="window" id="projects-window" style="top: 20%; left: 30%; width: 700px; height: 500px;">
                 <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">Projects</span></div>
                 <div id="projects-grid" class="window-content grid grid-cols-2 gap-4"></div>
             </div>
-            <!-- Contact -->
             <div class="window" id="contact-window" style="top: 40%; left: 10%; width: 400px; height: 250px;">
                 <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">Contact.app</span></div>
                 <div class="window-content flex flex-col items-center justify-center text-center"><h2 class="text-xl font-bold text-white">Mari Terhubung</h2><p class="text-slate-400 mt-2 mb-4">Saya terbuka untuk proyek dan kolaborasi baru.</p><a href="mailto:hadi.prasetia@example.com" class="bg-indigo-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-indigo-400 transition-all">Kirim Email</a><div class="flex space-x-4 mt-6"><a href="#" class="text-slate-400 hover:text-indigo-400">GitHub</a><a href="#" class="text-slate-400 hover:text-indigo-400">LinkedIn</a><a href="#" class="text-slate-400 hover:text-indigo-400">Dribbble</a></div></div>
             </div>
-            <!-- Project Detail -->
             <div class="window" id="project-detail-window" style="top: 15%; left: 25%; width: 800px; height: 600px;">
                 <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span id="detail-window-title" class="font-medium text-sm text-slate-300 mx-auto">Project Detail</span></div>
                 <div class="window-content text-slate-300"><img id="detail-image" src="" class="w-full h-64 object-cover rounded-lg mb-4"><h1 id="detail-title" class="text-3xl font-bold text-white mb-2"></h1><p id="detail-description" class="mb-6 text-slate-400"></p><h2 class="text-lg font-bold text-white mb-3">Teknologi yang Digunakan</h2><div id="detail-tech-stack" class="flex flex-wrap gap-2 text-sm mb-6"></div><a id="detail-live-url" href="#" target="_blank" class="inline-block bg-indigo-500 text-white font-bold py-2 px-5 rounded-lg hover:bg-indigo-400 transition-all">Lihat Proyek Langsung</a></div>
             </div>
-            <!-- Widgets -->
             <div class="window" id="widgets-window" style="top: 10%; right: 2%; width: 320px; height: 420px; resize: none;">
                  <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div></div>
                 <div class="window-content space-y-4 text-white"><div><p id="widget-time" class="text-6xl font-bold tracking-tight"></p><p id="widget-date" class="text-slate-400"></p></div><div class="bg-white/5 p-3 rounded-lg"><div id="calendar-header" class="flex justify-between items-center mb-2 text-sm font-semibold"></div><div id="calendar-grid" class="calendar-grid text-sm"></div></div></div>
             </div>
-            <!-- Terminal -->
             <div class="window" id="terminal-window" style="top: 50%; left: 20%; width: 640px; height: 360px;">
                 <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">zsh</span></div>
                 <div class="window-content bg-black/50 text-green-400 font-mono text-sm p-2" onclick="this.querySelector('input').focus()"><div id="terminal-output"></div><div class="flex"><span>hadi@portfolio:~$ </span><input type="text" id="terminal-input" class="flex-1 bg-transparent border-none outline-none text-green-400 ml-2"></div><span id="terminal-cursor"></span></div>
             </div>
-            <!-- Music Player -->
             <div class="window" id="music-window" style="top: 60%; left: 40%; width: 320px; height: 380px; resize: none;">
                 <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">Music</span></div>
                 <div class="window-content text-white flex flex-col items-center p-4"><img id="album-art" src="https://placehold.co/200x200/0f172a/38bdf8?text=Music" class="w-48 h-48 rounded-lg shadow-lg mb-4"><div class="text-center"><h3 id="track-title" class="font-bold text-lg">Select a Track</h3><p id="track-artist" class="text-sm text-slate-400">Lo-fi Beats</p></div><input type="range" id="music-progress" class="music-progress-bar my-4" value="0" max="100"><div class="flex items-center gap-6"><button id="prev-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg></button><button id="play-pause-btn" class="bg-white text-slate-900 w-12 h-12 rounded-full flex items-center justify-center"><svg id="play-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg><svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 hidden"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg></button><button id="next-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg></button></div></div>
             </div>
-             <!-- System Preferences -->
             <div class="window" id="settings-window" style="top: 25%; left: 10%; width: 500px; height: 300px;">
                 <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">System Preferences</span></div>
                 <div class="window-content text-slate-300 space-y-6"><h2 class="text-lg font-bold text-white">Appearance</h2><div><h3 class="font-semibold mb-2">Wallpaper</h3><div class="flex gap-2" id="wallpaper-options"><button class="w-20 h-12 rounded-md bg-cover bg-center border-2 border-blue-500" style="background-image: url('https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/Minimalist%20Black%20and%20Blue%20Moodboard%20Desktop%20Wallpaper%20(2).png')" data-wallpaper="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/Minimalist%20Black%20and%20Blue%20Moodboard%20Desktop%20Wallpaper%20(2).png"></button><button class="w-20 h-12 rounded-md bg-cover bg-center border-2 border-transparent" style="background-image: url('https://placehold.co/1920x1080/0f172a/ffffff?text=Abstract')" data-wallpaper="https://placehold.co/1920x1080/0f172a/ffffff?text=Abstract"></button><button class="w-20 h-12 rounded-md bg-cover bg-center border-2 border-transparent" style="background-image: url('https://placehold.co/1920x1080/4338ca/ffffff?text=Gradient')" data-wallpaper="https://placehold.co/1920x1080/4338ca/ffffff?text=Gradient"></button></div></div><div><h3 class="font-semibold mb-2">Accent Color</h3><div class="flex gap-2" id="accent-color-options"><button class="w-8 h-8 rounded-full bg-blue-500 border-2 border-white" data-color="blue"></button><button class="w-8 h-8 rounded-full bg-green-500 border-2 border-transparent" data-color="green"></button><button class="w-8 h-8 rounded-full bg-purple-500 border-2 border-transparent" data-color="purple"></button></div></div></div>
             </div>
+             <div class="window" id="notes-window" style="top: 30%; left: 50%; width: 400px; height: 350px;">
+                <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">Notes.app</span></div>
+                <textarea id="notepad-textarea" class="w-full h-full bg-yellow-100/10 text-yellow-100 p-4 font-mono outline-none resize-none" style="height: calc(100% - 36px);" placeholder="Tulis catatan di sini..."></textarea>
+            </div>
         </div>
+        
+        <!-- Notification -->
+        <div id="notification" class="fixed top-10 left-1/2 -translate-x-1/2 bg-white/20 backdrop-blur-md text-white px-6 py-3 rounded-lg shadow-xl opacity-0 -translate-y-10"></div>
 
         <!-- Dock -->
         <div id="dock">
-            <div class="dock-item" data-window="about-window">
-                <div class="w-10 h-10"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="4" width="32" height="40" rx="4" fill="white"/><path d="M16 16H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/><path d="M16 24H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/><path d="M16 32H24" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/></svg></div>
-            </div>
-            <div class="dock-item" data-window="projects-window">
-                <div class="w-10 h-10"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 18C2 15.7909 3.79086 14 6 14H18L22 10H42C44.2091 10 46 11.7909 46 14V38C46 40.2091 44.2091 42 42 42H6C3.79086 42 2 40.2091 2 38V18Z" class="folder-icon-primary"/><rect x="0" y="20" width="48" height="20" rx="4" class="folder-icon-secondary"/></svg></div>
-            </div>
-            <div class="dock-item" data-window="contact-window">
-                 <div class="w-10 h-10"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="12" class="folder-icon-primary"/><path d="M12 18L24 28L36 18" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 30V18H36V30H12Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            </div>
+            <div class="dock-item" data-window="about-window"><div class="w-10 h-10"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="4" width="32" height="40" rx="4" fill="white"/><path d="M16 16H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/><path d="M16 24H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/><path d="M16 32H24" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/></svg></div></div>
+            <div class="dock-item" data-window="projects-window"><div class="w-10 h-10"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 18C2 15.7909 3.79086 14 6 14H18L22 10H42C44.2091 10 46 11.7909 46 14V38C46 40.2091 44.2091 42 42 42H6C3.79086 42 2 40.2091 2 38V18Z" class="folder-icon-primary"/><rect x="0" y="20" width="48" height="20" rx="4" class="folder-icon-secondary"/></svg></div></div>
+            <div class="dock-item" data-window="notes-window"><div class="w-10 h-10"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="4" width="36" height="40" rx="4" fill="#FBBF24"/><rect x="6" y="4" width="36" height="12" rx="4" fill="#F59E0B"/><path d="M14 16H34" stroke="#A16207" stroke-width="2" stroke-linecap="round"/><path d="M14 24H34" stroke="#A16207" stroke-width="2" stroke-linecap="round"/><path d="M14 32H24" stroke="#A16207" stroke-width="2" stroke-linecap="round"/></svg></div></div>
             <div class="w-px h-10 bg-slate-600/50 mx-1"></div>
-            <div class="dock-item" data-window="music-window">
-                 <div class="w-10 h-10"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="20" fill="#F43F5E"/><circle cx="24" cy="24" r="10" fill="white"/><path d="M24 24V14" stroke="#F43F5E" stroke-width="3" stroke-linecap="round"/></svg></div>
-            </div>
-             <div class="dock-item" data-window="widgets-window">
-                <div class="w-10 h-10"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="12" fill="#F97316"/><path d="M14 14H34V34H14V14Z" fill="#FDBA74"/><path d="M24 10V18" stroke="white" stroke-width="3" stroke-linecap="round"/><path d="M38 24L30 24" stroke="white" stroke-width="3" stroke-linecap="round"/></svg></div>
-            </div>
-            <div class="dock-item" data-window="terminal-window">
-                 <div class="w-10 h-10 p-1 bg-black rounded-md border border-slate-700"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 7L10 12L5 17" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 17H19" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            </div>
-            <div class="dock-item" data-window="settings-window">
-                <div class="w-10 h-10"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="20" fill="#4B5563"/><circle cx="24" cy="24" r="12" fill="#9CA3AF"/><path d="M24 4L24 44" stroke="#6B7280" stroke-width="3"/><path d="M44 24L4 24" stroke="#6B7280" stroke-width="3"/><path d="M10 10L38 38" stroke="#6B7280" stroke-width="3"/><path d="M38 10L10 38" stroke="#6B7280" stroke-width="3"/></svg></div>
-            </div>
+            <div class="dock-item" data-window="music-window"><div class="w-10 h-10"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="20" fill="#F43F5E"/><circle cx="24" cy="24" r="10" fill="white"/><path d="M24 24V14" stroke="#F43F5E" stroke-width="3" stroke-linecap="round"/></svg></div></div>
+            <div class="dock-item" data-window="widgets-window"><div class="w-10 h-10"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="12" fill="#F97316"/><path d="M14 14H34V34H14V14Z" fill="#FDBA74"/><path d="M24 10V18" stroke="white" stroke-width="3" stroke-linecap="round"/><path d="M38 24L30 24" stroke="white" stroke-width="3" stroke-linecap="round"/></svg></div></div>
+            <div class="dock-item" data-window="terminal-window"><div class="w-10 h-10 p-1 bg-black rounded-md border border-slate-700"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 7L10 12L5 17" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 17H19" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+            <div class="dock-item" data-window="settings-window"><div class="w-10 h-10"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="20" fill="#4B5563"/><circle cx="24" cy="24" r="12" fill="#9CA3AF"/><path d="M24 4L24 44" stroke="#6B7280" stroke-width="3"/><path d="M44 24L4 24" stroke="#6B7280" stroke-width="3"/><path d="M10 10L38 38" stroke="#6B7280" stroke-width="3"/><path d="M38 10L10 38" stroke="#6B7280" stroke-width="3"/></svg></div></div>
         </div>
     </div>
 
@@ -345,7 +298,6 @@
                         const itemCenterX = itemRect.left + itemRect.width / 2;
                         
                         const distance = Math.abs(mouseX - itemCenterX);
-                        
                         const maxDistance = 100;
                         const baseScale = 1;
                         const maxScale = 1.75;
