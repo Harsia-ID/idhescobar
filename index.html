@@ -1,1707 +1,432 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HADI PRASETIA | KEEPER OF THE LOST REALMS</title>
-    <!-- Memuat Tailwind CSS CDN -->
+    <title>Hadi Prasetia | Digital Desktop</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Memuat ikon Lucide untuk elemen fantasi -->
+    
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        /* Menggunakan font Inter sebagai standar dan Cinzel untuk aksen fantasi */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Cinzel:wght@400;700&display=swap');
-        
-        /* Definisi Warna Complementary (Deep Dark Blue/Black + Amber/Orange) */
-        :root {
-            --accent-color: #ff9900; /* Vibrant Amber/Orange for main accent */
-            --glow-strong: rgba(255, 153, 0, 0.8); /* Stronger Amber glow */
-            --glow-soft: rgba(255, 153, 0, 0.3);  /* Softer Amber glow */
-            --border-color: #4b5563; /* Darker gray for subtle borders */
-            --ethereal-dust: rgba(255, 190, 80, 0.5); /* Light Amber/Gold for cursor trail */
-            --fib-color: rgba(255, 153, 0, 0.15); /* Subtle Amber for fib spiral */
-            --progress-color: #64748b; /* Slate-500 for progress bar background */
-        }
 
+    <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #030712; /* Deep dark background color */
-            color: #d1d5db; /* Light gray text for contrast */
-            overflow-x: hidden; /* Prevent horizontal scroll */
-            padding-bottom: 0; 
-        }
-
-        /* NEW: Dark Vignette Overlay */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            /* Radial gradient creates the vignette effect */
-            box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.9);
-            pointer-events: none;
-            z-index: 100; 
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
-        /* Gaya untuk judul yang lebih fantastis */
-        .fantasy-title {
-            font-family: 'Cinzel', serif;
-            letter-spacing: 0.1em;
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
         }
 
-        /* --- CURSOR TRAIL STYLES --- */
-        .cursor-dot {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: var(--ethereal-dust);
-            pointer-events: none;
-            user-select: none;
-            transform: translate(-50%, -50%) scale(0);
-            mix-blend-mode: screen; 
-            box-shadow: 0 0 10px 2px var(--ethereal-dust);
-            z-index: 9999;
-            transition: opacity 0.5s ease, transform 0.1s linear;
-            opacity: 0;
-            will-change: transform, opacity;
-        }
-
-        /* --- AMBER GLOW EFFECT --- */
-        .neon-glow {
-            /* Fokus pada warna Amber/Orange untuk efek canggih */
-            text-shadow: 0 0 5px var(--glow-strong), 0 0 15px var(--glow-soft); 
-        }
-        
-        /* NEW: Enhanced Title Glow with Pulse Animation */
-        .title-glow {
-            text-shadow: 0 0 10px var(--glow-strong), 0 0 30px var(--glow-soft), 0 0 50px rgba(255, 153, 0, 0.1); 
-            animation: pulse-glow 3s infinite alternate;
-        }
-
-        @keyframes pulse-glow {
-            from { opacity: 0.9; }
-            to { opacity: 1; }
-        }
-
-        .border-glow {
-            /* Consistent Amber shadow for borders */
-            box-shadow: 0 0 8px var(--glow-soft), 0 0 15px rgba(255, 153, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .border-glow:hover {
-            box-shadow: 0 0 10px var(--glow-strong), 0 0 20px rgba(255, 153, 0, 0.4);
-            transform: translateY(-2px);
-        }
-
-        /* Subtle Background Animation (Smoke/Magic) - Amber */
-        .hero-bg-dark {
-            /* Disesuaikan untuk gradien Amber/hitam */
-            background-image: radial-gradient(at 27% 37%, hsla(38, 100%, 50%, 0.15) 0px, transparent 40%),
-                              radial-gradient(at 97% 21%, hsla(38, 100%, 40%, 0.15) 0px, transparent 40%),
-                              radial-gradient(at 19% 87%, hsla(0,0%,4%,1) 0px, transparent 50%),
-                              radial-gradient(at 66% 63%, hsla(38, 100%, 70%, 0.2) 0px, transparent 50%);
-            background-size: 200% 200%;
-            animation: move-bg 60s infinite alternate;
-        }
-
-        @keyframes move-bg {
-            from { background-position: 0% 0%; }
-            to { background-position: 100% 100%; }
-        }
-
-        /* --- FIBONACCI SPIRAL ANIMATION --- */
-        .fib-spiral {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100vw;
+        /* --- Desktop --- */
+        #desktop {
+            background: url('https://placehold.co/1920x1080/e0e7ff/4338ca?text=') no-repeat center center/cover;
+            background-color: #e0e7ff;
             height: 100vh;
-            max-width: 800px;
-            max-height: 800px;
-            opacity: 0.1;
-            transform: translate(-50%, -50%) rotate(0deg);
-            animation: rotate-fib 120s linear infinite;
-        }
-
-        @keyframes rotate-fib {
-            to { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        .fib-spiral svg {
-            width: 100%;
-            height: 100%;
-            stroke: var(--fib-color);
-            fill: none;
-            stroke-width: 1;
-            stroke-linecap: round;
-        }
-        /* END FIBONACCI STYLES */
-
-        /* --- PROGRESS BAR STYLES --- */
-        .progress-bar-container {
-            background-color: #1f2937; /* Gray-800 */
-            height: 10px;
-            border-radius: 9999px;
+            width: 100vw;
             overflow: hidden;
-            border: 1px solid #374151;
-        }
-        .progress-bar {
-            height: 100%;
-            width: 0; /* Initial state for animation */
-            background-color: var(--accent-color); /* Amber */
-            transition: width 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-            box-shadow: 0 0 8px var(--glow-strong);
-        }
-        
-        /* Parallax JS akan menyesuaikan properti transform */
-        .parallax-element {
-            transition: transform 0.1s ease-out;
-        }
-        
-        /* Ikon Jam Saku Kustom */
-        .pocket-watch-icon {
-            filter: drop-shadow(0 0 5px var(--glow-strong));
-            color: var(--accent-color); /* Apply amber color to the icon */
-        }
-
-        /* NEW: Clock Box Style (Retained for visual structure) */
-        .chrono-box {
-            padding: 0.75rem 1.5rem;
-            background-color: rgba(31, 41, 55, 0.7); /* gray-800/70 */
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            backdrop-filter: blur(5px);
-            display: inline-block;
-        }
-        
-        /* NEW: Particle styles for Hero */
-        .particle {
-            position: absolute;
-            background: var(--ethereal-dust);
-            border-radius: 50%;
-            opacity: 0;
-            pointer-events: none;
-            will-change: transform, opacity;
-            box-shadow: 0 0 5px var(--glow-soft);
-        }
-
-        /* Styling Kustom untuk Kartu Proyek */
-        .project-card-fantasy {
-            transition: transform 0.1s linear, box-shadow 0.3s ease;
-        }
-
-        /* --- STYLES FOR SLIDING CAPSULE NAV INDICATOR (Fixed Left) --- */
-        .nav-links-container {
-            position: relative;
-            padding-top: 8px; 
-            padding-bottom: 8px;
-            padding-left: 8px;
-            padding-right: 8px;
-        }
-
-        #nav-indicator {
-            position: absolute;
-            border-radius: 9999px; 
-            
-            /* Latar Belakang Glow - Amber */
-            background-color: rgba(255, 153, 0, 0.1); /* Very subtle Amber background */
-            box-shadow: 0 0 10px var(--glow-strong); 
-            
-            transition: all 0.35s ease-in-out; 
-            z-index: 10; 
-            top: 0;
-            left: 0;
-            opacity: 0; 
-        }
-
-        .nav-link-item {
-            padding: 8px 0px; 
-            width: 100%; 
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 9999px; 
-            transition: color 0.3s;
-            z-index: 20; 
             position: relative;
         }
 
-        .nav-link-item.active {
-            color: var(--accent-color) !important; /* Warna Amber cemerlang untuk ikon aktif */
-            text-shadow: 0 0 5px var(--glow-strong); 
+        /* --- Windows --- */
+        .window {
+            position: absolute;
+            min-width: 350px;
+            min-height: 200px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(255,255,255,0.3);
+            display: none; /* Hidden by default */
+            resize: both;
+            overflow: hidden;
         }
 
-        /* Tooltips */
-        .nav-link-item span {
-            transform: none; 
-            left: 100%; 
-            pointer-events: none; 
-        }
-
-        /* --- Custom CSS for Toggle Menu Logic --- */
-        .floating-nav {
-            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-            transform: translateX(0) translateY(-50%); 
-            opacity: 1;
-        }
-
-        .floating-nav.closed {
-            transform: translateX(-128px) translateY(-50%); 
-            opacity: 0;
-        }
-
-        /* --- New/Adapted Styles for Project Cards & Filtering --- */
-        .filter-btn {
-            background-color: #1f2937; /* gray-800 */
-            color: #d1d5db; /* text-gray-300 */
-            transition: all 0.3s ease;
-            border: 1px solid #374151; /* gray-700 */
-            border-radius: 9999px; /* rounded-full */
-        }
-        .filter-btn.active {
-            background-color: var(--accent-color); /* accent-color */
-            color: #030712; /* dark text */
-            font-weight: 700;
-            box-shadow: 0 0 10px var(--glow-strong);
-            transform: scale(1.05);
-        }
-        .filter-btn:hover:not(.active) {
-            background-color: #374151; /* gray-700 */
-            transform: scale(1.03);
-        }
-        
-        .project-card {
-            background-color: #1f2937; /* gray-800 */
-            padding: 1rem;
-            border-radius: 0.75rem;
-            border: 1px solid #374151;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 10px var(--glow-soft);
-        }
-        .project-card.hidden {
-            display: none;
-            opacity: 0;
-            transform: scale(0.9);
-        }
-        .project-image {
-            aspect-ratio: 16 / 10;
-            object-fit: cover;
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
-            border: 1px solid #374151;
-            filter: grayscale(100%); /* Apply grayscale to project images */
-        }
-        
-        /* Modal Styles */
-        #project-modal { transition: opacity 0.3s ease-out; }
-        #project-modal.is-visible { opacity: 1; pointer-events: auto; }
-        #project-modal.is-visible #modal-content { transform: scale(1); }
-        #modal-content {
-            background-color: #0f172a; /* Slate-900 for dark modal content */
-            border: 2px solid #374151;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-        .no-scroll { overflow: hidden; }
-
-        /* Accordion Styles (adapted to Dark Fantasy Grayscale) */
-        details > summary {
-            list-style: none;
-            cursor: pointer;
+        .title-bar {
+            height: 36px;
+            background-color: rgba(0,0,0,0.05);
+            cursor: grab;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            background-color: #1f2937; /* gray-800 */
-            color: #d1d5db;
-            transition: background-color 0.3s ease;
-            padding: 0.75rem 1rem;
-            border-radius: 0.75rem;
-            border: 1px solid #374151;
+            padding: 0 12px;
+            user-select: none;
         }
-        details > summary:hover { 
-            background-color: #374151; /* gray-700 */
-            box-shadow: 0 0 5px var(--glow-soft);
+        .title-bar:active { cursor: grabbing; }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
         }
-        details .accordion-content {
-            overflow: hidden;
-            transition: max-height 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), padding 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-            max-height: 0;
-            padding-top: 0;
+
+        .control-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
         }
-        details[open] .accordion-content {
-            max-height: 600px; 
-            padding-top: 1rem;
+
+        .window-content {
+            padding: 16px;
+            height: calc(100% - 36px);
+            overflow-y: auto;
         }
-        details .accordion-icon { transition: transform 0.3s ease; }
-        details[open] > summary .accordion-icon { transform: rotate(90deg); }
         
-        .timeline-line {
-            border-color: #4b5563 !important; /* gray-600 */
+        /* Custom scrollbar for windows */
+        .window-content::-webkit-scrollbar { width: 6px; }
+        .window-content::-webkit-scrollbar-track { background: transparent; }
+        .window-content::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 3px; }
+
+        /* --- Desktop Icons --- */
+        .desktop-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            text-align: center;
+            width: 100px;
+        }
+        .desktop-icon:hover {
+            background-color: rgba(255, 255, 255, 0.2);
         }
 
-        /* --- NEW GALLERY STYLES --- */
-        .overlay-container {
-            /* To ensure all children scale correctly */
-            transform-origin: center center;
-            /* Default scale and transition for the grid item */
-            transition: transform 0.3s ease-out, box-shadow 0.3s ease;
-            height: 100%; /* Important for grid auto-rows */
-        }
-        .overlay-container:hover {
-            transform: scale(1.03);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-        .overlay-container .overlay-content {
-            opacity: 0;
-            transition: opacity 0.4s ease-in-out;
-        }
-        .overlay-container:hover .overlay-content {
-            opacity: 1;
+        /* --- Dock --- */
+        #dock {
+            position: absolute;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(255,255,255,0.2);
+            padding: 8px;
+            display: flex;
+            gap: 8px;
         }
 
-        .gallery-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transform: scale(1.0);
-            transition: transform 0.5s, filter 0.5s;
-            filter: grayscale(100%);
+        .dock-item {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
         }
-        .overlay-container:hover .gallery-image {
-            transform: scale(1.08);
-            filter: grayscale(0%);
+        .dock-item:hover {
+            transform: scale(1.1) translateY(-4px);
+            background-color: rgba(255, 255, 255, 0.3);
         }
-
-        /* Loader Style */
-        .image-loader {
-            transition: opacity 0.3s;
-        }
-
-        /* Modal specific styles for Gallery (2-column view) */
-        #gallery-modal {
-            transition: opacity 0.3s ease-out;
-            opacity: 0;
-            pointer-events: none;
-        }
-        #gallery-modal.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        #gallery-modal.active > div {
-            transform: scale(1);
-        }
-        #gallery-modal-content {
-            background-color: #0f172a; /* Slate-900 */
-            border: 2px solid #374151;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-            transform: scale(0.95);
-        }
-
         
+        /* --- Mobile Fallback --- */
+        @media (max-width: 768px) {
+            #desktop { display: none; }
+            #mobile-fallback {
+                display: block;
+                background-color: #f1f5f9; /* Slate 100 */
+                min-height: 100vh;
+                padding: 16px;
+            }
+        }
     </style>
 </head>
-<body>
-    <!-- Container for Cursor Trail Dots -->
-    <div id="cursor-trail-container"></div>
-    
-    <!-- NEW: Canvas for Particle Dust -->
-    <canvas id="particle-canvas" class="fixed inset-0 z-0 pointer-events-none"></canvas>
+<body class="bg-slate-100">
 
-    <!-- Menu Toggle Button (The Activation Sigil) -->
-    <button id="nav-toggle-button" class="fixed top-8 left-8 z-50 p-3 rounded-full bg-gray-800/80 text-white border-glow border border-gray-600/50 shadow-lg hover:bg-gray-700 transition duration-300">
-        <i id="nav-toggle-icon" data-lucide="menu" class="w-6 h-6 neon-glow text-gray-200"></i>
-    </button>
-
-    <!-- Navigasi Bar (Fixed Left - Floating Icon, HIDDEN by default) -->
-    <nav id="main-nav" class="fixed top-1/2 left-8 z-50 bg-gray-950/90 backdrop-blur-sm shadow-2xl shadow-gray-900/50 w-20 rounded-xl border border-gray-800/50 floating-nav closed"> 
-        <div class="p-2 flex items-center justify-center">
-            <!-- Menu Navigasi (Icon Only, Archaic Fantasy Terms) -->
-            <div class="nav-links-container flex flex-col space-y-4 text-sm font-medium relative justify-center">
-                <!-- Nav Indicator - The Sliding Capsule -->
-                <div id="nav-indicator"></div>
-                
-                <!-- Links (Icons only for vertical bar, includes hover tooltip to the RIGHT) -->
-                <a href="#hero" data-target="hero" class="nav-link-item group active text-gray-400 hover:text-white transition duration-300 relative">
-                    <i data-lucide="castle" class="w-6 h-6"></i>
-                    <span class="absolute left-full ml-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap top-1/2 -translate-y-1/2">THE SANCTUARY</span>
-                </a>
-                <a href="#about" data-target="about" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
-                    <i data-lucide="scroll" class="w-6 h-6"></i>
-                    <span class="absolute left-full ml-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap top-1/2 -translate-y-1/2">CV & THE GRIMOIRE</span>
-                </a>
-                <a href="#principles" data-target="principles" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
-                    <i data-lucide="palette" class="w-6 h-6"></i> 
-                    <span class="absolute left-full ml-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap top-1/2 -translate-y-1/2">PRINCIPLES OF THE RITE</span>
-                </a>
-                <!-- NEW MENU: THE FORGE -->
-                <a href="#tools" data-target="tools" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
-                    <i data-lucide="hammer" class="w-6 h-6"></i> 
-                    <span class="absolute left-full ml-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap top-1/2 -translate-y-1/2">THE FORGE (TOOLS)</span>
-                </a>
-                <!-- END NEW MENU -->
-                <a href="#karya" data-target="karya" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
-                    <i data-lucide="file-text" class="w-6 h-6"></i> 
-                    <span class="absolute left-full ml-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap top-1/2 -translate-y-1/2">ARTIFACTS & LORE</span>
-                </a>
-                <a href="#gallery" data-target="gallery" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
-                    <i data-lucide="layout-grid" class="w-6 h-6"></i>
-                    <span class="absolute left-full ml-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap top-1/2 -translate-y-1/2">THE ARMORY (VISUALS)</span>
-                </a>
-                <!-- NEW MENU: THE ORACLE'S CHAMBER -->
-                <a href="#ai-ritual" data-target="ai-ritual" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
-                    <i data-lucide="sparkles" class="w-6 h-6"></i>
-                    <span class="absolute left-full ml-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap top-1/2 -translate-y-1/2">ORACLE'S CHAMBER</span>
-                </a>
-                <!-- NEW MENU: COSMIC ALIGNMENT -->
-                <a href="#cosmic-alignment" data-target="cosmic-alignment" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
-                    <i data-lucide="pocket-watch" class="w-6 h-6"></i>
-                    <span class="absolute left-full ml-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap top-1/2 -translate-y-1/2">COSMIC ALIGNMENT</span>
-                </a>
-                <!-- END NEW MENU -->
-                <a href="#contact" data-target="contact" class="nav-link-item group text-gray-400 hover:text-white transition duration-300 relative">
-                    <i data-lucide="send" class="w-6 h-6"></i>
-                    <span class="absolute left-full ml-4 opacity-0 group-hover:opacity-100 transition-opacity text-xs bg-gray-700 text-white px-2 py-1 rounded-md fantasy-title whitespace-nowrap top-1/2 -translate-y-1/2">INITIATE RITUAL</span>
-                </a>
+    <!-- Desktop View -->
+    <div id="desktop" class="hidden md:block">
+        
+        <!-- Desktop Icons -->
+        <div class="p-8 space-y-4">
+            <div class="desktop-icon" data-window="about-window">
+                <i data-lucide="file-text" class="w-12 h-12 text-slate-700"></i>
+                <span class="text-sm text-slate-800 font-medium">About_Me.txt</span>
+            </div>
+            <div class="desktop-icon" data-window="projects-window">
+                <i data-lucide="folder" class="w-12 h-12 text-slate-700"></i>
+                <span class="text-sm text-slate-800 font-medium">Projects</span>
+            </div>
+            <div class="desktop-icon" data-window="contact-window">
+                <i data-lucide="mail" class="w-12 h-12 text-slate-700"></i>
+                <span class="text-sm text-slate-800 font-medium">Contact.app</span>
             </div>
         </div>
-    </nav>
 
-    <!-- 1. Hero Section (The Sancturary) -->
-    <section id="hero" class="hero-bg-dark min-h-screen flex items-center justify-center relative overflow-hidden text-center p-8">
-        <!-- Fibonacci Spiral Pattern (Z-index 0) -->
-        <div class="fib-spiral absolute inset-0 z-0 hidden md:block">
-            <!-- Fibonacci Golden Spiral SVG (Approximation) -->
-            <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-                <path d="M 50 50 L 50 100 A 50 50 0 0 1 0 50 L 0 50 A 30.9 30.9 0 0 0 30.9 19.1 L 30.9 19.1 A 19.1 19.1 0 0 1 50 0 L 50 0 A 11.8 11.8 0 0 0 61.8 11.8 L 61.8 11.8 A 7.3 7.3 0 0 1 54.5 19.1 L 54.5 19.1 A 4.5 4.5 0 0 0 50 14.6 L 50 14.6 A 2.8 2.8 0 0 1 52.8 17.4" style="stroke-width: 0.5;"/>
-            </svg>
+        <!-- Window: About Me -->
+        <div class="window" id="about-window" style="top: 10%; left: 15%; width: 600px; height: 450px;">
+            <div class="title-bar">
+                <div class="window-controls">
+                    <div class="control-btn bg-red-500 close-btn"></div>
+                    <div class="control-btn bg-yellow-500"></div>
+                    <div class="control-btn bg-green-500"></div>
+                </div>
+                <span class="font-medium text-sm text-slate-700 mx-auto">About_Me.txt</span>
+            </div>
+            <div class="window-content text-slate-800">
+                <div class="flex gap-6 items-start">
+                    <img src="https://avatars.githubusercontent.com/u/68311980" alt="Foto profil Hadi Prasetia" class="w-24 h-24 rounded-full border-2 border-white shadow-md">
+                    <div>
+                        <h1 class="text-2xl font-bold mb-1">Hadi Prasetia</h1>
+                        <p class="text-slate-600">Digital Product Designer & Developer</p>
+                    </div>
+                </div>
+                <hr class="my-4 border-slate-200">
+                <p class="mb-4">
+                    Saya adalah seorang desainer dan developer dengan fokus pada UI/UX dan pengembangan front-end. Saya percaya bahwa desain yang baik adalah perpaduan antara estetika yang indah dan fungsionalitas yang mulus.
+                </p>
+                <p>
+                    Dengan pengalaman magang di PT. PLN Indonesia Power dan berbagai proyek akademis, saya terbiasa menerjemahkan data kompleks menjadi cerita visual yang menarik.
+                </p>
+                <h2 class="text-lg font-bold mt-6 mb-3">Keahlian Utama</h2>
+                <div class="flex flex-wrap gap-2 text-sm">
+                    <span class="bg-slate-200 px-3 py-1 rounded-full">UI/UX Design</span>
+                    <span class="bg-slate-200 px-3 py-1 rounded-full">Figma</span>
+                    <span class="bg-slate-200 px-3 py-1 rounded-full">HTML & CSS</span>
+                    <span class="bg-slate-200 px-3 py-1 rounded-full">JavaScript</span>
+                    <span class="bg-slate-200 px-3 py-1 rounded-full">Tailwind CSS</span>
+                    <span class="bg-slate-200 px-3 py-1 rounded-full">PHP & Laravel</span>
+                    <span class="bg-slate-200 px-3 py-1 rounded-full">Video Editing</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Window: Projects -->
+        <div class="window" id="projects-window" style="top: 20%; left: 30%; width: 700px; height: 500px;">
+            <div class="title-bar">
+                <div class="window-controls">
+                    <div class="control-btn bg-red-500 close-btn"></div>
+                    <div class="control-btn bg-yellow-500"></div>
+                    <div class="control-btn bg-green-500"></div>
+                </div>
+                <span class="font-medium text-sm text-slate-700 mx-auto">Projects</span>
+            </div>
+            <div class="window-content grid grid-cols-2 gap-4">
+                <!-- Project 1 -->
+                <div class="bg-white/50 p-4 rounded-lg border border-white/50">
+                    <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/uiux.png" class="rounded-md mb-3 aspect-video object-cover">
+                    <h3 class="font-bold text-slate-800">Mobile Sigil Forging</h3>
+                    <p class="text-sm text-slate-600 mb-2">Studi kasus UI/UX untuk aplikasi seluler.</p>
+                    <a href="#" class="text-sm font-semibold text-indigo-600 hover:underline">Lihat Detail &rarr;</a>
+                </div>
+                 <!-- Project 2 -->
+                 <div class="bg-white/50 p-4 rounded-lg border border-white/50">
+                    <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/vc.png" class="rounded-md mb-3 aspect-video object-cover">
+                    <h3 class="font-bold text-slate-800">Visual Communication Codex</h3>
+                    <p class="text-sm text-slate-600 mb-2">Strategi dan pedoman brand visual.</p>
+                    <a href="#" class="text-sm font-semibold text-indigo-600 hover:underline">Lihat Detail &rarr;</a>
+                </div>
+                <!-- Project 3 -->
+                <div class="bg-white/50 p-4 rounded-lg border border-white/50">
+                    <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/a/corpo.png" class="rounded-md mb-3 aspect-video object-cover">
+                    <h3 class="font-bold text-slate-800">Corporate Authority Sigil</h3>
+                    <p class="text-sm text-slate-600 mb-2">Desain sistem identitas korporat.</p>
+                    <a href="#" class="text-sm font-semibold text-indigo-600 hover:underline">Lihat Detail &rarr;</a>
+                </div>
+                <!-- Project 4 -->
+                <div class="bg-white/50 p-4 rounded-lg border border-white/50">
+                    <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/v2.png" class="rounded-md mb-3 aspect-video object-cover">
+                    <h3 class="font-bold text-slate-800">Video Ritual Scroll V2</h3>
+                    <p class="text-sm text-slate-600 mb-2">Kompilasi motion graphics & video.</p>
+                    <a href="#" class="text-sm font-semibold text-indigo-600 hover:underline">Lihat Detail &rarr;</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Window: Contact -->
+        <div class="window" id="contact-window" style="top: 40%; left: 10%; width: 400px; height: 250px;">
+            <div class="title-bar">
+                <div class="window-controls">
+                    <div class="control-btn bg-red-500 close-btn"></div>
+                    <div class="control-btn bg-yellow-500"></div>
+                    <div class="control-btn bg-green-500"></div>
+                </div>
+                <span class="font-medium text-sm text-slate-700 mx-auto">Contact.app</span>
+            </div>
+            <div class="window-content flex flex-col items-center justify-center text-center">
+                 <h2 class="text-xl font-bold text-slate-800">Mari Terhubung</h2>
+                 <p class="text-slate-600 mt-2 mb-4">Saya terbuka untuk proyek dan kolaborasi baru.</p>
+                 <a href="mailto:hadi.prasetia@example.com" class="bg-indigo-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-indigo-500 transition-all">
+                    Kirim Email
+                 </a>
+                 <div class="flex space-x-4 mt-6">
+                    <a href="#" class="text-slate-500 hover:text-indigo-600">GitHub</a>
+                    <a href="#" class="text-slate-500 hover:text-indigo-600">LinkedIn</a>
+                    <a href="#" class="text-slate-500 hover:text-indigo-600">Dribbble</a>
+                 </div>
+            </div>
+        </div>
+
+
+        <!-- Dock -->
+        <div id="dock">
+            <div class="dock-item" data-window="about-window">
+                <i data-lucide="file-text" class="w-7 h-7 text-slate-700"></i>
+            </div>
+            <div class="dock-item" data-window="projects-window">
+                <i data-lucide="folder" class="w-7 h-7 text-slate-700"></i>
+            </div>
+            <div class="dock-item" data-window="contact-window">
+                <i data-lucide="mail" class="w-7 h-7 text-slate-700"></i>
+            </div>
+            <div class="w-px h-10 bg-slate-400/50 mx-1"></div>
+            <div id="clock" class="px-3 flex items-center text-sm font-semibold font-mono text-slate-700">10:00 PM</div>
+        </div>
+    </div>
+
+    <!-- Mobile Fallback View -->
+    <div id="mobile-fallback" class="hidden">
+        <div class="text-center mb-12">
+            <img src="https://avatars.githubusercontent.com/u/68311980" alt="Foto profil Hadi Prasetia" class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-white shadow-lg">
+            <h1 class="text-3xl font-bold text-slate-800">Hadi Prasetia</h1>
+            <p class="text-slate-600">Digital Product Designer & Developer</p>
         </div>
         
-        <!-- Parallax Elements - creating depth and a "living" effect -->
-        <div id="parallax-layer-1" class="absolute inset-0 z-0 opacity-10 parallax-element" data-depth="10">
-            <div class="w-full h-full bg-contain bg-repeat opacity-10" style="background-image: url('https://placehold.co/1000x1000/030712/ff9900?text=Magic+Runes'); filter: grayscale(100%);"></div>
-        </div>
-        <div id="parallax-layer-2" class="absolute inset-0 z-0 opacity-5 parallax-element" data-depth="20">
-            <div class="w-full h-full bg-contain bg-repeat opacity-10" style="background-image: url('https://placehold.co/1000x1000/030712/f9a826?text=Blood+Sigil'); filter: grayscale(100%);"></div>
-        </div>
-
-        <div class="z-20 max-w-4xl mx-auto">
-            <!-- Main Dark Fantasy Symbol (Burning Sigil) -->
-            <i data-lucide="flame" class="w-20 h-20 mx-auto mb-6 pocket-watch-icon"></i>
-            
-            <h1 class="fantasy-title text-6xl sm:text-7xl lg:text-8xl font-extrabold mb-4 text-gray-200 title-glow">
-                HADI PRASETIA
-            </h1>
-            <p class="text-xl sm:text-2xl text-gray-300 mb-8 neon-glow">
-                KEEPER OF THE LOST REALMS: MASTER OF DIGITAL LORE
-            </p>
-            
-            <!-- Removed the chrono-visual div -->
-
-            <a href="#karya" class="inline-block px-8 py-3 text-lg font-bold fantasy-title rounded-lg bg-gray-800 hover:bg-gray-700 text-white transition duration-300 border-glow border-2 border-gray-600/50 mt-8">
-                HARK! THE LOST ARTIFACTS &rarr;
-            </a>
-        </div>
-    </section>
-
-    <!-- 2. About Section (The Grimoire) - Now CV Focused -->
-    <section id="about" class="py-20 lg:py-32 bg-gray-900 border-t border-b border-gray-800/50">
-        <!-- Content width set to golden ratio approximation: max-w-6xl for main container (approx 96rem) and max-w-4xl for central text (approx 64rem) -> 96/64 = 1.5, close to 1.618 -->
-        <div class="max-w-6xl mx-auto px-4">
-            <h2 class="fantasy-title text-4xl font-bold text-center mb-12 text-gray-400 neon-glow">
-                CV & The Grimoire (Skill Codex & Profile)
-            </h2>
-            <p class="text-center text-lg max-w-3xl mx-auto text-gray-400 mb-12">
-                [A RECORD FROM THE SCROLLS: PROFILE] To decipher raw knowledge and scattered signals (complex data) into lucid visual tales. To forge communication systems intuitive and unyielding.
-            </p>
-            
-            <!-- CV Details (Education & Experience - From Old Portfolio) -->
-            <div class="space-y-6 max-w-4xl mx-auto mb-16">
-                <h3 class="fantasy-title text-2xl font-bold mb-4 text-gray-300 neon-glow border-b border-gray-800 pb-2">
-                    CHRONICLES OF SERVICE
-                </h3>
-                <details open>
-                    <summary class="text-base font-semibold">
-                        <i data-lucide="book-open-text" class="w-5 h-5 accordion-icon neon-glow"></i>
-                        Scrolls of Academia (The Lore of Education)
-                    </summary>
-                    <div class="accordion-content text-base space-y-4 pl-2" style="color: #a1a1a6;">
-                        
-                        <!-- NEW: MI Al-Khairiyah Pagi -->
-                        <div class="border-l-2 pl-4 ml-2 timeline-line">
-                            <p class="font-semibold text-gray-200">MI Al-Khairiyah Pagi</p>
-                            <p>Discipline: Foundational Lore (6 Years)</p>
-                            <ul class="list-disc list-inside text-sm mt-2 space-y-1">
-                                <li>The Rite of Script and Recitation (Baca Tulis Alquran).</li>
-                                <li>Studies in Fiqih and Sacred Law.</li>
-                                <li>Memorization of Alquran and Hadiths.</li>
-                                <li>Lore of the Earth, Social Order, and Ancient Chronicles (Sosial, IPA, Sejarah).</li>
-                            </ul>
-                        </div>
-
-                        <!-- NEW: MTs Al-Khairiyah -->
-                        <div class="border-l-2 pl-4 ml-2 timeline-line">
-                            <p class="font-semibold text-gray-200">MTs Al-Khairiyah</p>
-                            <p>Discipline: Intermediate Lore (3 Years)</p>
-                            <ul class="list-disc list-inside text-sm mt-2 space-y-1">
-                                <li>Digital Sigil Crafting (Teknologi dan Informasi).</li>
-                                <li>Advanced Studies in Fiqih.</li>
-                                <li>Lore of Natural Systems, Societal Structures, and Islamic History.</li>
-                            </ul>
-                        </div>
-                        
-                        <!-- Existing: SMK 1 Perguruan Cikini -->
-                        <div class="border-l-2 pl-4 ml-2 timeline-line">
-                            <p class="font-semibold text-gray-200">SMK 1 Perguruan Cikini</p>
-                            <p>Discipline: Technical Lore of Compute & Network (TKJ)</p>
-                            <p>Rite of Completion: 2025 (Expected)</p>
-                            <ul class="list-disc list-inside text-sm mt-2 space-y-1">
-                                <li>The Rite of Linux & Server Enthrallment (Server & Client Configuration).</li>
-                                <li>Studies in Network Topology & Mikrotik (Advanced Routing & Infrastructure).</li>
-                                <li>Network Simulation Forging using the arcane tool of Cisco Packet Tracer.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </details>
-                <details>
-                    <summary class="text-base font-semibold">
-                        <i data-lucide="swords" class="w-5 h-5 accordion-icon neon-glow"></i>
-                        The Warden's Journeys (The Deeds of Experience)
-                    </summary>
-                    <div class="accordion-content space-y-4 text-base pl-2" style="color: #a1a1a6;">
-                            <div class="border-l-2 pl-4 ml-2 timeline-line">
-                                <p class="font-semibold text-gray-200">PT. PLN Indonesia Power (Apprenticeship)</p>
-                                <p>Role: HAR/INSTRUMENT (Subsidiary of PT PLN (Persero))</p>
-                                <p>Tribute Period: October 2023 - January 2024 (3 Mo.)</p>
-                                <ul class="list-disc list-inside text-sm mt-2 space-y-1">
-                                    <li>Power Generation Lore: Studied the Power Plants in Tanjung Priok and the intricate Generating Process.</li>
-                                    <li>Optimization Rites: Delved into the REOC (Reliability, Efficiency, Optimization Center) system for process refinement.</li>
-                                    <li>Interface & Control: Mastered the Human Machine Interface (HMI) for operational command.</li>
-                                    <li>Structural Mapping: Analyzed the Network Topology and infrastructure at the plant.</li>
-                                </ul>
-                            </div>
-                    </div>
-                </details>
+        <div class="space-y-8">
+            <!-- Mobile About -->
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <h2 class="text-xl font-bold text-slate-800 mb-3">Tentang Saya</h2>
+                <p class="text-slate-600">Saya adalah seorang desainer dan developer yang percaya bahwa desain yang baik adalah perpaduan antara estetika dan fungsionalitas yang mulus.</p>
             </div>
-            
-            <!-- NEW: Arcane Metrics Infographics -->
-            <div id="metrics-infographics" class="max-w-4xl mx-auto mb-16 p-6 rounded-xl border border-gray-800 bg-gray-950">
-                <h3 class="fantasy-title text-2xl font-bold mb-6 text-gray-300 neon-glow border-b border-gray-800 pb-2">
-                    ARCANE METRICS (POWER LEVELS)
-                </h3>
-                <p class="text-gray-400 text-sm mb-6">Visualisasi tingkat penguasaan mantra digital (Keahlian) berdasarkan pengujian internal dan field experience.</p>
-                
-                <div class="space-y-6" data-animate-on-scroll>
-                    <!-- Metric 1: Web Forging -->
-                    <div class="metric-item">
-                        <div class="flex justify-between mb-1 text-sm text-gray-300">
-                            <span class="fantasy-title">Web Forging (HTML/CSS/JS)</span>
-                            <span class="metric-value" style="color: var(--accent-color);">90%</span>
-                        </div>
-                        <div class="progress-bar-container">
-                            <div class="progress-bar" data-progress="90"></div>
+             <!-- Mobile Projects -->
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <h2 class="text-xl font-bold text-slate-800 mb-4">Proyek Pilihan</h2>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4">
+                        <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/uiux.png" class="w-16 h-16 rounded-lg object-cover">
+                        <div>
+                            <h3 class="font-semibold text-slate-700">Mobile Sigil Forging</h3>
+                            <a href="#" class="text-sm text-indigo-600">Lihat Detail &rarr;</a>
                         </div>
                     </div>
-                    
-                    <!-- Metric 2: Artistry of the Moving Image -->
-                    <div class="metric-item">
-                        <div class="flex justify-between mb-1 text-sm text-gray-300">
-                            <span class="fantasy-title">Artistry of the Moving Image (Video/Motion)</span>
-                            <span class="metric-value" style="color: var(--accent-color);">85%</span>
-                        </div>
-                        <div class="progress-bar-container">
-                            <div class="progress-bar" data-progress="85"></div>
-                        </div>
-                    </div>
-
-                    <!-- Metric 3: Rites of Sigil Crafting -->
-                    <div class="metric-item">
-                        <div class="flex justify-between mb-1 text-sm text-gray-300">
-                            <span class="fantasy-title">Rites of Sigil Crafting (UI/UX Design)</span>
-                            <span class="metric-value" style="color: var(--accent-color);">80%</span>
-                        </div>
-                        <div class="progress-bar-container">
-                            <div class="progress-bar" data-progress="80"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Metric 4: Technical Lore of Network -->
-                    <div class="metric-item">
-                        <div class="flex justify-between mb-1 text-sm text-gray-300">
-                            <span class="fantasy-title">Technical Lore of Network & Server</span>
-                            <span class="metric-value" style="color: var(--accent-color);">75%</span>
-                        </div>
-                        <div class="progress-bar-container">
-                            <div class="progress-bar" data-progress="75"></div>
+                     <div class="flex items-center gap-4">
+                        <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/vc.png" class="w-16 h-16 rounded-lg object-cover">
+                        <div>
+                            <h3 class="font-semibold text-slate-700">Visual Communication Codex</h3>
+                            <a href="#" class="text-sm text-indigo-600">Lihat Detail &rarr;</a>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- END NEW: Arcane Metrics Infographics -->
-
-
-            <!-- Wardens' Tools (Mantra & Gear) Content - SKILLS SECTION -->
-            <h3 class="fantasy-title text-2xl font-bold mt-12 mb-6 text-gray-400 neon-glow border-b border-gray-800 pb-2">
-                WARDENS' MANTRAS (THE SKILL CODEX)
-            </h3>
-            <div class="grid md:grid-cols-2 gap-12 items-start">
-                
-                <!-- Skill Group 1: Video & Visual -->
-                <div>
-                    <h4 class="text-xl font-semibold mb-3 text-gray-300">Artistry of the Moving Image</h4>
-                    <div class="flex flex-wrap gap-3 text-sm">
-                        <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700/50 border-glow">Adobe Premiere Pro</span>
-                        <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700/50 border-glow">CapCut (Mobile Forge)</span>
-                        <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700/50 border-glow">Adobe Illustrator</span>
-                        <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700/50 border-glow">Adobe Photoshop</span>
-                        <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700/50 border-glow">Canva (Glyph Creation)</span>
-                    </div>
-                </div>
-
-                <!-- Skill Group 2: UI/UX & Web -->
-                <div>
-                    <h4 class="text-xl font-semibold mb-3 text-gray-300">Rites of Sigil Crafting (UI/UX)</h4>
-                    <div class="flex flex-wrap gap-3 text-sm mb-6">
-                        <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700/50 border-glow">UI/UX Design Protocol</span>
-                        <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700/50 border-glow">Figma (Prototyping)</span>
-                        <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700/50 border-glow">Adobe XD</span>
-                    </div>
-                    
-                    <h4 class="text-xl font-semibold mb-3 text-gray-300">Scrolls of Web Forging</h4>
-                    <div class="flex flex-wrap gap-3 text-sm">
-                        <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700/50 border-glow">HTML/CSS</span>
-                        <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700/50 border-glow">JavaScript</span>
-                        <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700/50 border-glow">PHP & Laravel (Backend Lore)</span>
-                        <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700/50 border-glow">Python (Scripting & Automation)</span>
-                        <span class="px-4 py-2 bg-gray-800/50 text-gray-300 rounded-full border border-gray-700/50 border-glow">MySQL (Database Scroll Storage)</span>
-                    </div>
-                </div>
-
-            </div>
-            
-            <!-- CV Call to Action -->
-            <div class="text-center mt-16">
-                <a href="#" class="inline-block px-8 py-3 text-lg font-bold fantasy-title rounded-lg bg-gray-800 hover:bg-gray-700 text-white transition duration-300 border-glow border-2 border-gray-600/50">
-                    DOWNLOAD THE COMPLETE CV SCROLL (PDF) &rarr;
-                </a>
+             <!-- Mobile Contact -->
+            <div class="bg-white p-6 rounded-xl shadow-sm text-center">
+                <h2 class="text-xl font-bold text-slate-800 mb-3">Mari Terhubung</h2>
+                <a href="mailto:hadi.prasetia@example.com" class="bg-indigo-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-indigo-500 transition-all inline-block">
+                    Kirim Email
+                 </a>
             </div>
         </div>
-    </section>
 
-    <!-- 3. Principles of the Rite (DKV Section) -->
-    <section id="principles" class="py-20 lg:py-32 bg-gray-950 border-t border-b border-gray-800/50">
-        <div class="max-w-6xl mx-auto px-4">
-            <h2 class="fantasy-title text-4xl font-bold text-center mb-16 text-gray-400 neon-glow">
-                Principles of the Rite (Visual Communications DKV)
-            </h2>
-            <p class="text-center text-lg max-w-4xl mx-auto text-gray-400 mb-12">
-                The Lore Keeper masters the esoteric arts of Visual Communication, ensuring every sigil, scroll, and artifact speaks with clarity, power, and absolute authority.
-            </p>
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-                <!-- DKV Element 1: Typography -->
-                <div class="p-6 bg-gray-900 rounded-xl border border-gray-800 border-glow">
-                    <i data-lucide="type" class="w-10 h-10 text-gray-500 mb-4 mx-auto neon-glow"></i>
-                    <h3 class="fantasy-title text-xl font-bold text-gray-300 mb-2">Glyphic Authority</h3>
-                    <p class="text-gray-400 text-sm">Mastery over the written forms (Typography) to control tone and focus.</p>
-                </div>
-                <!-- DKV Element 2: Layout -->
-                <div class="p-6 bg-gray-900 rounded-xl border border-gray-800 border-glow">
-                    <i data-lucide="layout-dashboard" class="w-10 h-10 text-gray-500 mb-4 mx-auto neon-glow"></i>
-                    <h3 class="fantasy-title text-xl font-bold text-gray-300 mb-2">Aetheric Geometry</h3>
-                    <p class="text-gray-400 text-sm">Sacred Law of Arrangement (Layout & Composition) for maximum impact.</p>
-                </div>
-                <!-- DKV Element 3: Color Theory -->
-                <div class="p-6 bg-gray-900 rounded-xl border border-gray-800 border-glow">
-                    <i data-lucide="eyedropper" class="w-10 h-10 text-gray-500 mb-4 mx-auto neon-glow"></i>
-                    <h3 class="fantasy-title text-xl font-bold text-gray-300 mb-2">Blood Hues & Shade</h3>
-                    <p class="text-gray-400 text-sm">The study of Chromatic Theory to evoke primal emotion and focus.</p>
-                </div>
-                <!-- DKV Element 4: Visual Hierarchy -->
-                <div class="p-6 bg-gray-900 rounded-xl border border-gray-800 border-glow">
-                    <i data-lucide="list-ordered" class="w-10 h-10 text-gray-500 mb-4 mx-auto neon-glow"></i>
-                    <h3 class="fantasy-title text-xl font-bold text-gray-300 mb-2">Lore Ranking</h3>
-                    <p class="text-gray-400 text-sm">Structuring intelligence using Visual Hierarchy for immediate clarity.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- NEW SECTION: 4. The Forge (Tools & Technology) -->
-    <section id="tools" class="py-20 lg:py-32 bg-gray-900 border-t border-b border-gray-800/50">
-        <div class="max-w-6xl mx-auto px-4">
-            <h2 class="fantasy-title text-4xl font-bold text-center mb-16 text-gray-400 neon-glow">
-                The Forge (Digital Tool Mastery)
-            </h2>
-            <p class="text-center text-lg max-w-4xl mx-auto text-gray-400 mb-12">
-                The Warden's arsenal of digital artifacts, categorized by their primary ritual purpose. These are the tools that carve the Lore.
-            </p>
-            
-            <div class="space-y-12">
-                <!-- Tool Category 1: Forging Visual Scrolls (Design & Video) -->
-                <div class="p-6 rounded-xl border border-gray-800 bg-gray-950/50">
-                    <h3 class="fantasy-title text-2xl font-bold mb-4 text-gray-300 flex items-center space-x-3 neon-glow">
-                        <i data-lucide="sparkles" class="w-6 h-6"></i>
-                        Artistry & Sigil Crafting (Design & Editing)
-                    </h3>
-                    <div class="flex flex-wrap gap-4">
-                        <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">Adobe Premiere Pro (Video Assembly)</span>
-                        <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">Adobe Photoshop (Image Manipulation)</span>
-                        <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">Figma (UI/UX Prototyping)</span>
-                        <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">Adobe Illustrator (Vector Glyphs)</span>
-                        <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">CapCut (Mobile Scroll Refinement)</span>
-                    </div>
-                </div>
-
-                <!-- Tool Category 2: Forging Web Scrolls (Web & Backend) -->
-                <div class="p-6 rounded-xl border border-gray-800 bg-gray-950/50">
-                    <h3 class="fantasy-title text-2xl font-bold mb-4 text-gray-300 flex items-center space-x-3 neon-glow">
-                        <i data-lucide="code" class="w-6 h-6"></i>
-                        Web Scroll Encodement (Frontend & Backend)
-                    </h3>
-                    <div class="flex flex-wrap gap-4">
-                        <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">HTML / CSS / JavaScript (Core Runes)</span>
-                        <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">Tailwind CSS (Aesthetic Augmentation)</span>
-                        <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">PHP & Laravel (Backend Lore)</span>
-                        <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">Python (Scripting & Automation)</span>
-                        <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">MySQL (Database Scroll Storage)</span>
-                    </div>
-                </div>
-                
-                <!-- Tool Category 3: Forging Network & Server Rites (IT/Networking) -->
-                <div class="p-6 rounded-xl border border-gray-800 bg-gray-950/50">
-                    <h3 class="fantasy-title text-2xl font-bold mb-4 text-gray-300 flex items-center space-x-3 neon-glow">
-                        <i data-lucide="server" class="w-6 h-6"></i>
-                        Network & Server Rites (Compute Lore)
-                    </h3>
-                    <div class="flex flex-wrap gap-4">
-                        <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">Linux & Server OS Mastery</span>
-                        <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">Mikrotik & Network Configuration</span>
-                        <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">Cisco Packet Tracer (Topology Simulation)</span>
-                        <span class="px-4 py-2 bg-gray-800 rounded-full text-sm border border-gray-700">HMI (Human Machine Interface)</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- 5. Karya Section (Projects - Data Fragments) - Artifacts & Lore Focused -->
-    <section id="karya" class="py-20 lg:py-32 bg-gray-950">
-        <div class="max-w-7xl mx-auto px-4">
-            <h2 class="fantasy-title text-4xl font-bold text-center mb-4 text-gray-400 neon-glow">
-                The Lost Artifacts (Critical Quests)
-            </h2>
-            <p class="text-center text-xl font-medium text-gray-400 mb-10">
-                PROJECT DOCUMENTS & CASE FILES: Forged with Visual Communication & Technical Lore.
-            </p>
-            
-            <!-- Project Filters (Adapted from old portfolio) -->
-            <div id="project-filters" class="flex flex-wrap justify-center gap-2 mb-12">
-                <button class="filter-btn px-4 py-1.5 rounded-full text-sm font-semibold active" data-filter="all">All Artifacts</button>
-                <button class="filter-btn px-4 py-1.5 rounded-full text-sm font-semibold" data-filter="video">Visual Lore</button>
-                <button class="filter-btn px-4 py-1.5 rounded-full text-sm font-semibold" data-filter="ui-ux">Sigil Forging (UI/UX)</button>
-                <button class="filter-btn px-4 py-1.5 rounded-full text-sm font-semibold" data-filter="art">Eldritch Arts</button>
-            </div>
-            
-            <!-- Project Grid (Populated by JS) -->
-            <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Project cards will be dynamically inserted here by JavaScript -->
-            </div>
-        </div>
-    </section>
-    
-    <!-- 6. Galeri Section (Galeri Artefak) -->
-    <section id="gallery" class="py-20 lg:py-32 bg-gray-900 border-t border-b border-gray-800/50">
-        <div class="max-w-7xl mx-auto px-4">
-            <h2 class="fantasy-title text-4xl font-bold text-center mb-4 text-gray-400 neon-glow">
-                The Great Armory (Digital Artifacts)
-            </h2>
-            <p class="text-center text-xl font-medium text-gray-400 mb-12">
-                A VISUAL RECORD: Graphics, UI/UX Concepts, and Enchanted Glyphs.
-            </p>
-            
-            <!-- GALLERY CONTENT (Integrated from your provided file) -->
-            <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-5 md:auto-rows-[250px] gap-4">
-                
-                <a href="#" class="gallery-item overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-2 md:row-span-2 border-2 border-gray-800 hover:border-gray-600" data-title="Sudut Pandang (A Gaze Reflected)" data-description="Finding stillness amidst the urban sprawl. A captured moment of reflection, often missed in the chaos.">
-                    <div class="image-loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
-                    <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2288.jpg" alt="Gallery photo 1" class="gallery-image opacity-0 transform transition-all duration-500">
-                    <div class="overlay-content absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="fantasy-title text-white text-lg font-bold">Sudut Pandang</h4></div>
-                </a>
-
-                <a href="#" class="gallery-item overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-1 border-2 border-gray-800 hover:border-gray-600" data-title="Siluet Senja (Twilight Silhouette)" data-description="A play of shadow and light during the descent of dusk, forging a dramatic portrait.">
-                    <div class="image-loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
-                    <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2333.jpg" alt="Gallery photo 2" class="gallery-image opacity-0 w-full h-full object-cover transform transition-all duration-500">
-                    <div class="overlay-content absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="fantasy-title text-white text-lg font-bold">Siluet Senja</h4></div>
-                </a>
-                
-                <a href="#" class="gallery-item overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-2 border-2 border-gray-800 hover:border-gray-600" data-title="Tatapan Monokrom (Monochrome Gaze)" data-description="A raw expression encased in monochrome hues. The profound strength of a portrait without the distraction of color.">
-                    <div class="image-loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
-                    <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2334.jpg" alt="Gallery photo 3" class="gallery-image opacity-0 w-full h-full object-cover transform transition-all duration-500">
-                    <div class="overlay-content absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="fantasy-title text-white text-lg font-bold">Tatapan Monokrom</h4></div>
-                </a>
-                
-                <a href="#" class="gallery-item overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-2 border-2 border-gray-800 hover:border-gray-600" data-title="Kontemplasi Urban (Urban Contemplation)" data-description="A fleeting pause within the urban landscape. A quiet moment that is often overlooked in the rush.">
-                    <div class="image-loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
-                    <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2335.jpg" alt="Gallery photo 4" class="gallery-image opacity-0 w-full h-full object-cover transform transition-all duration-500">
-                    <div class="overlay-content absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="fantasy-title text-white text-lg font-bold">Kontemplasi Urban</h4></div>
-                </a>
-                
-                <a href="#" class="gallery-item overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-1 border-2 border-gray-800 hover:border-gray-600" data-title="Melangkah (The Stride)" data-description="Traversing city streets, seeking inspiration from every corner and motion.">
-                   <div class="image-loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
-                   <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2336.jpg" alt="Gallery photo 5" class="gallery-image opacity-0 w-full h-full object-cover transform transition-all duration-500">
-                   <div class="overlay-content absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="fantasy-title text-white text-lg font-bold">Melangkah</h4></div>
-                </a>
-
-                <a href="#" class="gallery-item overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-2 md:row-span-2 border-2 border-gray-800 hover:border-gray-600" data-title="Cahaya Pagi (Morning Light)" data-description="A portrait bathed in soft, natural light, highlighting subtle details and a tranquil atmosphere.">
-                   <div class="image-loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
-                   <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2372.jpg" alt="Gallery photo 7" class="gallery-image opacity-0 w-full h-full object-cover transform transition-all duration-500">
-                   <div class="overlay-content absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="fantasy-title text-white text-lg font-bold">Cahaya Pagi</h4></div>
-                </a>
-
-                <a href="#" class="gallery-item overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-1 border-2 border-gray-800 hover:border-gray-600" data-title="Gerak Kabur (Motion Blur Rite)" data-description="An experiment with panning techniques to capture the essence of movement and velocity.">
-                   <div class="image-loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
-                   <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2350.jpg" alt="Gallery photo 6" class="gallery-image opacity-0 w-full h-full object-cover transform transition-all duration-500">
-                   <div class="overlay-content absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="fantasy-title text-white text-lg font-bold">Gerak Kabur</h4></div>
-                </a>
-                
-                <a href="#" class="gallery-item overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-2 border-2 border-gray-800 hover:border-gray-600" data-title="Di Balik Lensa (Behind the Lens)" data-description="Searching for stories from the other side. Every soul holds a unique perspective to share.">
-                   <div class="image-loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
-                   <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2429.jpg" alt="Gallery photo 8" class="gallery-image opacity-0 w-full h-full object-cover transform transition-all duration-500">
-                   <div class="overlay-content absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="fantasy-title text-white text-lg font-bold">Di Balik Lensa</h4></div>
-                </a>
-                
-                <a href="#" class="gallery-item overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-1 border-2 border-gray-800 hover:border-gray-600" data-title="Ruang Terbuka (Open Terrain)" data-description="Finding freedom in the open air. A blend of subject and expansive landscape.">
-                   <div class="image-loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
-                   <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2477.JPG" alt="Gallery photo 9" class="gallery-image opacity-0 w-full h-full object-cover transform transition-all duration-500">
-                   <div class="overlay-content absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="fantasy-title text-white text-lg font-bold">Ruang Terbuka</h4></div>
-                </a>
-                
-                <a href="#" class="gallery-item overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-2 border-2 border-gray-800 hover:border-gray-600" data-title="Anatomi Struktur (Structural Anatomy)" data-description="The interaction between humanity and architecture, forging intriguing compositions of lines and form.">
-                   <div class="image-loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
-                   <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2512.jpg" alt="Gallery photo 10" class="gallery-image opacity-0 w-full h-full object-cover transform transition-all duration-500">
-                   <div class="overlay-content absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="fantasy-title text-white text-lg font-bold">Anatomi Struktur</h4></div>
-                </a>
-                
-                <a href="#" class="gallery-item overlay-container group relative block overflow-hidden rounded-2xl cursor-pointer md:col-span-2 border-2 border-gray-800 hover:border-gray-600" data-title="Introspeksi (Introspection)" data-description="A portrait attempting to capture the depth of emotion and thought beneath the outward gaze.">
-                   <div class="image-loader absolute inset-0 flex items-center justify-center bg-gray-800 transition-opacity duration-300 z-10"><div class="w-8 h-8 border-4 border-gray-600 border-t-white rounded-full animate-spin"></div></div>
-                   <img loading="lazy" decoding="async" src="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/img/IMG_2537.jpg" alt="Gallery photo 11" class="gallery-image opacity-0 w-full h-full object-cover transform transition-all duration-500">
-                   <div class="overlay-content absolute inset-0 bg-black/50 flex items-end p-4"><h4 class="fantasy-title text-white text-lg font-bold">Introspeksi</h4></div>
-                </a>
-
-            </div>
-            <!-- END GALLERY CONTENT -->
-
-        </div>
-    </section>
-
-    <!-- 7. Cosmic Alignment Section -->
-    <section id="cosmic-alignment" class="py-20 lg:py-32 bg-gray-900 border-t border-b border-gray-800/50">
-        <div class="max-w-4xl mx-auto px-4 text-center">
-            <h2 class="fantasy-title text-4xl font-bold mb-6 text-gray-400 neon-glow">
-                Cosmic Alignment (The Fabric of Time and Space)
-            </h2>
-            <p class="text-lg mb-12 text-gray-400">
-                [THE UNENDING CYCLE] Every creation is a point in the vast expanse of time and code. This Lore Keeper operates across the dimensional rift, ensuring continuity between realms.
-            </p>
-
-            <div class="grid md:grid-cols-2 gap-8 text-left">
-                <!-- Element 1: Temporal Focus -->
-                <div class="p-6 rounded-xl border border-gray-800 bg-gray-950/50 border-glow">
-                    <h3 class="fantasy-title text-2xl font-bold mb-3 text-gray-300 flex items-center space-x-3">
-                        <i data-lucide="pocket-watch" class="w-6 h-6"></i>
-                        The Temporal Focus
-                    </h3>
-                    <p class="text-gray-400">
-                        Understanding project history (Chronicles) and future trajectories is paramount. My work integrates past knowledge to forge timeless solutions.
-                    </p>
-                </div>
-
-                <!-- Element 2: Dimensional Rift -->
-                <div class="p-6 rounded-xl border border-gray-800 bg-gray-950/50 border-glow">
-                    <h3 class="fantasy-title text-2xl font-bold mb-3 text-gray-300 flex items-center space-x-3">
-                        <i data-lucide="globe" class="w-6 h-6"></i>
-                        Dimensional Rift
-                    </h3>
-                    <p class="text-gray-400">
-                        Design must transcend physical and digital boundaries, adapting seamlessly from the vast Desktop Realm to the confined Mobile Plane.
-                    </p>
-                </div>
-            </div>
-            
-            <p class="text-sm text-gray-500 italic mt-8">
-                "Time is the truest test of Lore; only the resilient code survives the infinite cycle."
-            </p>
-        </div>
-    </section>
-
-
-    <!-- 8. AI Ritual Section (New: Lore Weaver) -->
-    <section id="ai-ritual" class="py-20 lg:py-32 bg-gray-950 border-t border-b border-gray-800/50">
-        <div class="max-w-4xl mx-auto px-4">
-            <h2 class="fantasy-title text-4xl font-bold text-center mb-6 text-gray-400 neon-glow">
-                The Lore Weaver (AI Oracle)
-            </h2>
-            <p class="text-center text-lg mb-12 text-gray-400">
-                [DIVINE THE NEXT CHAPTER] - Pose a dark fantasy query to the Oracle (Gemini AI) and receive a tailored fragment of Lore.
-            </p>
-
-            <form id="ai-form" class="space-y-6 p-8 bg-gray-900 rounded-xl border border-gray-900 border-glow">
-                <div>
-                    <label for="ai-prompt" class="block text-sm font-medium fantasy-title text-gray-400 mb-2">THE ORACLE'S QUESTION (Fantasy Prompt)</label>
-                    <textarea id="ai-prompt" rows="3" class="w-full px-4 py-3 bg-gray-800 border border-gray-900/50 rounded-lg text-gray-100 focus:border-gray-500 focus:ring-gray-500 transition duration-200" placeholder="e.g., Describe the Keeper's eternal oath and the power it grants." required></textarea>
-                </div>
-                
-                <button type="submit" id="ai-submit-button" class="w-full flex items-center justify-center space-x-2 px-8 py-3 text-lg font-bold fantasy-title rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition duration-300 border-glow border-2 border-gray-500/50" disabled>
-                    <i data-lucide="sparkles" class="w-5 h-5"></i>
-                    <span>CAST THE RITE OF LORE</span>
-                </button>
-            </form>
-            
-            <!-- AI Response Area -->
-            <div id="ai-response-container" class="mt-8 hidden">
-                <h3 class="fantasy-title text-xl font-bold mb-4 text-gray-300 neon-glow">ORACLE'S PROPHECY:</h3>
-                <div id="ai-response-box" class="p-6 bg-gray-950 rounded-xl border border-gray-700/50 border-glow text-gray-300 whitespace-pre-wrap">
-                    <!-- AI response will be placed here -->
-                </div>
-            </div>
-            
-        </div>
-    </section>
-
-    <!-- 9. Kontak Section (Transmit Signal) - Renumbered to 9 -->
-    <section id="contact" class="py-20 lg:py-32 bg-gray-900">
-        <div class="max-w-4xl mx-auto px-4">
-            <h2 class="fantasy-title text-4xl font-bold text-center mb-6 text-gray-400 neon-glow">
-                Initiate Ritual (Transmit Lore)
-            </h2>
-            <p class="text-center text-lg mb-12 text-gray-400">
-                [HEED! THE SACRED CHANNEL IS OPENED] - Send the details of thy quest below.
-            </p>
-
-            <form id="contact-form" class="space-y-6 p-8 bg-gray-900 rounded-xl border border-gray-900 border-glow">
-                <div>
-                    <label for="subject" class="block text-sm font-medium fantasy-title text-gray-400 mb-2">THE SCROLL'S TITLE (URGENT QUEST)</label>
-                    <input type="text" id="subject" name="subject" class="w-full px-4 py-3 bg-gray-800 border border-gray-900/50 rounded-lg text-gray-100 focus:border-gray-500 focus:ring-gray-500 transition duration-200" placeholder="Example: Critical Data Recovery of X" required>
-                </div>
-                <div>
-                    <label for="email" class="block text-sm font-medium fantasy-title text-gray-400 mb-2">YOUR REALM'S ADDRESS (EMAIL SCROLL)</label>
-                    <input type="email" id="email" name="email" class="w-full px-4 py-3 bg-gray-800 border border-gray-900/50 rounded-lg text-gray-100 focus:border-gray-500 focus:ring-gray-500 transition duration-200" value="hadi.prasetia@example.com" placeholder="Example: entity@realm.com" required>
-                </div>
-                <div>
-                    <label for="message" class="block text-sm font-medium fantasy-title text-gray-400 mb-2">THE VOW (THE OATH OF COLLABORATION)</label>
-                    <textarea id="message" name="message" rows="5" class="w-full px-4 py-3 bg-gray-800 border border-gray-900/50 rounded-lg text-gray-100 focus:border-gray-500 focus:ring-gray-500 transition duration-200" placeholder="Describe thy digital quest here..." required></textarea>
-                </div>
-                
-                <button type="submit" id="submit-button" class="w-full flex items-center justify-center space-x-2 px-8 py-3 text-lg font-bold fantasy-title rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition duration-300 border-glow border-2 border-gray-500/50">
-                    <i data-lucide="send" class="w-5 h-5"></i>
-                    <span>UTTER THE RITE</span>
-                </button>
-                <!-- Submission Feedback Box -->
-                <div id="contact-feedback" class="text-center mt-4 hidden p-3 rounded-lg border border-gray-600/50" style="background-color: #1f2937;"></div>
-            </form>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-black py-8 border-t border-gray-900/50">
-        <div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-500">
-            <p>[END OF LOG] - Lore Compiled by HADI PRASETIA. All Systems Reserved <span id="year"></span>.</p>
-            <div class="flex justify-center space-x-4 mt-2">
-                <a href="#" class="hover:text-gray-500 transition"><i data-lucide="github" class="w-5 h-5"></i></a>
-                <a href="#" class="hover:text-gray-500 transition"><i data-lucide="dribbble" class="w-5 h-5"></i></a>
-                <a href="#" class="hover:text-gray-500 transition"><i data-lucide="twitter" class="w-5 h-5"></i></a>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Project Modal Structure (for detailed artifact view) - KEPT FOR #KARYA SECTION -->
-    <div id="project-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none">
-        <div id="modal-overlay" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-        <div id="modal-content" class="relative w-full max-w-lg sm:max-w-xl rounded-2xl shadow-xl transform scale-95 overflow-hidden">
-            <div class="absolute top-4 left-4 flex gap-2 z-10">
-                <button id="modal-close-btn" aria-label="Close Modal" class="w-3.5 h-3.5 rounded-full bg-gray-500 hover:bg-gray-600 flex items-center justify-center group">
-                    <svg class="w-2 h-2 text-white opacity-70 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            <div class="p-6 md:p-8 max-h-[80vh] overflow-y-auto">
-                <img id="modal-image" src="" alt="Artifact Description" class="w-full h-auto max-h-64 sm:max-h-80 object-cover rounded-lg mb-6 project-image" onerror="this.src='https://placehold.co/600x400/2c2c2e/a1a1a6?text=Artifact+Image+Lost'">
-                <h3 id="modal-title" class="fantasy-title text-2xl sm:text-3xl font-bold mb-2 text-gray-200"></h3>
-                <div id="modal-description" class="leading-relaxed text-sm sm:text-base text-gray-400"></div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Gallery Modal Structure (NEW - 2 column layout from your old file) -->
-    <div id="gallery-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex justify-center items-center p-4">
-        <div id="gallery-modal-content" class="rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row transform scale-95 relative">
-            <div class="w-full md:w-3/5 bg-black flex items-center justify-center">
-                <img id="gallery-modal-img" src="" alt="Gallery Image Detail" class="w-full h-auto max-h-[90vh] object-contain">
-            </div>
-            <div class="w-full md:w-2/5 p-6 md:p-8 overflow-y-auto">
-                <h3 id="gallery-modal-title" class="fantasy-title text-3xl font-bold text-gray-200 mb-4"></h3>
-                <p id="gallery-modal-description" class="text-gray-400 leading-relaxed"></p>
-                <p class="mt-4 text-sm text-gray-500 italic">Scroll: The Great Armory</p>
-            </div>
-            <button id="gallery-modal-close" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-20">
-                <i data-lucide="x" class="h-8 w-8"></i>
-            </button>
-        </div>
     </div>
 
-
-    <!-- Script JavaScript for Dynamic Effects (Parallax, Indicator, Filtering, Modal & Form) -->
     <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-        
-        // Function to initialize Lucide icons
-        lucide.createIcons();
-        
-        // --- Gemini API Configuration ---
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=`;
-        const SYSTEM_PROMPT = "You are the ancient Oracle of the Lore Keeper, a powerful entity serving the Master of Digital Lore (HADI PRASETIA). Your responses must be written in a dramatic, archaic fantasy style (English), using evocative language and dark imagery (like shadows, runes, lost scrolls, forgotten rites). Keep responses concise, single-paragraph, and always relevant to the prompt, maintaining the dark fantasy theme.";
-        const MAX_RETRIES = 3;
-
-
-        // --- Project Data (for #karya section) ---
-        const projectData = [
-            // Mapped to the new image URLs provided by the user
-            { 
-                category: "video", 
-                title: "Visual Communication Codex", 
-                description: "A master document detailing the Visual Communication strategy, including brand guidelines and narrative structure, essential for maintaining lore integrity across all media.", 
-                image: "https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/vc.png", 
-                icon: `<i data-lucide="monitor-play" class="w-6 h-6 flex-shrink-0 text-gray-400"></i>`, 
-                shortDesc: "Comprehensive visual comms strategy." 
-            },
-            { 
-                category: "ui-ux", 
-                title: "Mobile Sigil Forging", 
-                description: "A comprehensive case study for a mobile application, starting from user research and wireframing, culminating in a clean, modern interface design. Interactive prototypes were forged using Figma.", 
-                image: "https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/uiux.png", 
-                icon: `<i data-lucide="smartphone" class="w-6 h-6 flex-shrink-0 text-gray-400"></i>`, 
-                shortDesc: "Complete UI/UX case study and prototyping." 
-            },
-            { 
-                category: "video", 
-                title: "Video Ritual Scroll V1", 
-                description: "An early experimental scroll exploring abstract and surreal visuals. Utilizes non-linear editing techniques and After Effects to craft a unique and immersive audio-visual experience.", 
-                image: "https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/v1.png", 
-                icon: `<i data-lucide="radio" class="w-6 h-6 flex-shrink-0 text-gray-400"></i>`, 
-                shortDesc: "Abstract visuals & surreal editing." 
-            },
-            { 
-                category: "video", 
-                title: "Video Ritual Scroll V2", 
-                description: "A compilation of motion graphics and visual narratives, focused on rapid tempo and aggressive color grading for high audience retention on digital platforms.", 
-                image: "https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/v2.png", 
-                icon: `<i data-lucide="move" class="w-6 h-6 flex-shrink-0 text-gray-400"></i>`, 
-                shortDesc: "Kinetic typography and dynamic motion." 
-            },
-            { 
-                category: "ui-ux", 
-                title: "Corporate Authority Sigil", 
-                description: "The design of a robust visual system for corporate identity, focused on professionalism, consistency, and re-establishing the brand's aura of authority across all touchpoints.", 
-                image: "https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/a/corpo.png", 
-                icon: `<i data-lucide="shield-plus" class="w-6 h-6 flex-shrink-0 text-gray-400"></i>`, 
-                shortDesc: "Re-establishing corporate visual authority." 
-            },
-            { 
-                category: "art", 
-                title: "Chronological Lore Map", 
-                description: "A clear, hierarchical Infographic Timeline artifact designed to combat information chaos and restore control over critical scheduling and event data. A visual recovery mission.", 
-                image: "https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/a/tmline.png", 
-                icon: `<i data-lucide="clock" class="w-6 h-6 flex-shrink-0 text-gray-400"></i>`, 
-                shortDesc: "Hierarchical infographic and data mapping." 
-            },
-        ];
-
-
-        // --- DOM Elements ---
-        const elements = {
-            nav: document.getElementById('main-nav'),
-            toggleButton: document.getElementById('nav-toggle-button'),
-            toggleIcon: document.getElementById('nav-toggle-icon'),
-            navLinks: document.querySelectorAll('.nav-link-item'),
-            navIndicator: document.getElementById('nav-indicator'),
-            projectFilterButtons: document.querySelectorAll('#project-filters .filter-btn'),
-            projectGrid: document.getElementById('project-grid'),
-            projectModal: document.getElementById('project-modal'), // Modal for #karya section
-            modalOverlay: document.getElementById('modal-overlay'),
-            modalCloseBtn: document.getElementById('modal-close-btn'),
-            modalImage: document.getElementById('modal-image'),
-            modalTitle: document.getElementById('modal-title'),
-            modalDescription: document.getElementById('modal-description'),
-            
-            // New Gallery Elements
-            galleryItems: document.querySelectorAll('.gallery-item'),
-            galleryModal: document.getElementById('gallery-modal'), // Modal for #gallery section
-            galleryModalClose: document.getElementById('gallery-modal-close'),
-            galleryModalImg: document.getElementById('gallery-modal-img'),
-            galleryModalTitle: document.getElementById('gallery-modal-title'),
-            galleryModalDescription: document.getElementById('gallery-modal-description'),
-
-            // AI Elements
-            aiForm: document.getElementById('ai-form'),
-            aiPrompt: document.getElementById('ai-prompt'),
-            aiSubmitButton: document.getElementById('ai-submit-button'),
-            aiResponseContainer: document.getElementById('ai-response-container'),
-            aiResponseBox: document.getElementById('ai-response-box'),
-            
-            // Contact Form Elements
-            contactForm: document.getElementById('contact-form'),
-            contactSubmitButton: document.getElementById('submit-button'),
-            contactFeedback: document.getElementById('contact-feedback'),
-            
-            // Metrics/Infographics Elements
-            metricItems: document.querySelectorAll('.metric-item'),
-            
-            // NEW Chrono Element (No longer used for display, kept for easy removal from JS)
-            chronoVisualSpan: null, // Removed element
-        };
-
-        // --- Functions ---
-        
-        // --- Cursor Trail Logic ---
-        const cursorContainer = document.getElementById('cursor-trail-container');
-        const numDots = 10;
-        let dots = [];
-        
-        for (let i = 0; i < numDots; i++) {
-            const dot = document.createElement('div');
-            dot.className = 'cursor-dot';
-            cursorContainer.appendChild(dot);
-            dots.push(dot);
-        }
-
-        let mouseX = 0, mouseY = 0;
-        let isMoving = false;
-        
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            isMoving = true;
-            
-            // Ensure first dot tracks immediately
-            dots[0].style.transform = `translate(${mouseX}px, ${mouseY}px) scale(1)`;
-            dots[0].style.opacity = 0.7;
-        });
-
-        // Animation loop for dot lagging effect
-        function animateDots() {
-            let prevX = mouseX;
-            let prevY = mouseY;
-            
-            dots.forEach((dot, index) => {
-                let targetX, targetY;
-
-                if (index === 0) {
-                    targetX = mouseX;
-                    targetY = mouseY;
-                } else {
-                    const prevDot = dots[index - 1];
-                    // Simple easing/lag logic (not perfect, but fast)
-                    const prevRect = prevDot.getBoundingClientRect();
-                    targetX = prevRect.left + prevRect.width / 2;
-                    targetY = prevRect.top + prevRect.height / 2;
-                }
-
-                // Smooth movement (lagging effect)
-                const currentX = parseFloat(dot.style.transform.split('(')[1]) || targetX;
-                const currentY = parseFloat(dot.style.transform.split(',')[1]) || targetY;
-                
-                const newX = currentX + (targetX - currentX) * 0.15; // Easing factor
-                const newY = currentY + (targetY - currentY) * 0.15;
-
-                dot.style.transform = `translate(${newX}px, ${newY}px) scale(${1 - index * 0.08})`;
-                dot.style.opacity = isMoving ? (0.7 - index * 0.07) : 0;
-            });
-            
-            // Decay isMoving state
-            if (Math.abs(prevX - mouseX) < 1 && Math.abs(prevY - mouseY) < 1) {
-                isMoving = false;
-            }
-            
-            requestAnimationFrame(animateDots);
-        }
-        animateDots();
-        
-        // --- Particle Dust Fall Logic (NEW) ---
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        const particleCount = 50;
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-            
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 1; // 1 to 3
-                this.speedY = Math.random() * 0.5 + 0.1; // Slow vertical fall
-                this.speedX = (Math.random() - 0.5) * 0.2; // Slight horizontal drift
-                this.alpha = Math.random() * 0.5 + 0.5; // Opacity 0.5 to 1.0
-                this.color = 'rgba(255, 153, 0, ' + this.alpha + ')'; // Amber color
-            }
-
-            update() {
-                this.y += this.speedY;
-                this.x += this.speedX;
-                if (this.y > canvas.height) {
-                    this.reset();
-                    this.y = 0; // Reset to top
-                }
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = 'rgba(255, 153, 0, 0.5)';
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
-            
-            // Only draw particles within the Hero section boundaries
-            const heroRect = document.getElementById('hero').getBoundingClientRect();
-            
-            particles.forEach(particle => {
-                particle.update();
-                
-                // Only draw if particle is within the Hero section's viewport
-                if (particle.y >= heroRect.top && particle.y <= heroRect.bottom &&
-                    particle.x >= heroRect.left && particle.x <= heroRect.right) {
-                    particle.draw();
-                }
-            });
-            requestAnimationFrame(animateParticles);
-        }
-        
-        // Start particles animation only after window load
-        window.onload = function() {
-            initParticles();
-            animateParticles();
-        };
-
-
-        // --- Gemini AI Logic ---
-
-        // Function to implement exponential backoff
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-
-        async function initiateRitual(prompt) {
-            
-            // 1. Setup UI for Loading State
-            elements.aiResponseContainer.classList.remove('hidden');
-            elements.aiResponseBox.innerHTML = `
-                <div class="flex items-center space-x-3">
-                    <i data-lucide="loader-circle" class="w-6 h-6 animate-spin neon-glow"></i>
-                    <span class="fantasy-title neon-glow">RUNES ARE GATHERING... DIVINATION IN PROGRESS...</span>
-                </div>
-            `;
-            elements.aiSubmitButton.disabled = true;
-            elements.aiSubmitButton.querySelector('span').textContent = 'CASTING RITE...';
+        document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
-
-            const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-                systemInstruction: {
-                    parts: [{ text: SYSTEM_PROMPT }]
-                },
-                // Requesting a concise, single paragraph response
-                config: {
-                    maxOutputTokens: 300, 
-                    temperature: 0.8
+            const desktop = document.getElementById('desktop');
+            
+            // Clock
+            const clockElement = document.getElementById('clock');
+            function updateClock() {
+                if(clockElement) {
+                    const now = new Date();
+                    const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+                    clockElement.textContent = time;
                 }
-            };
+            }
+            updateClock();
+            setInterval(updateClock, 1000);
 
-            for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
-                try {
-                    const response = await fetch(API_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
+            // Window Management
+            let activeWindow = null;
+            let zIndexCounter = 10;
+            const windows = document.querySelectorAll('.window');
 
-                    if (!response.ok) {
-                        if (response.status === 429 && attempt < MAX_RETRIES - 1) {
-                            const delay = Math.pow(2, attempt) * 1000; // Exponential backoff
-                            await sleep(delay);
-                            continue; // Retry the loop
-                        }
-                        throw new Error(`HTTP error! Status: ${response.status}`);
+            function bringToFront(windowEl) {
+                if (windowEl !== activeWindow) {
+                    windows.forEach(w => w.classList.remove('active-window'));
+                    windowEl.style.zIndex = ++zIndexCounter;
+                    windowEl.classList.add('active-window');
+                    activeWindow = windowEl;
+                }
+            }
+
+            windows.forEach(windowEl => {
+                windowEl.addEventListener('mousedown', () => bringToFront(windowEl));
+            });
+
+            // Open/Close windows
+            const openTriggers = document.querySelectorAll('[data-window]');
+            openTriggers.forEach(trigger => {
+                trigger.addEventListener('click', () => {
+                    const windowId = trigger.dataset.window;
+                    const windowEl = document.getElementById(windowId);
+                    if (windowEl) {
+                        windowEl.style.display = 'block';
+                        bringToFront(windowEl);
                     }
+                });
+            });
 
-                    const result = await response.json();
-                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text || "The Oracle's vision is obscured. The ritual failed.";
+            const closeButtons = document.querySelectorAll('.close-btn');
+            closeButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const windowEl = btn.closest('.window');
+                    if(windowEl) windowEl.style.display = 'none';
+                });
+            });
 
-                    // 2. Display Success
-                    elements.aiResponseBox.textContent = text;
+
+            // Make windows draggable
+            function makeDraggable(windowEl) {
+                const titleBar = windowEl.querySelector('.title-bar');
+                let offsetX, offsetY;
+                let isDragging = false;
+                
+                titleBar.addEventListener('mousedown', (e) => {
+                    isDragging = true;
+                    offsetX = e.clientX - windowEl.getBoundingClientRect().left;
+                    offsetY = e.clientY - windowEl.getBoundingClientRect().top;
                     
-                    // 3. Reset UI
-                    elements.aiSubmitButton.disabled = false;
-                    elements.aiSubmitButton.querySelector('span').textContent = 'CAST THE RITE OF LORE';
-                    elements.aiPrompt.value = '';
-                    lucide.createIcons();
-                    return; // Exit the function on success
+                    document.addEventListener('mousemove', onMouseMove);
+                    document.addEventListener('mouseup', onMouseUp);
+                });
 
-                } catch (error) {
-                    // Log the error but don't disrupt the user interface too harshly
-                    console.error("AI Ritual failed:", error);
+                function onMouseMove(e) {
+                    if (!isDragging) return;
                     
-                    // 2. Display Failure
-                    elements.aiResponseBox.textContent = `[ECHO OF FAILURE] The connection to the Aetheric Gateway was severed. Try a new invocation. (Error: ${error.message})`;
+                    let newX = e.clientX - offsetX;
+                    let newY = e.clientY - offsetY;
                     
-                    // 3. Reset UI
-                    elements.aiSubmitButton.disabled = false;
-                    elements.aiSubmitButton.querySelector('span').textContent = 'CAST THE RITE OF LORE';
-                    lucide.createIcons();
-                    return; // Exit the function on final failure
+                    // Constrain to viewport
+                    const rect = desktop.getBoundingClientRect();
+                    newX = Math.max(0, Math.min(newX, rect.width - windowEl.offsetWidth));
+                    newY = Math.max(0, Math.min(newY, rect.height - windowEl.offsetHeight));
+
+                    windowEl.style.left = `${newX}px`;
+                    windowEl.style.top = `${newY}px`;
+                }
+
+                function onMouseUp() {
+                    isDragging = false;
+                    document.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseup', onMouseUp);
                 }
             }
-        }
-        
-        // --- Contact Form Submission Simulation ---
-
-        elements.contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const submitBtn = elements.contactSubmitButton;
-            const feedbackBox = elements.contactFeedback;
-            
-            // 1. Loading State
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i data-lucide="loader-circle" class="w-5 h-5 animate-spin"></i><span>TRANSMITTING RITE...</span>';
-            feedbackBox.classList.add('hidden');
-            lucide.createIcons();
-
-            // Simulate form submission delay (replace with actual backend submission)
-            setTimeout(() => {
-                // 2. Success State
-                const data = {
-                    subject: document.getElementById('subject').value,
-                    email: document.getElementById('email').value,
-                    message: document.getElementById('message').value
-                };
-
-                feedbackBox.classList.remove('hidden');
-                // Note: Changed text color to green-400 for success signal
-                feedbackBox.innerHTML = `
-                    <p class="font-bold text-green-400 neon-glow">TRANSMISSION RECEIVED!</p>
-                    <p class="text-sm text-gray-400 mt-1">The Lore Keeper has received the scroll titled: "${data.subject}". A response shall follow from the shadow realm.</p>
-                `;
-                
-                // Reset Form (except for email)
-                elements.contactForm.reset();
-                document.getElementById('email').value = data.email; // Keep email for convenience
-                
-                // Reset Button
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>UTTER THE RITE</span>';
-                lucide.createIcons();
-            }, 2500); // 2.5 second delay
+            windows.forEach(makeDraggable);
         });
-
-
-        // --- Infographics Animation Logic ---
-        const metricsObserverOptions = {
-            root: null, 
-            rootMargin: '0px 0px -20% 0px', // Trigger when 80% of the element is visible
-            threshold: 0.1
-        };
-
-        const metricsObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.querySelectorAll('.progress-bar').forEach(bar => {
-                        const progress = bar.getAttribute('data-progress');
-                        bar.style.width = `${progress}%`;
-                    });
-                    // Stop observing once animation has run
-                    observer.unobserve(entry.target); 
-                }
-            });
-        }, metricsObserverOptions);
-        
-        // Target the container for animation trigger
-        const metricsContainer = document.querySelector('#metrics-infographics .space-y-6');
-        if (metricsContainer) {
-            metricsObserver.observe(metricsContainer);
-        }
-
-        // --- Rest of the existing application logic ---
-
-        elements.aiForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const prompt = elements.aiPrompt.value.trim();
-            if (prompt) {
-                initiateRitual(prompt);
-            }
-        });
-        
-        elements.aiPrompt.addEventListener('input', function() {
-            elements.aiSubmitButton.disabled = this.value.trim() === '';
-        });
-
-        function updateIndicator(targetElement) {
-            const links = document.querySelectorAll('.nav-link-item');
-            let targetLink = null;
-            links.forEach(link => {
-                link.classList.remove('active', 'text-gray-400');
-                link.classList.add('text-gray-400');
-                if (link.getAttribute('data-target') === targetElement) {
-                    targetLink = link;
-                }
-            });
-
-            if (targetLink) {
-                targetLink.classList.add('active', 'text-gray-400');
-                targetLink.classList.remove('text-gray-400');
-                
-                const container = document.querySelector('.nav-links-container');
-                const containerRect = container.getBoundingClientRect();
-                const linkRect = targetLink.getBoundingClientRect();
-                
-                const left = linkRect.left - containerRect.left;
-                const top = linkRect.top - containerRect.top;
-                
-                elements.navIndicator.style.opacity = 1;
-                elements.navIndicator.style.width = `${linkRect.width}px`;
-                elements.navIndicator.style.height = `${linkRect.height}px`;
-                elements.navIndicator.style.transform = `translate(${left}px, ${top}px)`;
-            } else {
-                elements.navIndicator.style.opacity = 0;
-            }
-            lucide.createIcons();
-        }
-        
-        // Intersection Observer Logic (for auto-detecting scroll position)
-        const sections = document.querySelectorAll('section[id]');
-        const observerOptions = {
-            root: null, 
-            rootMargin: '0px 0px -35% 0px', 
-            threshold: 0
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    updateIndicator(entry.target.id);
-                }
-            });
-        }, observerOptions);
-        sections.forEach(section => { observer.observe(section); });
-
-        // Nav Toggle Logic
-        function toggleNav() {
-            const isClosed = elements.nav.classList.toggle('closed');
-            if (isClosed) {
-                elements.toggleIcon.setAttribute('data-lucide', 'menu');
-            } else {
-                elements.toggleIcon.setAttribute('data-lucide', 'x');
-            }
-            lucide.createIcons();
-        }
-        elements.toggleButton.addEventListener('click', toggleNav);
-        elements.navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                setTimeout(() => {
-                    if (!elements.nav.classList.contains('closed')) {
-                        toggleNav();
-                    }
-                }, 500); 
-            });
-        });
-
-        // Parallax Effect
-        const heroSection = document.getElementById('hero');
-        const layers = [
-            { id: 'parallax-layer-1', depth: 10 },
-            { id: 'parallax-layer-2', depth: 20 },
-        ];
-        heroSection.addEventListener('mousemove', (e) => {
-            const rect = heroSection.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            const x = e.clientX - centerX;
-            const y = e.clientY - centerY;
-            layers.forEach(layer => {
-                const element = document.getElementById(layer.id);
-                if (element) {
-                    const moveX = -(x / layer.depth) * 0.5;
-                    const moveY = -(y / layer.depth) * 0.5;
-                    element.style.transform = `translate(${moveX}px, ${moveY}px)`;
-                }
-            });
-        });
-        
-        // --- Project Modal (#karya) & Filtering Functions ---
-        
-        function openProjectModal(project) {
-            elements.modalImage.src = project.image;
-            elements.modalTitle.textContent = project.title;
-            elements.modalDescription.textContent = project.description;
-            lucide.createIcons(); 
-            
-            elements.projectModal.classList.add('is-visible');
-            document.body.classList.add('no-scroll');
-        }
-
-        function closeProjectModal() {
-            elements.projectModal.classList.remove('is-visible');
-            document.body.classList.remove('no-scroll');
-        }
-        
-        function populateProjectGrid() {
-            elements.projectGrid.innerHTML = ''; 
-            projectData.forEach(project => {
-                const card = document.createElement('button');
-                card.className = 'project-card text-left p-4 rounded-xl shadow-lg';
-                card.dataset.category = project.category;
-                
-                card.innerHTML = `
-                    <img src="${project.image}" alt="${project.title}" class="project-image" loading="lazy">
-                    <div class="flex items-center gap-3 mb-2">
-                        ${project.icon}
-                        <h3 class="font-semibold fantasy-title text-gray-200">${project.title}</h3>
-                    </div>
-                    <p class="text-sm text-gray-400">${project.shortDesc}</p>
-                `;
-                
-                // Add event listener to open project modal
-                card.addEventListener('click', () => openProjectModal(project));
-                elements.projectGrid.appendChild(card);
-            });
-            lucide.createIcons(); 
-        }
-
-        function filterProjects(filter) {
-            const cards = document.querySelectorAll('#project-grid .project-card');
-            cards.forEach(card => {
-                const category = card.dataset.category;
-                const shouldShow = filter === 'all' || filter === category;
-                
-                if (shouldShow) {
-                    card.classList.remove('hidden');
-                } else {
-                    card.classList.add('hidden');
-                }
-            });
-        }
-
-        // --- Gallery Modal (#gallery) Functions ---
-        
-        function openGalleryModal(item) {
-            elements.galleryModalImg.src = item.querySelector('.gallery-image').src;
-            elements.galleryModalTitle.textContent = item.dataset.title;
-            elements.galleryModalDescription.textContent = item.dataset.description;
-            
-            elements.galleryModal.classList.add('active');
-            document.body.classList.add('no-scroll');
-        }
-        
-        function closeGalleryModal() {
-            elements.galleryModal.classList.remove('active');
-            document.body.classList.remove('no-scroll');
-        }
-
-
-        // --- Event Listeners for Filters & Modals ---
-        
-        // Project Modal Listeners
-        elements.modalOverlay.addEventListener('click', closeProjectModal);
-        elements.modalCloseBtn.addEventListener('click', closeProjectModal);
-
-        // Gallery Modal Listeners
-        elements.galleryModalClose.addEventListener('click', closeGalleryModal);
-        elements.galleryModal.addEventListener('click', (e) => {
-            // Close if clicking on the overlay, but not the content itself
-            const modalContent = document.getElementById('gallery-modal-content');
-            if (!modalContent.contains(e.target) && e.target.id === 'gallery-modal') {
-                closeGalleryModal();
-            }
-        });
-        
-        // General Escape Key Listener
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                if (elements.projectModal.classList.contains('is-visible')) {
-                    closeProjectModal();
-                } else if (elements.galleryModal.classList.contains('active')) {
-                    closeGalleryModal();
-                }
-            }
-        });
-
-        // Project Filter Listeners
-        elements.projectFilterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                elements.projectFilterButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                filterProjects(button.dataset.filter);
-            });
-        });
-
-        // Gallery Item Listeners (Image Loading and Modal Open)
-        elements.galleryItems.forEach(item => {
-            const img = item.querySelector('.gallery-image');
-            const loader = item.querySelector('.image-loader');
-
-            // Image loading logic
-            img.addEventListener('load', () => {
-                loader.classList.add('opacity-0', 'pointer-events-none');
-                img.classList.remove('opacity-0');
-            }, { once: true });
-            if (img.complete) { img.dispatchEvent(new Event('load')); }
-
-            // Modal trigger logic
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                openGalleryModal(this);
-            });
-        });
-        
-        // --- Initialization ---
-        window.addEventListener('load', () => {
-            populateProjectGrid(); 
-            filterProjects('all');
-            
-            // Set initial indicator on hero
-            setTimeout(() => updateIndicator('hero'), 100);
-            
-            // Enable AI button if prompt box is not empty on load
-            elements.aiSubmitButton.disabled = elements.aiPrompt.value.trim() === '';
-        });
-        
     </script>
 </body>
 </html>
+
