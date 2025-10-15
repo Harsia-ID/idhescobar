@@ -13,9 +13,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -35,6 +32,7 @@
             width: 100vw;
             overflow: hidden;
             position: relative;
+            transition: background-image 0.5s ease-in-out;
         }
 
         /* --- Top Menu Bar --- */
@@ -144,11 +142,59 @@
             justify-content: center;
             cursor: pointer;
             transition: transform 0.2s, background-color 0.2s;
+            position: relative;
         }
         .dock-item:hover {
             transform: scale(1.1) translateY(-4px);
             background-color: rgba(255, 255, 255, 0.1);
         }
+
+        /* --- Terminal --- */
+        #terminal-output { white-space: pre-wrap; }
+        #terminal-cursor {
+            display: inline-block;
+            background-color: #f1f5f9;
+            width: 8px;
+            height: 1.2em;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 50% { background-color: transparent; } }
+
+        /* --- Calendar Widget --- */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+        .calendar-day { text-align: center; padding: 4px; border-radius: 4px; }
+        .today { background-color: var(--accent-color, #3b82f6); color: white; }
+        
+        /* Music Player */
+        .music-progress-bar {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            outline: none;
+            border-radius: 2px;
+        }
+        .music-progress-bar::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            background: white;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        /* Accent Color Variable */
+        .accent-color-blue { --accent-color: #3b82f6; --accent-color-light: #60A5FA; }
+        .accent-color-green { --accent-color: #22c55e; --accent-color-light: #4ade80; }
+        .accent-color-purple { --accent-color: #8b5cf6; --accent-color-light: #a78bfa; }
+
+        .folder-icon-primary { fill: var(--accent-color, #3b82f6); }
+        .folder-icon-secondary { fill: var(--accent-color-light, #60A5FA); }
+        .text-accent { color: var(--accent-color-light, #60A5FA); }
+        .bg-accent { background-color: var(--accent-color, #3b82f6); }
+        .hover\:bg-accent-hover:hover { background-color: var(--accent-color-light, #60A5FA); }
         
         /* --- Mobile Fallback --- */
         @media (max-width: 768px) {
@@ -162,7 +208,7 @@
         }
     </style>
 </head>
-<body class="bg-slate-950">
+<body class="bg-slate-950 accent-color-blue">
 
     <!-- Desktop View -->
     <div id="desktop" class="hidden md:block">
@@ -183,262 +229,136 @@
         <div class="p-8 pt-12 space-y-4">
             <div class="desktop-icon" data-window="about-window">
                 <div class="w-12 h-12">
-                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="8" y="4" width="32" height="40" rx="4" fill="white"/>
-                        <path d="M16 16H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/>
-                        <path d="M16 24H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/>
-                        <path d="M16 32H24" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/>
-                    </svg>
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="4" width="32" height="40" rx="4" fill="white"/><path d="M16 16H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/><path d="M16 24H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/><path d="M16 32H24" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/></svg>
                 </div>
                 <span class="text-sm text-white font-semibold">About_Me.txt</span>
             </div>
             <div class="desktop-icon" data-window="projects-window">
                  <div class="w-12 h-12">
-                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M2 18C2 15.7909 3.79086 14 6 14H18L22 10H42C44.2091 10 46 11.7909 46 14V38C46 40.2091 44.2091 42 42 42H6C3.79086 42 2 40.2091 2 38V18Z" fill="#3B82F6"/>
-                        <rect x="0" y="20" width="48" height="20" rx="4" fill="#60A5FA"/>
-                    </svg>
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 18C2 15.7909 3.79086 14 6 14H18L22 10H42C44.2091 10 46 11.7909 46 14V38C46 40.2091 44.2091 42 42 42H6C3.79086 42 2 40.2091 2 38V18Z" class="folder-icon-primary"/><rect x="0" y="20" width="48" height="20" rx="4" class="folder-icon-secondary"/></svg>
                 </div>
                 <span class="text-sm text-white font-semibold">Projects</span>
             </div>
+             <div class="desktop-icon" data-window="terminal-window">
+                <div class="w-12 h-12 p-1.5 bg-black rounded-lg border border-slate-700">
+                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 7L10 12L5 17" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 17H19" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <span class="text-sm text-white font-semibold">Terminal</span>
+            </div>
             <div class="desktop-icon" data-window="contact-window">
                 <div class="w-12 h-12">
-                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="48" height="48" rx="12" fill="#3B82F6"/>
-                        <path d="M12 18L24 28L36 18" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 30V18H36V30H12Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="12" class="folder-icon-primary"/><path d="M12 18L24 28L36 18" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 30V18H36V30H12Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </div>
                 <span class="text-sm text-white font-semibold">Contact.app</span>
             </div>
         </div>
 
-        <!-- Window: About Me -->
-        <div class="window" id="about-window" style="top: 10%; left: 15%; width: 600px; height: 450px;">
-            <div class="title-bar">
-                <div class="window-controls">
-                    <div class="control-btn bg-red-500 close-btn"></div>
-                    <div class="control-btn bg-yellow-500"></div>
-                    <div class="control-btn bg-green-500"></div>
-                </div>
-                <span class="font-medium text-sm text-slate-300 mx-auto">About_Me.txt</span>
+        <!-- All Windows -->
+        <div id="windows-container">
+            <!-- About Me -->
+            <div class="window" id="about-window" style="top: 10%; left: 15%; width: 600px; height: 450px;">
+                <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">About_Me.txt</span></div>
+                <div class="window-content text-slate-300"><div class="flex gap-6 items-start"><img src="https://avatars.githubusercontent.com/u/68311980" alt="Foto profil Hadi Prasetia" class="w-24 h-24 rounded-full border-2 border-slate-600 shadow-md"><div><h1 class="text-2xl font-bold text-white mb-1">Hadi Prasetia</h1><p class="text-slate-400">Digital Product Designer & Developer</p></div></div><hr class="my-4 border-slate-700"><p class="mb-4">Saya adalah seorang desainer dan developer dengan fokus pada UI/UX dan pengembangan front-end. Saya percaya bahwa desain yang baik adalah perpaduan antara estetika yang indah dan fungsionalitas yang mulus.</p><p>Dengan pengalaman magang di PT. PLN Indonesia Power dan berbagai proyek akademis, saya terbiasa menerjemahkan data kompleks menjadi cerita visual yang menarik.</p><h2 class="text-lg font-bold text-white mt-6 mb-3">Keahlian Utama</h2><div class="flex flex-wrap gap-2 text-sm"><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">UI/UX Design</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">Figma</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">HTML & CSS</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">JavaScript</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">Tailwind CSS</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">PHP & Laravel</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">Video Editing</span></div></div>
             </div>
-            <div class="window-content text-slate-300">
-                <div class="flex gap-6 items-start">
-                    <img src="https://avatars.githubusercontent.com/u/68311980" alt="Foto profil Hadi Prasetia" class="w-24 h-24 rounded-full border-2 border-slate-600 shadow-md">
-                    <div>
-                        <h1 class="text-2xl font-bold text-white mb-1">Hadi Prasetia</h1>
-                        <p class="text-slate-400">Digital Product Designer & Developer</p>
-                    </div>
-                </div>
-                <hr class="my-4 border-slate-700">
-                <p class="mb-4">
-                    Saya adalah seorang desainer dan developer dengan fokus pada UI/UX dan pengembangan front-end. Saya percaya bahwa desain yang baik adalah perpaduan antara estetika yang indah dan fungsionalitas yang mulus.
-                </p>
-                <p>
-                    Dengan pengalaman magang di PT. PLN Indonesia Power dan berbagai proyek akademis, saya terbiasa menerjemahkan data kompleks menjadi cerita visual yang menarik.
-                </p>
-                <h2 class="text-lg font-bold text-white mt-6 mb-3">Keahlian Utama</h2>
-                <div class="flex flex-wrap gap-2 text-sm">
-                    <span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">UI/UX Design</span>
-                    <span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">Figma</span>
-                    <span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">HTML & CSS</span>
-                    <span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">JavaScript</span>
-                    <span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">Tailwind CSS</span>
-                    <span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">PHP & Laravel</span>
-                    <span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">Video Editing</span>
-                </div>
+            <!-- Projects -->
+            <div class="window" id="projects-window" style="top: 20%; left: 30%; width: 700px; height: 500px;">
+                <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">Projects</span></div>
+                <div id="projects-grid" class="window-content grid grid-cols-2 gap-4"></div>
             </div>
-        </div>
-
-        <!-- Window: Projects -->
-        <div class="window" id="projects-window" style="top: 20%; left: 30%; width: 700px; height: 500px;">
-            <div class="title-bar">
-                <div class="window-controls">
-                    <div class="control-btn bg-red-500 close-btn"></div>
-                    <div class="control-btn bg-yellow-500"></div>
-                    <div class="control-btn bg-green-500"></div>
-                </div>
-                <span class="font-medium text-sm text-slate-300 mx-auto">Projects</span>
+            <!-- Contact -->
+            <div class="window" id="contact-window" style="top: 40%; left: 10%; width: 400px; height: 250px;">
+                <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">Contact.app</span></div>
+                <div class="window-content flex flex-col items-center justify-center text-center"><h2 class="text-xl font-bold text-white">Mari Terhubung</h2><p class="text-slate-400 mt-2 mb-4">Saya terbuka untuk proyek dan kolaborasi baru.</p><a href="mailto:hadi.prasetia@example.com" class="bg-indigo-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-indigo-400 transition-all">Kirim Email</a><div class="flex space-x-4 mt-6"><a href="#" class="text-slate-400 hover:text-indigo-400">GitHub</a><a href="#" class="text-slate-400 hover:text-indigo-400">LinkedIn</a><a href="#" class="text-slate-400 hover:text-indigo-400">Dribbble</a></div></div>
             </div>
-            <div id="projects-grid" class="window-content grid grid-cols-2 gap-4">
-                <!-- Project cards will be dynamically inserted here -->
+            <!-- Project Detail -->
+            <div class="window" id="project-detail-window" style="top: 15%; left: 25%; width: 800px; height: 600px;">
+                <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span id="detail-window-title" class="font-medium text-sm text-slate-300 mx-auto">Project Detail</span></div>
+                <div class="window-content text-slate-300"><img id="detail-image" src="" class="w-full h-64 object-cover rounded-lg mb-4"><h1 id="detail-title" class="text-3xl font-bold text-white mb-2"></h1><p id="detail-description" class="mb-6 text-slate-400"></p><h2 class="text-lg font-bold text-white mb-3">Teknologi yang Digunakan</h2><div id="detail-tech-stack" class="flex flex-wrap gap-2 text-sm mb-6"></div><a id="detail-live-url" href="#" target="_blank" class="inline-block bg-indigo-500 text-white font-bold py-2 px-5 rounded-lg hover:bg-indigo-400 transition-all">Lihat Proyek Langsung</a></div>
             </div>
-        </div>
-
-        <!-- Window: Contact -->
-        <div class="window" id="contact-window" style="top: 40%; left: 10%; width: 400px; height: 250px;">
-            <div class="title-bar">
-                <div class="window-controls">
-                    <div class="control-btn bg-red-500 close-btn"></div>
-                    <div class="control-btn bg-yellow-500"></div>
-                    <div class="control-btn bg-green-500"></div>
-                </div>
-                <span class="font-medium text-sm text-slate-300 mx-auto">Contact.app</span>
+            <!-- Widgets -->
+            <div class="window" id="widgets-window" style="top: 10%; right: 2%; width: 320px; height: 420px; resize: none;">
+                 <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div></div>
+                <div class="window-content space-y-4 text-white"><div><p id="widget-time" class="text-6xl font-bold tracking-tight"></p><p id="widget-date" class="text-slate-400"></p></div><div class="bg-white/5 p-3 rounded-lg"><div id="calendar-header" class="flex justify-between items-center mb-2 text-sm font-semibold"></div><div id="calendar-grid" class="calendar-grid text-sm"></div></div></div>
             </div>
-            <div class="window-content flex flex-col items-center justify-center text-center">
-                 <h2 class="text-xl font-bold text-white">Mari Terhubung</h2>
-                 <p class="text-slate-400 mt-2 mb-4">Saya terbuka untuk proyek dan kolaborasi baru.</p>
-                 <a href="mailto:hadi.prasetia@example.com" class="bg-indigo-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-indigo-400 transition-all">
-                    Kirim Email
-                 </a>
-                 <div class="flex space-x-4 mt-6">
-                    <a href="#" class="text-slate-400 hover:text-indigo-400">GitHub</a>
-                    <a href="#" class="text-slate-400 hover:text-indigo-400">LinkedIn</a>
-                    <a href="#" class="text-slate-400 hover:text-indigo-400">Dribbble</a>
-                 </div>
+            <!-- Terminal -->
+            <div class="window" id="terminal-window" style="top: 50%; left: 20%; width: 640px; height: 360px;">
+                <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">zsh</span></div>
+                <div class="window-content bg-black/50 text-green-400 font-mono text-sm p-2" onclick="this.querySelector('input').focus()"><div id="terminal-output"></div><div class="flex"><span>hadi@portfolio:~$ </span><input type="text" id="terminal-input" class="flex-1 bg-transparent border-none outline-none text-green-400 ml-2"></div><span id="terminal-cursor"></span></div>
             </div>
-        </div>
-        
-        <!-- Window: Project Detail (Template) -->
-        <div class="window" id="project-detail-window" style="top: 15%; left: 25%; width: 800px; height: 600px;">
-            <div class="title-bar">
-                <div class="window-controls">
-                    <div class="control-btn bg-red-500 close-btn"></div>
-                    <div class="control-btn bg-yellow-500"></div>
-                    <div class="control-btn bg-green-500"></div>
-                </div>
-                <span id="detail-window-title" class="font-medium text-sm text-slate-300 mx-auto">Project Detail</span>
+            <!-- Music Player -->
+            <div class="window" id="music-window" style="top: 60%; left: 40%; width: 320px; height: 380px; resize: none;">
+                <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">Music</span></div>
+                <div class="window-content text-white flex flex-col items-center p-4"><img id="album-art" src="https://placehold.co/200x200/0f172a/38bdf8?text=Music" class="w-48 h-48 rounded-lg shadow-lg mb-4"><div class="text-center"><h3 id="track-title" class="font-bold text-lg">Select a Track</h3><p id="track-artist" class="text-sm text-slate-400">Lo-fi Beats</p></div><input type="range" id="music-progress" class="music-progress-bar my-4" value="0" max="100"><div class="flex items-center gap-6"><button id="prev-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg></button><button id="play-pause-btn" class="bg-white text-slate-900 w-12 h-12 rounded-full flex items-center justify-center"><svg id="play-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg><svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 hidden"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg></button><button id="next-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg></button></div></div>
             </div>
-            <div class="window-content text-slate-300">
-                <img id="detail-image" src="" class="w-full h-64 object-cover rounded-lg mb-4">
-                <h1 id="detail-title" class="text-3xl font-bold text-white mb-2"></h1>
-                <p id="detail-description" class="mb-6 text-slate-400"></p>
-                
-                <h2 class="text-lg font-bold text-white mb-3">Teknologi yang Digunakan</h2>
-                <div id="detail-tech-stack" class="flex flex-wrap gap-2 text-sm mb-6">
-                    <!-- Tech tags will be inserted here -->
-                </div>
-
-                <a id="detail-live-url" href="#" target="_blank" class="inline-block bg-indigo-500 text-white font-bold py-2 px-5 rounded-lg hover:bg-indigo-400 transition-all">
-                    Lihat Proyek Langsung
-                </a>
+             <!-- System Preferences -->
+            <div class="window" id="settings-window" style="top: 25%; left: 10%; width: 500px; height: 300px;">
+                <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">System Preferences</span></div>
+                <div class="window-content text-slate-300 space-y-6"><h2 class="text-lg font-bold text-white">Appearance</h2><div><h3 class="font-semibold mb-2">Wallpaper</h3><div class="flex gap-2" id="wallpaper-options"><button class="w-20 h-12 rounded-md bg-cover bg-center border-2 border-blue-500" style="background-image: url('https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/Minimalist%20Black%20and%20Blue%20Moodboard%20Desktop%20Wallpaper%20(2).png')" data-wallpaper="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/Minimalist%20Black%20and%20Blue%20Moodboard%20Desktop%20Wallpaper%20(2).png"></button><button class="w-20 h-12 rounded-md bg-cover bg-center border-2 border-transparent" style="background-image: url('https://placehold.co/1920x1080/0f172a/ffffff?text=Abstract')" data-wallpaper="https://placehold.co/1920x1080/0f172a/ffffff?text=Abstract"></button><button class="w-20 h-12 rounded-md bg-cover bg-center border-2 border-transparent" style="background-image: url('https://placehold.co/1920x1080/4338ca/ffffff?text=Gradient')" data-wallpaper="https://placehold.co/1920x1080/4338ca/ffffff?text=Gradient"></button></div></div><div><h3 class="font-semibold mb-2">Accent Color</h3><div class="flex gap-2" id="accent-color-options"><button class="w-8 h-8 rounded-full bg-blue-500 border-2 border-white" data-color="blue"></button><button class="w-8 h-8 rounded-full bg-green-500 border-2 border-transparent" data-color="green"></button><button class="w-8 h-8 rounded-full bg-purple-500 border-2 border-transparent" data-color="purple"></button></div></div></div>
             </div>
         </div>
 
         <!-- Dock -->
         <div id="dock">
             <div class="dock-item" data-window="about-window">
-                <div class="w-8 h-8">
-                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="8" y="4" width="32" height="40" rx="4" fill="white"/>
-                        <path d="M16 16H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/>
-                        <path d="M16 24H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/>
-                        <path d="M16 32H24" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/>
-                    </svg>
-                </div>
+                <div class="w-8 h-8"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="4" width="32" height="40" rx="4" fill="white"/><path d="M16 16H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/><path d="M16 24H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/><path d="M16 32H24" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/></svg></div>
             </div>
             <div class="dock-item" data-window="projects-window">
-                <div class="w-8 h-8">
-                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M2 18C2 15.7909 3.79086 14 6 14H18L22 10H42C44.2091 10 46 11.7909 46 14V38C46 40.2091 44.2091 42 42 42H6C3.79086 42 2 40.2091 2 38V18Z" fill="#3B82F6"/>
-                        <rect x="0" y="20" width="48" height="20" rx="4" fill="#60A5FA"/>
-                    </svg>
-                </div>
+                <div class="w-8 h-8"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 18C2 15.7909 3.79086 14 6 14H18L22 10H42C44.2091 10 46 11.7909 46 14V38C46 40.2091 44.2091 42 42 42H6C3.79086 42 2 40.2091 2 38V18Z" class="folder-icon-primary"/><rect x="0" y="20" width="48" height="20" rx="4" class="folder-icon-secondary"/></svg></div>
             </div>
             <div class="dock-item" data-window="contact-window">
-                <div class="w-8 h-8">
-                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="48" height="48" rx="12" fill="#3B82F6"/>
-                        <path d="M12 18L24 28L36 18" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 30V18H36V30H12Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
+                 <div class="w-8 h-8"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="12" class="folder-icon-primary"/><path d="M12 18L24 28L36 18" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 30V18H36V30H12Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            </div>
+            <div class="w-px h-10 bg-slate-600/50 mx-1"></div>
+            <div class="dock-item" data-window="music-window">
+                 <div class="w-8 h-8"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="20" fill="#F43F5E"/><circle cx="24" cy="24" r="10" fill="white"/><path d="M24 24V14" stroke="#F43F5E" stroke-width="3" stroke-linecap="round"/></svg></div>
+            </div>
+             <div class="dock-item" data-window="widgets-window">
+                <div class="w-8 h-8"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="12" fill="#F97316"/><path d="M14 14H34V34H14V14Z" fill="#FDBA74"/><path d="M24 10V18" stroke="white" stroke-width="3" stroke-linecap="round"/><path d="M38 24L30 24" stroke="white" stroke-width="3" stroke-linecap="round"/></svg></div>
+            </div>
+            <div class="dock-item" data-window="terminal-window">
+                 <div class="w-8 h-8 p-1 bg-black rounded-md border border-slate-700"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 7L10 12L5 17" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 17H19" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            </div>
+            <div class="dock-item" data-window="settings-window">
+                <div class="w-8 h-8"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="20" fill="#4B5563"/><circle cx="24" cy="24" r="12" fill="#9CA3AF"/><path d="M24 4L24 44" stroke="#6B7280" stroke-width="3"/><path d="M44 24L4 24" stroke="#6B7280" stroke-width="3"/><path d="M10 10L38 38" stroke="#6B7280" stroke-width="3"/><path d="M38 10L10 38" stroke="#6B7280" stroke-width="3"/></svg></div>
             </div>
         </div>
     </div>
 
     <!-- Mobile Fallback View -->
     <div id="mobile-fallback" class="hidden">
-        <div class="text-center mb-12">
-            <img src="https://avatars.githubusercontent.com/u/68311980" alt="Foto profil Hadi Prasetia" class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-slate-700 shadow-lg">
-            <h1 class="text-3xl font-bold text-white">Hadi Prasetia</h1>
-            <p class="text-slate-400">Digital Product Designer & Developer</p>
-        </div>
-        
-        <div class="space-y-4">
-            <!-- Mobile About -->
-            <div class="bg-slate-900 p-6 rounded-xl shadow-sm border border-slate-800">
-                <h2 class="text-xl font-bold text-white mb-3">Tentang Saya</h2>
-                <p class="text-slate-400">Saya adalah seorang desainer dan developer yang percaya bahwa desain yang baik adalah perpaduan antara estetika dan fungsionalitas yang mulus.</p>
-            </div>
-             <!-- Mobile Projects -->
-            <div class="bg-slate-900 p-6 rounded-xl shadow-sm border border-slate-800">
-                <h2 class="text-xl font-bold text-white mb-4">Proyek Pilihan</h2>
-                <div class="space-y-4">
-                    <div class="flex items-center gap-4">
-                        <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/uiux.png" class="w-16 h-16 rounded-lg object-cover">
-                        <div>
-                            <h3 class="font-semibold text-slate-200">Mobile Sigil Forging</h3>
-                            <a href="#" class="text-sm text-indigo-400">Lihat Detail &rarr;</a>
-                        </div>
-                    </div>
-                     <div class="flex items-center gap-4">
-                        <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/vc.png" class="w-16 h-16 rounded-lg object-cover">
-                        <div>
-                            <h3 class="font-semibold text-slate-200">Visual Communication Codex</h3>
-                            <a href="#" class="text-sm text-indigo-400">Lihat Detail &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-             <!-- Mobile Contact -->
-            <div class="bg-slate-900 p-6 rounded-xl shadow-sm text-center border border-slate-800">
-                <h2 class="text-xl font-bold text-white mb-3">Mari Terhubung</h2>
-                <a href="mailto:hadi.prasetia@example.com" class="bg-indigo-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-indigo-400 transition-all inline-block">
-                    Kirim Email
-                 </a>
-            </div>
-        </div>
-
+        <div class="text-center mb-12"><img src="https://avatars.githubusercontent.com/u/68311980" alt="Foto profil Hadi Prasetia" class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-slate-700 shadow-lg"><h1 class="text-3xl font-bold text-white">Hadi Prasetia</h1><p class="text-slate-400">Digital Product Designer & Developer</p></div><div class="space-y-4"><div class="bg-slate-900 p-6 rounded-xl shadow-sm border border-slate-800"><h2 class="text-xl font-bold text-white mb-3">Tentang Saya</h2><p class="text-slate-400">Saya adalah seorang desainer dan developer yang percaya bahwa desain yang baik adalah perpaduan antara estetika dan fungsionalitas yang mulus.</p></div><div class="bg-slate-900 p-6 rounded-xl shadow-sm border border-slate-800"><h2 class="text-xl font-bold text-white mb-4">Proyek Pilihan</h2><div class="space-y-4"><div class="flex items-center gap-4"><img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/uiux.png" class="w-16 h-16 rounded-lg object-cover"><div><h3 class="font-semibold text-slate-200">Mobile Sigil Forging</h3><a href="#" class="text-sm text-indigo-400">Lihat Detail &rarr;</a></div></div><div class="flex items-center gap-4"><img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/vc.png" class="w-16 h-16 rounded-lg object-cover"><div><h3 class="font-semibold text-slate-200">Visual Communication Codex</h3><a href="#" class="text-sm text-indigo-400">Lihat Detail &rarr;</a></div></div></div></div><div class="bg-slate-900 p-6 rounded-xl shadow-sm text-center border border-slate-800"><h2 class="text-xl font-bold text-white mb-3">Mari Terhubung</h2><a href="mailto:hadi.prasetia@example.com" class="bg-indigo-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-indigo-400 transition-all inline-block">Kirim Email</a></div></div>
     </div>
+    
+    <audio id="audio-player" src=""></audio>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
             const desktop = document.getElementById('desktop');
 
-            // --- DATA PROYEK ---
+            // --- DATA ---
             const projectsData = [
-                {
-                    id: 'mobile-sigil',
-                    title: 'Mobile Sigil Forging',
-                    shortDesc: 'Studi kasus UI/UX untuk aplikasi seluler.',
-                    longDesc: 'Ini adalah studi kasus komprehensif untuk aplikasi mobile, dimulai dari riset pengguna, wireframing, hingga menghasilkan desain antarmuka yang bersih dan modern. Prototipe interaktif dibuat menggunakan Figma untuk memvalidasi alur pengguna.',
-                    image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/uiux.png',
-                    techStack: ['Figma', 'UI/UX Research', 'Prototyping', 'User Flow'],
-                    liveUrl: '#'
-                },
-                {
-                    id: 'visual-codex',
-                    title: 'Visual Communication Codex',
-                    shortDesc: 'Strategi dan pedoman brand visual.',
-                    longDesc: 'Dokumen master yang merinci strategi Komunikasi Visual, termasuk pedoman merek dan struktur naratif, yang penting untuk menjaga integritas cerita di semua media. Tujuannya adalah untuk menciptakan identitas visual yang konsisten dan kuat.',
-                    image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/vc.png',
-                    techStack: ['Branding', 'Graphic Design', 'Adobe Illustrator', 'Strategy'],
-                    liveUrl: '#'
-                },
-                {
-                    id: 'corp-authority',
-                    title: 'Corporate Authority Sigil',
-                    shortDesc: 'Desain sistem identitas korporat.',
-                    longDesc: 'Perancangan sistem visual yang kuat untuk identitas korporat, berfokus pada profesionalisme, konsistensi, dan membangun kembali citra otoritas merek di semua titik kontak, baik digital maupun cetak.',
-                    image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/a/corpo.png',
-                    techStack: ['Corporate Identity', 'Logo Design', 'Brand Guidelines'],
-                    liveUrl: '#'
-                },
-                {
-                    id: 'video-ritual',
-                    title: 'Video Ritual Scroll V2',
-                    shortDesc: 'Kompilasi motion graphics & video.',
-                    longDesc: 'Sebuah kompilasi motion graphics dan narasi visual, yang berfokus pada tempo cepat dan color grading yang agresif untuk retensi audiens yang tinggi di platform digital. Menggunakan Adobe Premiere Pro dan After Effects.',
-                    image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/v2.png',
-                    techStack: ['Video Editing', 'Motion Graphics', 'Adobe Premiere Pro', 'Color Grading'],
-                    liveUrl: '#'
-                },
+                {id: 'mobile-sigil', title: 'Mobile Sigil Forging', shortDesc: 'Studi kasus UI/UX untuk aplikasi seluler.', longDesc: 'Ini adalah studi kasus komprehensif untuk aplikasi mobile, dimulai dari riset pengguna, wireframing, hingga menghasilkan desain antarmuka yang bersih dan modern. Prototipe interaktif dibuat menggunakan Figma untuk memvalidasi alur pengguna.', image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/uiux.png', techStack: ['Figma', 'UI/UX Research', 'Prototyping', 'User Flow'], liveUrl: '#'},
+                {id: 'visual-codex', title: 'Visual Communication Codex', shortDesc: 'Strategi dan pedoman brand visual.', longDesc: 'Dokumen master yang merinci strategi Komunikasi Visual, termasuk pedoman merek dan struktur naratif, yang penting untuk menjaga integritas cerita di semua media. Tujuannya adalah untuk menciptakan identitas visual yang konsisten dan kuat.', image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/vc.png', techStack: ['Branding', 'Graphic Design', 'Adobe Illustrator', 'Strategy'], liveUrl: '#'},
+                {id: 'corp-authority', title: 'Corporate Authority Sigil', shortDesc: 'Desain sistem identitas korporat.', longDesc: 'Perancangan sistem visual yang kuat untuk identitas korporat, berfokus pada profesionalisme, konsistensi, dan membangun kembali citra otoritas merek di semua titik kontak, baik digital maupun cetak.', image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/a/corpo.png', techStack: ['Corporate Identity', 'Logo Design', 'Brand Guidelines'], liveUrl: '#'},
+                {id: 'video-ritual', title: 'Video Ritual Scroll V2', shortDesc: 'Kompilasi motion graphics & video.', longDesc: 'Sebuah kompilasi motion graphics dan narasi visual, yang berfokus pada tempo cepat dan color grading yang agresif untuk retensi audiens yang tinggi di platform digital. Menggunakan Adobe Premiere Pro dan After Effects.', image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/v2.png', techStack: ['Video Editing', 'Motion Graphics', 'Adobe Premiere Pro', 'Color Grading'], liveUrl: '#'},
+            ];
+            
+            const musicPlaylist = [
+                { title: 'Empty Mind', artist: 'Lofi Girl', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Lofi_Girl/Empty_Mind/Lofi_Girl_-_Empty_Mind.mp3', art: 'https://placehold.co/200x200/1e293b/94a3b8?text=Empty+Mind'},
+                { title: 'Chill', artist: 'Liborio Conti', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Liborio_Conti/Book_The_Flight/Liborio_Conti_-_Chill.mp3', art: 'https://placehold.co/200x200/1e293b/38bdf8?text=Chill'},
+                { title: 'Lazy Walk', artist: 'Cheel', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Cheel/Lazy_Walk/Cheel_-_Lazy_Walk.mp3', art: 'https://placehold.co/200x200/1e293b/a78bfa?text=Lazy+Walk'}
             ];
 
-            // --- FUNGSI TAMPILKAN DETAIL PROYEK ---
+            // --- DYNAMIC CONTENT ---
+            const projectsGrid = document.getElementById('projects-grid');
+            projectsData.forEach(project => {
+                const card = document.createElement('div');
+                card.className = 'bg-slate-800/50 p-4 rounded-lg border border-white/20';
+                card.innerHTML = `<img src="${project.image}" class="rounded-md mb-3 aspect-video object-cover"><h3 class="font-bold text-white">${project.title}</h3><p class="text-sm text-slate-400 mb-2">${project.shortDesc}</p><button data-project-id="${project.id}" class="project-detail-btn text-sm font-semibold text-indigo-400 hover:underline">Lihat Detail &rarr;</button>`;
+                projectsGrid.appendChild(card);
+            });
+            document.querySelectorAll('.project-detail-btn').forEach(btn => btn.addEventListener('click', () => showProjectDetail(btn.dataset.projectId)));
+            
             const detailWindow = document.getElementById('project-detail-window');
             const detailWindowTitle = document.getElementById('detail-window-title');
             const detailImage = document.getElementById('detail-image');
@@ -446,18 +366,14 @@
             const detailDescription = document.getElementById('detail-description');
             const detailTechStack = document.getElementById('detail-tech-stack');
             const detailLiveUrl = document.getElementById('detail-live-url');
-
+            
             function showProjectDetail(projectId) {
                 const project = projectsData.find(p => p.id === projectId);
                 if (!project) return;
-
-                // Populate data
                 detailWindowTitle.textContent = project.title;
                 detailImage.src = project.image;
                 detailTitle.textContent = project.title;
                 detailDescription.textContent = project.longDesc;
-                
-                // Populate tech stack
                 detailTechStack.innerHTML = '';
                 project.techStack.forEach(tech => {
                     const span = document.createElement('span');
@@ -465,132 +381,164 @@
                     span.textContent = tech;
                     detailTechStack.appendChild(span);
                 });
-
-                // Set live URL
-                if (project.liveUrl && project.liveUrl !== '#') {
-                    detailLiveUrl.href = project.liveUrl;
-                    detailLiveUrl.style.display = 'inline-block';
-                } else {
-                    detailLiveUrl.style.display = 'none';
-                }
-
-                // Show window
+                detailLiveUrl.style.display = (project.liveUrl && project.liveUrl !== '#') ? 'inline-block' : 'none';
+                detailLiveUrl.href = project.liveUrl;
                 detailWindow.style.display = 'block';
                 bringToFront(detailWindow);
             }
 
-            // --- POPULATE JENDELA PROYEK ---
-            const projectsGrid = document.getElementById('projects-grid');
-            projectsData.forEach(project => {
-                const card = document.createElement('div');
-                card.className = 'bg-slate-800/50 p-4 rounded-lg border border-white/20';
-                card.innerHTML = `
-                    <img src="${project.image}" class="rounded-md mb-3 aspect-video object-cover">
-                    <h3 class="font-bold text-white">${project.title}</h3>
-                    <p class="text-sm text-slate-400 mb-2">${project.shortDesc}</p>
-                    <button data-project-id="${project.id}" class="project-detail-btn text-sm font-semibold text-indigo-400 hover:underline">Lihat Detail &rarr;</button>
-                `;
-                projectsGrid.appendChild(card);
+            // --- MUSIC PLAYER ---
+            const audioPlayer = document.getElementById('audio-player');
+            const [playPauseBtn, nextBtn, prevBtn] = [document.getElementById('play-pause-btn'), document.getElementById('next-btn'), document.getElementById('prev-btn')];
+            const [playIcon, pauseIcon] = [document.getElementById('play-icon'), document.getElementById('pause-icon')];
+            const [musicProgress, trackTitle, trackArtist, albumArt] = [document.getElementById('music-progress'), document.getElementById('track-title'), document.getElementById('track-artist'), document.getElementById('album-art')];
+            let currentTrackIndex = 0;
+
+            const loadTrack = (index) => {
+                const track = musicPlaylist[index];
+                audioPlayer.src = track.src;
+                trackTitle.textContent = track.title;
+                trackArtist.textContent = track.artist;
+                albumArt.src = track.art;
+            };
+            const playTrack = () => { audioPlayer.play(); playIcon.classList.add('hidden'); pauseIcon.classList.remove('hidden'); };
+            const pauseTrack = () => { audioPlayer.pause(); playIcon.classList.remove('hidden'); pauseIcon.classList.add('hidden'); };
+
+            playPauseBtn.addEventListener('click', () => (audioPlayer.paused ? playTrack() : pauseTrack()));
+            nextBtn.addEventListener('click', () => { currentTrackIndex = (currentTrackIndex + 1) % musicPlaylist.length; loadTrack(currentTrackIndex); playTrack(); });
+            prevBtn.addEventListener('click', () => { currentTrackIndex = (currentTrackIndex - 1 + musicPlaylist.length) % musicPlaylist.length; loadTrack(currentTrackIndex); playTrack(); });
+            audioPlayer.addEventListener('timeupdate', () => { musicProgress.value = (audioPlayer.currentTime / audioPlayer.duration) * 100 || 0; });
+            musicProgress.addEventListener('input', () => { audioPlayer.currentTime = (musicProgress.value / 100) * audioPlayer.duration; });
+            loadTrack(currentTrackIndex);
+            
+            // --- SYSTEM PREFERENCES ---
+            const wallpaperOptions = document.getElementById('wallpaper-options');
+            const accentColorOptions = document.getElementById('accent-color-options');
+            wallpaperOptions.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    desktop.style.backgroundImage = `url('${e.target.dataset.wallpaper}')`;
+                    wallpaperOptions.querySelectorAll('button').forEach(btn => btn.classList.remove('border-blue-500'));
+                    e.target.classList.add('border-blue-500');
+                }
+            });
+            accentColorOptions.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    document.body.className = document.body.className.replace(/accent-color-\w+/g, '');
+                    document.body.classList.add(`accent-color-${e.target.dataset.color}`);
+                    accentColorOptions.querySelectorAll('button').forEach(btn => btn.classList.replace('border-white', 'border-transparent'));
+                    e.target.classList.replace('border-transparent', 'border-white');
+                }
             });
 
-            // Add event listener for detail buttons
-            document.querySelectorAll('.project-detail-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    showProjectDetail(btn.dataset.projectId);
-                });
+            // --- TERMINAL ---
+            const terminalInput = document.getElementById('terminal-input');
+            const terminalOutput = document.getElementById('terminal-output');
+            const terminalCursor = document.getElementById('terminal-cursor');
+            const terminalWindowContent = terminalInput?.closest('.window-content');
+            const commands = {
+                help: () => 'Perintah: help, about, projects, contact, clear',
+                about: () => { openWindowById('about-window'); return 'Membuka jendela "Tentang Saya"...'; },
+                projects: () => { openWindowById('projects-window'); return `Membuka folder "Proyek"...\n\n` + projectsData.map(p => `- ${p.title}`).join('\n'); },
+                contact: () => { openWindowById('contact-window'); return 'Membuka aplikasi "Kontak"...'; },
+                clear: () => { setTimeout(() => terminalOutput.innerHTML = '', 1); return ''; }
+            };
+            const appendToTerminal = (html) => {
+                terminalOutput.insertAdjacentHTML('beforeend', `<div>${html}</div>`);
+                terminalWindowContent.scrollTop = terminalWindowContent.scrollHeight;
+            };
+            terminalInput?.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const cmd = terminalInput.value.trim().toLowerCase();
+                    appendToTerminal(`<span>hadi@portfolio:~$ ${cmd}</span>`);
+                    const result = commands[cmd] ? commands[cmd]() : `bash: command not found: ${cmd}`;
+                    if (result) appendToTerminal(result);
+                    terminalInput.value = '';
+                }
             });
-            
-            // Date & Time in Top Bar
+            terminalInput?.addEventListener('focus', () => terminalCursor.style.display = 'inline-block');
+            terminalInput?.addEventListener('blur', () => terminalCursor.style.display = 'none');
+            appendToTerminal(`Selamat datang! Ketik 'help' untuk daftar perintah.`);
+
+            // --- WIDGETS & CLOCK ---
             const datetimeElement = document.getElementById('datetime');
+            const widgetTime = document.getElementById('widget-time');
+            const widgetDate = document.getElementById('widget-date');
+            const calendarHeader = document.getElementById('calendar-header');
+            const calendarGrid = document.getElementById('calendar-grid');
+            
             function updateClock() {
-                if(datetimeElement) {
-                    const now = new Date();
-                    const options = { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' };
-                    const formattedDate = now.toLocaleDateString('en-US', options);
-                    datetimeElement.textContent = formattedDate;
+                const now = new Date();
+                if(datetimeElement) datetimeElement.textContent = now.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+                if(widgetTime) widgetTime.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+                if(widgetDate) widgetDate.textContent = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            }
+            function generateCalendar() {
+                if(!calendarGrid) return;
+                const now = new Date();
+                calendarHeader.innerHTML = `<span>${now.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })}</span>`;
+                const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
+                const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+                calendarGrid.innerHTML = '';
+                ['S', 'S', 'R', 'K', 'J', 'S', 'M'].forEach(day => calendarGrid.insertAdjacentHTML('beforeend', `<div class="text-slate-500 font-bold text-xs">${day}</div>`));
+                for (let i = 0; i < firstDay; i++) calendarGrid.appendChild(document.createElement('div'));
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const dayEl = document.createElement('div');
+                    dayEl.className = 'calendar-day';
+                    dayEl.textContent = i;
+                    if (i === now.getDate()) dayEl.classList.add('today');
+                    calendarGrid.appendChild(dayEl);
                 }
             }
             updateClock();
-            setInterval(updateClock, 1000);
+            generateCalendar();
+            setInterval(updateClock, 30000);
 
-            // Window Management
+            // --- WINDOW MANAGEMENT ---
             let activeWindow = null;
             let zIndexCounter = 10;
             const windows = document.querySelectorAll('.window');
-
-            function bringToFront(windowEl) {
+            const bringToFront = (windowEl) => {
                 if (windowEl !== activeWindow) {
                     windows.forEach(w => w.classList.remove('active-window'));
                     windowEl.style.zIndex = ++zIndexCounter;
                     windowEl.classList.add('active-window');
                     activeWindow = windowEl;
                 }
-            }
+            };
+            const openWindowById = (windowId) => {
+                const windowEl = document.getElementById(windowId);
+                if (windowEl) { windowEl.style.display = 'block'; bringToFront(windowEl); }
+            };
 
+            windows.forEach(windowEl => windowEl.addEventListener('mousedown', () => bringToFront(windowEl)));
+            document.querySelectorAll('[data-window]').forEach(trigger => trigger.addEventListener('click', () => openWindowById(trigger.dataset.window)));
+            document.querySelectorAll('.close-btn').forEach(btn => btn.addEventListener('click', (e) => { e.stopPropagation(); btn.closest('.window').style.display = 'none'; }));
+            
             windows.forEach(windowEl => {
-                windowEl.addEventListener('mousedown', () => bringToFront(windowEl));
-            });
-
-            // Open/Close windows
-            const openTriggers = document.querySelectorAll('[data-window]');
-            openTriggers.forEach(trigger => {
-                trigger.addEventListener('click', () => {
-                    const windowId = trigger.dataset.window;
-                    const windowEl = document.getElementById(windowId);
-                    if (windowEl) {
-                        windowEl.style.display = 'block';
-                        bringToFront(windowEl);
-                    }
-                });
-            });
-
-            const closeButtons = document.querySelectorAll('.close-btn');
-            closeButtons.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const windowEl = btn.closest('.window');
-                    if(windowEl) windowEl.style.display = 'none';
-                });
-            });
-
-
-            // Make windows draggable
-            function makeDraggable(windowEl) {
                 const titleBar = windowEl.querySelector('.title-bar');
-                let offsetX, offsetY;
-                let isDragging = false;
-                
+                let offsetX, offsetY, isDragging = false;
                 titleBar.addEventListener('mousedown', (e) => {
                     isDragging = true;
                     offsetX = e.clientX - windowEl.getBoundingClientRect().left;
                     offsetY = e.clientY - windowEl.getBoundingClientRect().top;
-                    
                     document.addEventListener('mousemove', onMouseMove);
                     document.addEventListener('mouseup', onMouseUp);
                 });
-
-                function onMouseMove(e) {
+                const onMouseMove = (e) => {
                     if (!isDragging) return;
-                    
-                    let newX = e.clientX - offsetX;
-                    let newY = e.clientY - offsetY;
-                    
-                    // Constrain to viewport
+                    let newX = e.clientX - offsetX, newY = e.clientY - offsetY;
                     const rect = desktop.getBoundingClientRect();
                     newX = Math.max(0, Math.min(newX, rect.width - windowEl.offsetWidth));
-                    newY = Math.max(28, Math.min(newY, rect.height - windowEl.offsetHeight)); // Constrain below top bar
-
+                    newY = Math.max(28, Math.min(newY, rect.height - windowEl.offsetHeight));
                     windowEl.style.left = `${newX}px`;
                     windowEl.style.top = `${newY}px`;
-                }
-
-                function onMouseUp() {
+                };
+                const onMouseUp = () => {
                     isDragging = false;
                     document.removeEventListener('mousemove', onMouseMove);
                     document.removeEventListener('mouseup', onMouseUp);
-                }
-            }
-            windows.forEach(makeDraggable);
+                };
+            });
         });
     </script>
 </body>
