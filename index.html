@@ -37,12 +37,31 @@
             position: relative;
         }
 
+        /* --- Top Menu Bar --- */
+        #top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 28px;
+            background: rgba(2, 6, 23, 0.5); /* Dark semi-transparent */
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #e2e8f0; /* Slate-200 */
+        }
+        
         /* --- Windows --- */
         .window {
             position: absolute;
             min-width: 350px;
             min-height: 200px;
-            background: rgba(15, 23, 42, 0.5); /* Dark, glassy background */
+            background: rgba(15, 23, 42, 0.6); /* Dark, glassy background */
             backdrop-filter: blur(20px);
             border-radius: 12px;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.1);
@@ -143,24 +162,36 @@
         }
     </style>
 </head>
-<body class="bg-slate-900">
+<body class="bg-slate-950">
 
     <!-- Desktop View -->
     <div id="desktop" class="hidden md:block">
         
+        <!-- Top Menu Bar -->
+        <header id="top-bar">
+            <div class="flex items-center gap-4">
+                <span class="font-bold">Portfolio</span>
+                <span>File</span>
+                <span>Edit</span>
+                <span>View</span>
+                <span>Go</span>
+            </div>
+            <div id="datetime" class="font-mono"></div>
+        </header>
+
         <!-- Desktop Icons -->
-        <div class="p-8 space-y-4">
+        <div class="p-8 pt-12 space-y-4">
             <div class="desktop-icon" data-window="about-window">
                 <i data-lucide="file-text" class="w-12 h-12 text-slate-200"></i>
-                <span class="text-sm text-white font-medium">About_Me.txt</span>
+                <span class="text-sm text-white font-semibold">About_Me.txt</span>
             </div>
             <div class="desktop-icon" data-window="projects-window">
                 <i data-lucide="folder" class="w-12 h-12 text-slate-200"></i>
-                <span class="text-sm text-white font-medium">Projects</span>
+                <span class="text-sm text-white font-semibold">Projects</span>
             </div>
             <div class="desktop-icon" data-window="contact-window">
                 <i data-lucide="mail" class="w-12 h-12 text-slate-200"></i>
-                <span class="text-sm text-white font-medium">Contact.app</span>
+                <span class="text-sm text-white font-semibold">Contact.app</span>
             </div>
         </div>
 
@@ -212,35 +243,8 @@
                 </div>
                 <span class="font-medium text-sm text-slate-300 mx-auto">Projects</span>
             </div>
-            <div class="window-content grid grid-cols-2 gap-4">
-                <!-- Project 1 -->
-                <div class="bg-slate-800/50 p-4 rounded-lg border border-white/20">
-                    <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/uiux.png" class="rounded-md mb-3 aspect-video object-cover">
-                    <h3 class="font-bold text-white">Mobile Sigil Forging</h3>
-                    <p class="text-sm text-slate-400 mb-2">Studi kasus UI/UX untuk aplikasi seluler.</p>
-                    <a href="#" class="text-sm font-semibold text-indigo-400 hover:underline">Lihat Detail &rarr;</a>
-                </div>
-                 <!-- Project 2 -->
-                 <div class="bg-slate-800/50 p-4 rounded-lg border border-white/20">
-                    <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/vc.png" class="rounded-md mb-3 aspect-video object-cover">
-                    <h3 class="font-bold text-white">Visual Communication Codex</h3>
-                    <p class="text-sm text-slate-400 mb-2">Strategi dan pedoman brand visual.</p>
-                    <a href="#" class="text-sm font-semibold text-indigo-400 hover:underline">Lihat Detail &rarr;</a>
-                </div>
-                <!-- Project 3 -->
-                <div class="bg-slate-800/50 p-4 rounded-lg border border-white/20">
-                    <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/a/corpo.png" class="rounded-md mb-3 aspect-video object-cover">
-                    <h3 class="font-bold text-white">Corporate Authority Sigil</h3>
-                    <p class="text-sm text-slate-400 mb-2">Desain sistem identitas korporat.</p>
-                    <a href="#" class="text-sm font-semibold text-indigo-400 hover:underline">Lihat Detail &rarr;</a>
-                </div>
-                <!-- Project 4 -->
-                <div class="bg-slate-800/50 p-4 rounded-lg border border-white/20">
-                    <img src="https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/v2.png" class="rounded-md mb-3 aspect-video object-cover">
-                    <h3 class="font-bold text-white">Video Ritual Scroll V2</h3>
-                    <p class="text-sm text-slate-400 mb-2">Kompilasi motion graphics & video.</p>
-                    <a href="#" class="text-sm font-semibold text-indigo-400 hover:underline">Lihat Detail &rarr;</a>
-                </div>
+            <div id="projects-grid" class="window-content grid grid-cols-2 gap-4">
+                <!-- Project cards will be dynamically inserted here -->
             </div>
         </div>
 
@@ -267,7 +271,32 @@
                  </div>
             </div>
         </div>
+        
+        <!-- Window: Project Detail (Template) -->
+        <div class="window" id="project-detail-window" style="top: 15%; left: 25%; width: 800px; height: 600px;">
+            <div class="title-bar">
+                <div class="window-controls">
+                    <div class="control-btn bg-red-500 close-btn"></div>
+                    <div class="control-btn bg-yellow-500"></div>
+                    <div class="control-btn bg-green-500"></div>
+                </div>
+                <span id="detail-window-title" class="font-medium text-sm text-slate-300 mx-auto">Project Detail</span>
+            </div>
+            <div class="window-content text-slate-300">
+                <img id="detail-image" src="" class="w-full h-64 object-cover rounded-lg mb-4">
+                <h1 id="detail-title" class="text-3xl font-bold text-white mb-2"></h1>
+                <p id="detail-description" class="mb-6 text-slate-400"></p>
+                
+                <h2 class="text-lg font-bold text-white mb-3">Teknologi yang Digunakan</h2>
+                <div id="detail-tech-stack" class="flex flex-wrap gap-2 text-sm mb-6">
+                    <!-- Tech tags will be inserted here -->
+                </div>
 
+                <a id="detail-live-url" href="#" target="_blank" class="inline-block bg-indigo-500 text-white font-bold py-2 px-5 rounded-lg hover:bg-indigo-400 transition-all">
+                    Lihat Proyek Langsung
+                </a>
+            </div>
+        </div>
 
         <!-- Dock -->
         <div id="dock">
@@ -280,8 +309,6 @@
             <div class="dock-item" data-window="contact-window">
                 <i data-lucide="mail" class="w-7 h-7 text-slate-200"></i>
             </div>
-            <div class="w-px h-10 bg-white/20 mx-1"></div>
-            <div id="clock" class="px-3 flex items-center text-sm font-semibold font-mono text-slate-200">10:00 PM</div>
         </div>
     </div>
 
@@ -334,14 +361,117 @@
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             const desktop = document.getElementById('desktop');
+
+            // --- DATA PROYEK ---
+            const projectsData = [
+                {
+                    id: 'mobile-sigil',
+                    title: 'Mobile Sigil Forging',
+                    shortDesc: 'Studi kasus UI/UX untuk aplikasi seluler.',
+                    longDesc: 'Ini adalah studi kasus komprehensif untuk aplikasi mobile, dimulai dari riset pengguna, wireframing, hingga menghasilkan desain antarmuka yang bersih dan modern. Prototipe interaktif dibuat menggunakan Figma untuk memvalidasi alur pengguna.',
+                    image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/uiux.png',
+                    techStack: ['Figma', 'UI/UX Research', 'Prototyping', 'User Flow'],
+                    liveUrl: '#'
+                },
+                {
+                    id: 'visual-codex',
+                    title: 'Visual Communication Codex',
+                    shortDesc: 'Strategi dan pedoman brand visual.',
+                    longDesc: 'Dokumen master yang merinci strategi Komunikasi Visual, termasuk pedoman merek dan struktur naratif, yang penting untuk menjaga integritas cerita di semua media. Tujuannya adalah untuk menciptakan identitas visual yang konsisten dan kuat.',
+                    image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/vc.png',
+                    techStack: ['Branding', 'Graphic Design', 'Adobe Illustrator', 'Strategy'],
+                    liveUrl: '#'
+                },
+                {
+                    id: 'corp-authority',
+                    title: 'Corporate Authority Sigil',
+                    shortDesc: 'Desain sistem identitas korporat.',
+                    longDesc: 'Perancangan sistem visual yang kuat untuk identitas korporat, berfokus pada profesionalisme, konsistensi, dan membangun kembali citra otoritas merek di semua titik kontak, baik digital maupun cetak.',
+                    image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/a/corpo.png',
+                    techStack: ['Corporate Identity', 'Logo Design', 'Brand Guidelines'],
+                    liveUrl: '#'
+                },
+                {
+                    id: 'video-ritual',
+                    title: 'Video Ritual Scroll V2',
+                    shortDesc: 'Kompilasi motion graphics & video.',
+                    longDesc: 'Sebuah kompilasi motion graphics dan narasi visual, yang berfokus pada tempo cepat dan color grading yang agresif untuk retensi audiens yang tinggi di platform digital. Menggunakan Adobe Premiere Pro dan After Effects.',
+                    image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/v2.png',
+                    techStack: ['Video Editing', 'Motion Graphics', 'Adobe Premiere Pro', 'Color Grading'],
+                    liveUrl: '#'
+                },
+            ];
+
+            // --- FUNGSI TAMPILKAN DETAIL PROYEK ---
+            const detailWindow = document.getElementById('project-detail-window');
+            const detailWindowTitle = document.getElementById('detail-window-title');
+            const detailImage = document.getElementById('detail-image');
+            const detailTitle = document.getElementById('detail-title');
+            const detailDescription = document.getElementById('detail-description');
+            const detailTechStack = document.getElementById('detail-tech-stack');
+            const detailLiveUrl = document.getElementById('detail-live-url');
+
+            function showProjectDetail(projectId) {
+                const project = projectsData.find(p => p.id === projectId);
+                if (!project) return;
+
+                // Populate data
+                detailWindowTitle.textContent = project.title;
+                detailImage.src = project.image;
+                detailTitle.textContent = project.title;
+                detailDescription.textContent = project.longDesc;
+                
+                // Populate tech stack
+                detailTechStack.innerHTML = '';
+                project.techStack.forEach(tech => {
+                    const span = document.createElement('span');
+                    span.className = 'bg-slate-700 text-slate-200 px-3 py-1 rounded-full';
+                    span.textContent = tech;
+                    detailTechStack.appendChild(span);
+                });
+
+                // Set live URL
+                if (project.liveUrl && project.liveUrl !== '#') {
+                    detailLiveUrl.href = project.liveUrl;
+                    detailLiveUrl.style.display = 'inline-block';
+                } else {
+                    detailLiveUrl.style.display = 'none';
+                }
+
+                // Show window
+                detailWindow.style.display = 'block';
+                bringToFront(detailWindow);
+            }
+
+            // --- POPULATE JENDELA PROYEK ---
+            const projectsGrid = document.getElementById('projects-grid');
+            projectsData.forEach(project => {
+                const card = document.createElement('div');
+                card.className = 'bg-slate-800/50 p-4 rounded-lg border border-white/20';
+                card.innerHTML = `
+                    <img src="${project.image}" class="rounded-md mb-3 aspect-video object-cover">
+                    <h3 class="font-bold text-white">${project.title}</h3>
+                    <p class="text-sm text-slate-400 mb-2">${project.shortDesc}</p>
+                    <button data-project-id="${project.id}" class="project-detail-btn text-sm font-semibold text-indigo-400 hover:underline">Lihat Detail &rarr;</button>
+                `;
+                projectsGrid.appendChild(card);
+            });
+
+            // Add event listener for detail buttons
+            document.querySelectorAll('.project-detail-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    showProjectDetail(btn.dataset.projectId);
+                });
+            });
             
-            // Clock
-            const clockElement = document.getElementById('clock');
+            // Date & Time in Top Bar
+            const datetimeElement = document.getElementById('datetime');
             function updateClock() {
-                if(clockElement) {
+                if(datetimeElement) {
                     const now = new Date();
-                    const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-                    clockElement.textContent = time;
+                    const options = { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' };
+                    const formattedDate = now.toLocaleDateString('en-US', options);
+                    datetimeElement.textContent = formattedDate;
                 }
             }
             updateClock();
@@ -412,7 +542,7 @@
                     // Constrain to viewport
                     const rect = desktop.getBoundingClientRect();
                     newX = Math.max(0, Math.min(newX, rect.width - windowEl.offsetWidth));
-                    newY = Math.max(0, Math.min(newY, rect.height - windowEl.offsetHeight));
+                    newY = Math.max(28, Math.min(newY, rect.height - windowEl.offsetHeight)); // Constrain below top bar
 
                     windowEl.style.left = `${newX}px`;
                     windowEl.style.top = `${newY}px`;
