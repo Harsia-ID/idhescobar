@@ -4,32 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hadi Prasetia | Portofolio Desainer & Developer</title>
-    
+
     <!-- SEO Meta Tags -->
     <meta name="description" content="Portofolio interaktif Hadi Prasetia, seorang Digital Product Designer & Developer yang berfokus pada UI/UX dan pengembangan front-end.">
     <meta name="keywords" content="Hadi Prasetia, Portofolio, UI/UX Designer, Front-end Developer, Web Developer, Desainer Produk Digital">
     <meta property="og:title" content="Hadi Prasetia | Digital Desktop Portfolio">
     <meta property="og:description" content="Jelajahi portofolio interaktif Hadi Prasetia dalam format desktop OS yang unik dan lihat proyek-proyeknya dalam UI/UX dan pengembangan web.">
     <meta property="og:image" content="https://avatars.githubusercontent.com/u/68311980">
-    <!-- Ganti [URL_ANDA] dengan URL domain Anda saat live -->
-    <meta property="og:url" content="https://hadi-portfolio.example.com">
-    <link rel="canonical" href="https://hadi-portfolio.example.com">
+    <meta property="og:url" content="https://idhesco.bar">
+    <link rel="canonical" href="https://idhesco.bar">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Google Fonts: Inter & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
-        
+
         .font-mono {
             font-family: 'JetBrains Mono', monospace;
         }
@@ -76,7 +75,7 @@
             font-weight: 500;
             color: #e2e8f0; /* Slate-200 */
         }
-        
+
         /* --- Windows --- */
         .window {
             position: absolute;
@@ -87,22 +86,24 @@
             border-radius: 12px;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.1);
             display: none; /* Hidden by default */
-            resize: both;
+            /* Removed resize: both; handled by JS on snap/maximize */
             overflow: hidden;
-            transition: width 0.2s ease-out, height 0.2s ease-out, top 0.2s ease-out, left 0.2s ease-out;
+            transition: width 0.3s ease-in-out, height 0.3s ease-in-out, top 0.3s ease-in-out, left 0.3s ease-in-out, transform 0.3s ease-in-out;
+            touch-action: none; /* Prevents mobile browser actions on drag */
         }
         
-        .window.opening {
-            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.3s linear;
+        /* State for when a window is snapped to half the screen */
+        .window.snapped {
+            transition: none; /* Disable transition during drag or snap */
+            border-radius: 0; /* Make corners square when snapped to edges */
+        }
+        
+        .window.minimizing {
+            opacity: 0 !important;
+            transform: scale(0.1) translate(0, 100vh); /* Scale down and move towards dock */
+            transition: transform 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045), opacity 0.3s linear;
             will-change: transform, opacity;
         }
-
-        .window.minimizing {
-            transition: transform 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045), opacity 0.3s linear, width 0.4s, height 0.4s, top 0.4s, left 0.4s;
-            opacity: 0 !important;
-            will-change: transform, opacity, width, height, top, left;
-        }
-
 
         .title-bar {
             height: 36px;
@@ -124,6 +125,8 @@
             width: 12px;
             height: 12px;
             border-radius: 50%;
+            cursor: pointer;
+            flex-shrink: 0;
         }
 
         .window-content {
@@ -131,7 +134,7 @@
             height: calc(100% - 36px);
             overflow-y: auto;
         }
-        
+
         /* Custom scrollbar for windows */
         .window-content::-webkit-scrollbar { width: 6px; }
         .window-content::-webkit-scrollbar-track { background: transparent; }
@@ -149,6 +152,7 @@
             transition: background-color 0.2s;
             text-align: center;
             width: 100px;
+            position: absolute; /* Added: Important for drag and drop */
         }
         .desktop-icon:hover {
             background-color: rgba(255, 255, 255, 0.1);
@@ -168,8 +172,8 @@
             display: flex;
             gap: 8px;
             align-items: flex-end;
+            z-index: 100;
         }
-
         .dock-item {
             width: 56px;
             height: 56px;
@@ -180,6 +184,15 @@
             cursor: pointer;
             transition: transform 0.1s ease-out; /* Smoother transition */
             position: relative;
+        }
+        .dock-item.minimized-active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: var(--accent-color-light);
         }
 
         /* --- UI Elements & States --- */
@@ -195,17 +208,10 @@
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
         .calendar-day { text-align: center; padding: 4px; border-radius: 4px; }
         .today { background-color: var(--accent-color, #3b82f6); color: white; }
-        
+
         .music-progress-bar { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; background: rgba(255,255,255,0.2); outline: none; border-radius: 2px; }
         .music-progress-bar::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 12px; height: 12px; background: white; cursor: pointer; border-radius: 50%; }
 
-        #profile-pic-droptarget.drag-over {
-            box-shadow: 0 0 0 4px var(--accent-color-light);
-            transform: scale(1.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        #notification { transition: opacity 0.5s, transform 0.5s; }
-        
         #snap-preview {
             position: absolute;
             background: rgba(96, 165, 250, 0.2);
@@ -216,39 +222,6 @@
             pointer-events: none;
             opacity: 0;
         }
-
-        /* Spotlight Search */
-        #spotlight-container {
-            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
-        }
-        .spotlight-result-item:hover, .spotlight-result-item.selected {
-            background-color: var(--accent-color, #3b82f6);
-            color: white;
-        }
-        
-        /* Context Menu */
-        #context-menu {
-            position: absolute;
-            background: rgba(30, 41, 59, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            padding: 6px;
-            z-index: 10000;
-        }
-        .context-menu-item {
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            color: #cbd5e1;
-        }
-         .context-menu-item:hover {
-            background-color: var(--accent-color, #3b82f6);
-            color: white;
-        }
-
         /* Accent Color Variable */
         .accent-color-blue { --accent-color: #3b82f6; --accent-color-light: #60A5FA; }
         .accent-color-green { --accent-color: #22c55e; --accent-color-light: #4ade80; }
@@ -258,6 +231,63 @@
         .folder-icon-secondary { fill: var(--accent-color-light, #60A5FA); }
         .text-accent { color: var(--accent-color-light, #60A5FA); }
         .bg-accent { background-color: var(--accent-color, #3b82f6); }
+
+        /* Custom table styling for Schedule.app */
+        .schedule-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px; /* Spacing between rows */
+        }
+        .schedule-table th, .schedule-table td {
+            padding: 12px;
+            text-align: left;
+        }
+        .schedule-table th {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #94a3b8; /* Slate-400 */
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+        .schedule-table tbody tr {
+            background-color: rgba(15, 23, 42, 0.8);
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+        .schedule-table tbody tr:hover {
+            background-color: rgba(15, 23, 42, 0.9);
+        }
+        .schedule-table tbody tr td:first-child { border-radius: 8px 0 0 8px; }
+        .schedule-table tbody tr td:last-child { border-radius: 0 8px 8px 0; }
+
+        /* Context Menu Styles (NEW) */
+        #context-menu {
+            position: absolute;
+            background: rgba(30, 41, 59, 0.9); /* Darker and more opaque than windows */
+            backdrop-filter: blur(15px);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            padding: 6px;
+            z-index: 10000;
+            display: none;
+            min-width: 180px;
+        }
+        .context-menu-item {
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #cbd5e1;
+            transition: background-color 0.1s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .context-menu-item:hover {
+            background-color: var(--accent-color, #3b82f6);
+            color: white;
+        }
         
         /* --- Mobile Fallback --- */
         @media (max-width: 768px) {
@@ -274,7 +304,7 @@
             <p>Situs ini memerlukan JavaScript untuk pengalaman interaktif penuh. Silakan aktifkan JavaScript untuk melanjutkan.</p>
         </div>
     </noscript>
-    
+
     <!-- Login Screen -->
     <div id="login-screen" class="fixed inset-0 z-[10001] flex flex-col items-center justify-center">
         <div class="text-center">
@@ -287,10 +317,9 @@
         </div>
     </div>
 
-
     <!-- Desktop View -->
     <div id="desktop" class="hidden md:block">
-        
+
         <!-- Top Menu Bar -->
         <header id="top-bar">
             <div class="flex items-center gap-4"><span class="font-bold">Portfolio</span><span>File</span><span>Edit</span><span>View</span><span>Go</span></div>
@@ -303,47 +332,188 @@
         </header>
 
         <!-- Desktop Icons -->
+        <!-- NOTE: Added initial positions (style) to prevent overlap on load. Positions are managed by JS. -->
         <div class="p-8 pt-12 space-y-4">
-            <div id="about-icon-draggable" class="desktop-icon" data-window="about-window" draggable="true">
+            <div id="about-icon" class="desktop-icon" data-window="about-window" draggable="true" style="top: 80px; left: 60px;">
                 <div class="w-12 h-12 pointer-events-none"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="4" width="32" height="40" rx="4" fill="white"/><path d="M16 16H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/><path d="M16 24H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/><path d="M16 32H24" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/></svg></div>
                 <span class="text-sm text-white font-semibold pointer-events-none">About_Me.txt</span>
             </div>
-            <div id="projects-icon-draggable" class="desktop-icon" data-window="projects-window" draggable="true">
+            <div id="projects-icon" class="desktop-icon" data-window="projects-window" draggable="true" style="top: 200px; left: 60px;">
                  <div class="w-12 h-12 pointer-events-none"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 18C2 15.7909 3.79086 14 6 14H18L22 10H42C44.2091 10 46 11.7909 46 14V38C46 40.2091 44.2091 42 42 42H6C3.79086 42 2 40.2091 2 38V18Z" class="folder-icon-primary"/><rect x="0" y="20" width="48" height="20" rx="4" class="folder-icon-secondary"/></svg></div>
                 <span class="text-sm text-white font-semibold pointer-events-none">Projects</span>
             </div>
-            <div class="desktop-icon" data-window="notes-window">
-                 <div class="w-12 h-12"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="4" width="36" height="40" rx="4" fill="#FBBF24"/><rect x="6" y="4" width="36" height="12" rx="4" fill="#F59E0B"/><path d="M14 16H34" stroke="#A16207" stroke-width="2" stroke-linecap="round"/><path d="M14 24H34" stroke="#A16207" stroke-width="2" stroke-linecap="round"/><path d="M14 32H24" stroke="#A16207" stroke-width="2" stroke-linecap="round"/></svg></div>
-                <span class="text-sm text-white font-semibold">Notes.app</span>
+            <!-- ICON: Jadwal Kuliah -->
+            <div id="schedule-icon" class="desktop-icon" data-window="schedule-window" draggable="true" style="top: 320px; left: 60px;">
+                <div class="w-12 h-12 p-1.5 bg-green-600 rounded-lg"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="14" rx="2" stroke="white" stroke-width="2"/><path d="M7 3V7M17 3V7" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M3 9H21" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="14" r="2" fill="white"/></svg></div>
+                <span class="text-sm text-white font-semibold">Schedule.app</span>
             </div>
-            <div class="desktop-icon" data-window="terminal-window">
+            <!-- ICON: Guestbook -->
+            <div id="guestbook-icon" class="desktop-icon" data-window="guestbook-window" draggable="true" style="top: 440px; left: 60px;">
+                 <div class="w-12 h-12 p-1.5 bg-yellow-600 rounded-lg"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 14L12 18L21 14M3 10L12 14L21 10M12 2L3 6L12 10L21 6L12 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <span class="text-sm text-white font-semibold">Guestbook</span>
+            </div>
+            <div id="terminal-icon" class="desktop-icon" data-window="terminal-window" draggable="true" style="top: 560px; left: 60px;">
                 <div class="w-12 h-12 p-1.5 bg-black rounded-lg border border-slate-700"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 7L10 12L5 17" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 17H19" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
                 <span class="text-sm text-white font-semibold">Terminal</span>
             </div>
         </div>
-        
+
+        <!-- Snap Preview Overlay -->
         <div id="snap-preview"></div>
 
         <!-- All Windows -->
         <div id="windows-container">
-            <div class="window" id="about-window" style="top: 10%; left: 15%; width: 600px; height: 450px;">
-                <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">About_Me.txt</span></div>
-                <div class="window-content text-slate-300"><div class="flex gap-6 items-start"><img id="profile-pic-droptarget" src="https://avatars.githubusercontent.com/u/68311980" alt="Foto profil Hadi Prasetia" class="w-24 h-24 rounded-full border-2 border-slate-600 shadow-md relative transition-all"><div><h1 class="text-2xl font-bold text-white mb-1">Hadi Prasetia</h1><p class="text-slate-400">Digital Product Designer & Developer</p></div></div><hr class="my-4 border-slate-700"><p class="mb-4">Saya adalah seorang desainer dan developer dengan fokus pada UI/UX dan pengembangan front-end. Saya percaya bahwa desain yang baik adalah perpaduan antara estetika yang indah dan fungsionalitas yang mulus.</p><p>Dengan pengalaman magang di PT. PLN Indonesia Power dan berbagai proyek akademis, saya terbiasa menerjemahkan data kompleks menjadi cerita visual yang menarik.</p><h2 class="text-lg font-bold text-white mt-6 mb-3">Keahlian Utama</h2><div class="flex flex-wrap gap-2 text-sm"><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">UI/UX Design</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">Figma</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">HTML & CSS</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">JavaScript</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">Tailwind CSS</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">PHP & Laravel</span><span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">Video Editing</span></div></div>
+            <div class="window" id="about-window" style="top: 10%; left: 15%; width: 600px; height: 450px;" data-original-x="15%" data-original-y="10%" data-original-w="600px" data-original-h="450px" data-is-maximized="false">
+                <div class="title-bar">
+                    <div class="window-controls">
+                        <div class="control-btn bg-red-500 close-btn"></div>
+                        <div class="control-btn bg-yellow-500 minimize-btn"></div>
+                        <div class="control-btn bg-green-500 maximize-btn"></div>
+                    </div>
+                    <span class="font-medium text-sm text-slate-300 mx-auto">About_Me.txt</span>
+                </div>
+                <div class="window-content text-slate-300">
+                    <div class="flex gap-6 items-start">
+                        <img id="profile-pic-droptarget" src="https://avatars.githubusercontent.com/u/68311980" alt="Foto profil Hadi Prasetia" class="w-24 h-24 rounded-full border-2 border-slate-600 shadow-md relative transition-all">
+                        <div>
+                            <h1 class="text-2xl font-bold text-white mb-1">Hadi Prasetia</h1>
+                            <p class="text-slate-400">Digital Product Designer & Developer</p>
+                        </div>
+                    </div>
+                    <hr class="my-4 border-slate-700">
+                    <p class="mb-4">Saya adalah seorang desainer dan developer dengan fokus pada UI/UX dan pengembangan front-end. Saya percaya bahwa desain yang baik adalah perpaduan antara estetika yang indah dan fungsionalitas yang mulus.</p>
+                    <p>Dengan pengalaman magang di PT. PLN Indonesia Power dan berbagai proyek akademis, saya terbiasa menerjemahkan data kompleks menjadi cerita visual yang menarik.</p>
+                    <h2 class="text-lg font-bold text-white mt-6 mb-3">Keahlian Utama</h2>
+                    <div class="flex flex-wrap gap-2 text-sm">
+                        <span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">UI/UX Design</span>
+                        <span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">Figma</span>
+                        <span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">HTML & CSS</span>
+                        <span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">JavaScript</span>
+                        <span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">Tailwind CSS</span>
+                        <span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">PHP & Laravel</span>
+                        <span class="bg-slate-700 text-slate-200 px-3 py-1 rounded-full">Video Editing</span>
+                    </div>
+                </div>
             </div>
-            <div class="window" id="projects-window" style="top: 20%; left: 30%; width: 700px; height: 500px;">
-                <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">Projects</span></div>
+
+            <div class="window" id="projects-window" style="top: 20%; left: 30%; width: 700px; height: 500px;" data-original-x="30%" data-original-y="20%" data-original-w="700px" data-original-h="500px" data-is-maximized="false">
+                <div class="title-bar">
+                    <div class="window-controls">
+                        <div class="control-btn bg-red-500 close-btn"></div>
+                        <div class="control-btn bg-yellow-500 minimize-btn"></div>
+                        <div class="control-btn bg-green-500 maximize-btn"></div>
+                    </div>
+                    <span class="font-medium text-sm text-slate-300 mx-auto">Projects</span>
+                </div>
                 <div id="projects-grid" class="window-content grid grid-cols-2 gap-4"></div>
             </div>
-            <div class="window" id="contact-window" style="top: 40%; left: 10%; width: 400px; height: 250px;">
-                <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">Contact.app</span></div>
-                <div class="window-content flex flex-col items-center justify-center text-center"><h2 class="text-xl font-bold text-white">Mari Terhubung</h2><p class="text-slate-400 mt-2 mb-4">Saya terbuka untuk proyek dan kolaborasi baru.</p><a href="mailto:hadi.prasetia@example.com" class="bg-indigo-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-indigo-400 transition-all">Kirim Email</a><div class="flex space-x-4 mt-6"><a href="#" class="text-slate-400 hover:text-indigo-400">GitHub</a><a href="#" class="text-slate-400 hover:text-indigo-400">LinkedIn</a><a href="#" class="text-slate-400 hover:text-indigo-400">Dribbble</a></div></div>
+
+            <!-- WINDOW BARU: JADWAL KULIAH -->
+            <div class="window" id="schedule-window" style="top: 15%; left: 20%; width: 850px; height: 600px;" data-original-x="20%" data-original-y="15%" data-original-w="850px" data-original-h="600px" data-is-maximized="false">
+                <div class="title-bar">
+                    <div class="window-controls">
+                        <div class="control-btn bg-red-500 close-btn"></div>
+                        <div class="control-btn bg-yellow-500 minimize-btn"></div>
+                        <div class="control-btn bg-green-500 maximize-btn"></div>
+                    </div>
+                    <span class="font-medium text-sm text-slate-300 mx-auto">Schedule.app (Jadwal Semester)</span>
+                </div>
+                <div class="window-content text-slate-300">
+                    <h2 class="text-2xl font-bold text-white mb-4">Jadwal Perkuliahan Semester 2025/2026 (Ganjil)</h2>
+                    <table id="schedule-table" class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th class="w-1/12">Hari</th>
+                                <th class="w-2/12">Waktu</th>
+                                <th class="w-4/12">Mata Kuliah</th>
+                                <th class="w-3/12">Dosen/Lokasi</th>
+                                <th class="w-2/12">SKS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Jadwal akan dimuat di sini oleh JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="window" id="project-detail-window" style="top: 15%; left: 25%; width: 800px; height: 600px;">
-                <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span id="detail-window-title" class="font-medium text-sm text-slate-300 mx-auto">Project Detail</span></div>
-                <div class="window-content text-slate-300"><img id="detail-image" src="" class="w-full h-64 object-cover rounded-lg mb-4"><h1 id="detail-title" class="text-3xl font-bold text-white mb-2"></h1><p id="detail-description" class="mb-6 text-slate-400"></p><h2 class="text-lg font-bold text-white mb-3">Teknologi yang Digunakan</h2><div id="detail-tech-stack" class="flex flex-wrap gap-2 text-sm mb-6"></div><a id="detail-live-url" href="#" target="_blank" class="inline-block bg-indigo-500 text-white font-bold py-2 px-5 rounded-lg hover:bg-indigo-400 transition-all">Lihat Proyek Langsung</a></div>
+            <!-- END WINDOW BARU -->
+
+            <!-- NEW WINDOW: GUESTBOOK (FULL STACK DEMO) -->
+            <div class="window" id="guestbook-window" style="top: 15%; left: 55%; width: 450px; height: 600px;" data-original-x="55%" data-original-y="15%" data-original-w="450px" data-original-h="600px" data-is-maximized="false">
+                <div class="title-bar">
+                    <div class="window-controls">
+                        <div class="control-btn bg-red-500 close-btn"></div>
+                        <div class="control-btn bg-yellow-500 minimize-btn"></div>
+                        <div class="control-btn bg-green-500 maximize-btn"></div>
+                    </div>
+                    <span class="font-medium text-sm text-slate-300 mx-auto">Guestbook.app (Real-time)</span>
+                </div>
+                <div class="window-content flex flex-col h-full space-y-4">
+                    <div id="guestbook-status" class="text-sm text-yellow-400">Loading...</div>
+
+                    <!-- Input Form -->
+                    <div class="bg-slate-700/50 p-3 rounded-lg flex flex-col space-y-2 flex-shrink-0">
+                        <input type="text" id="guestbook-name" class="p-2 rounded-md bg-slate-800 text-white placeholder-slate-400 text-sm border border-slate-600 focus:ring-blue-500 focus:border-blue-500" placeholder="Nama Anda (Optional)">
+                        <textarea id="guestbook-message" class="p-2 rounded-md bg-slate-800 text-white placeholder-slate-400 text-sm border border-slate-600 h-16 resize-none focus:ring-blue-500 focus:border-blue-500" placeholder="Tinggalkan pesan real-time untuk Hadi..."></textarea>
+                        <button id="guestbook-submit" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 rounded-md transition-colors">Kirim Pesan</button>
+                    </div>
+
+                    <!-- Messages Display -->
+                    <div id="guestbook-messages" class="flex-grow overflow-y-auto space-y-3 p-1">
+                        <!-- Messages will be injected here -->
+                    </div>
+                </div>
             </div>
-            <div class="window" id="widgets-window" style="top: 10%; right: 2%; width: 320px; min-height: 480px; resize: none;">
-                 <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div></div>
+            <!-- END NEW WINDOW -->
+
+            <div class="window" id="contact-window" style="top: 40%; left: 10%; width: 400px; height: 250px;" data-original-x="10%" data-original-y="40%" data-original-w="400px" data-original-h="250px" data-is-maximized="false">
+                <div class="title-bar">
+                    <div class="window-controls">
+                        <div class="control-btn bg-red-500 close-btn"></div>
+                        <div class="control-btn bg-yellow-500 minimize-btn"></div>
+                        <div class="control-btn bg-green-500 maximize-btn"></div>
+                    </div>
+                    <span class="font-medium text-sm text-slate-300 mx-auto">Contact.app</span>
+                </div>
+                <div class="window-content flex flex-col items-center justify-center text-center">
+                    <h2 class="text-xl font-bold text-white">Mari Terhubung</h2>
+                    <p class="text-slate-400 mt-2 mb-4">Saya terbuka untuk proyek dan kolaborasi baru.</p>
+                    <a href="/cdn-cgi/l/email-protection#c7afa6a3aee9b7b5a6b4a2b3aea687a2bfa6aab7aba2e9a4a8aa" class="bg-indigo-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-indigo-400 transition-all">Kirim Email</a>
+                    <div class="flex space-x-4 mt-6">
+                        <a href="#" class="text-slate-400 hover:text-indigo-400">GitHub</a>
+                        <a href="#" class="text-slate-400 hover:text-indigo-400">LinkedIn</a>
+                        <a href="#" class="text-slate-400 hover:text-indigo-400">Dribbble</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="window" id="project-detail-window" style="top: 15%; left: 25%; width: 800px; height: 600px;" data-original-x="25%" data-original-y="15%" data-original-w="800px" data-original-h="600px" data-is-maximized="false">
+                <div class="title-bar">
+                    <div class="window-controls">
+                        <div class="control-btn bg-red-500 close-btn"></div>
+                        <div class="control-btn bg-yellow-500 minimize-btn"></div>
+                        <div class="control-btn bg-green-500 maximize-btn"></div>
+                    </div>
+                    <span id="detail-window-title" class="font-medium text-sm text-slate-300 mx-auto">Project Detail</span>
+                </div>
+                <div class="window-content text-slate-300">
+                    <img id="detail-image" src="" class="w-full h-64 object-cover rounded-lg mb-4">
+                    <h1 id="detail-title" class="text-3xl font-bold text-white mb-2"></h1>
+                    <p id="detail-description" class="mb-6 text-slate-400"></p>
+                    <h2 class="text-lg font-bold text-white mb-3">Teknologi yang Digunakan</h2>
+                    <div id="detail-tech-stack" class="flex flex-wrap gap-2 text-sm mb-6"></div>
+                    <a id="detail-live-url" href="#" target="_blank" class="inline-block bg-indigo-500 text-white font-bold py-2 px-5 rounded-lg hover:bg-indigo-400 transition-all">Lihat Proyek Langsung</a>
+                </div>
+            </div>
+
+            <div class="window" id="widgets-window" style="top: 10%; right: 2%; width: 320px; min-height: 480px; resize: none;" data-original-x="right: 2%" data-original-y="10%" data-original-w="320px" data-original-h="480px" data-is-maximized="false">
+                 <div class="title-bar">
+                    <div class="window-controls">
+                        <div class="control-btn bg-red-500 close-btn"></div>
+                        <div class="control-btn bg-yellow-500 minimize-btn"></div>
+                        <div class="control-btn bg-green-500 maximize-btn"></div>
+                    </div>
+                </div>
                 <div class="window-content space-y-4 text-white">
                     <div class="bg-white/5 p-3 rounded-lg flex items-center gap-4">
                         <div id="weather-icon" class="w-16 h-16"></div>
@@ -352,30 +522,113 @@
                             <p id="weather-desc" class="text-slate-400">Loading...</p>
                         </div>
                     </div>
-                    <div><p id="widget-time" class="text-6xl font-bold tracking-tight"></p><p id="widget-date" class="text-slate-400"></p></div><div class="bg-white/5 p-3 rounded-lg"><div id="calendar-header" class="flex justify-between items-center mb-2 text-sm font-semibold"></div><div id="calendar-grid" class="calendar-grid text-sm"></div></div>
+                    <div>
+                        <p id="widget-time" class="text-6xl font-bold tracking-tight"></p>
+                        <p id="widget-date" class="text-slate-400"></p>
+                    </div>
+                    <div class="bg-white/5 p-3 rounded-lg">
+                        <div id="calendar-header" class="flex justify-between items-center mb-2 text-sm font-semibold"></div>
+                        <div id="calendar-grid" class="calendar-grid text-sm"></div>
+                    </div>
                 </div>
             </div>
-            <div class="window" id="terminal-window" style="top: 50%; left: 20%; width: 640px; height: 360px;">
-                <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">zsh</span></div>
-                <div class="window-content bg-black/50 text-green-400 font-mono text-sm p-2" onclick="this.querySelector('input').focus()"><div id="terminal-output"></div><div class="flex"><span>hadi@portfolio:~$ </span><input type="text" id="terminal-input" class="flex-1 bg-transparent border-none outline-none text-green-400 ml-2"></div><span id="terminal-cursor"></span></div>
+
+            <div class="window" id="terminal-window" style="top: 50%; left: 20%; width: 640px; height: 360px;" data-original-x="20%" data-original-y="50%" data-original-w="640px" data-original-h="360px" data-is-maximized="false">
+                <div class="title-bar">
+                    <div class="window-controls">
+                        <div class="control-btn bg-red-500 close-btn"></div>
+                        <div class="control-btn bg-yellow-500 minimize-btn"></div>
+                        <div class="control-btn bg-green-500 maximize-btn"></div>
+                    </div>
+                    <span class="font-medium text-sm text-slate-300 mx-auto">zsh</span>
+                </div>
+                <div class="window-content bg-black/50 text-green-400 font-mono text-sm p-2" onclick="this.querySelector('input').focus()">
+                    <div id="terminal-output"></div>
+                    <div class="flex">
+                        <span>hadi@portfolio:~$ </span>
+                        <input type="text" id="terminal-input" class="flex-1 bg-transparent border-none outline-none text-green-400 ml-2">
+                    </div>
+                    <span id="terminal-cursor"></span>
+                </div>
             </div>
-            <div class="window" id="music-window" style="top: 60%; left: 40%; width: 320px; height: 380px; resize: none;">
-                <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">Music</span></div>
-                <div class="window-content text-white flex flex-col items-center p-4"><img id="album-art" src="https://placehold.co/200x200/0f172a/38bdf8?text=Music" class="w-48 h-48 rounded-lg shadow-lg mb-4"><div class="text-center"><h3 id="track-title" class="font-bold text-lg">Select a Track</h3><p id="track-artist" class="text-sm text-slate-400">Lo-fi Beats</p></div><input type="range" id="music-progress" class="music-progress-bar my-4" value="0" max="100"><div class="flex items-center gap-6"><button id="prev-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg></button><button id="play-pause-btn" class="bg-white text-slate-900 w-12 h-12 rounded-full flex items-center justify-center"><svg id="play-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg><svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 hidden"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg></button><button id="next-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg></button></div></div>
+
+            <div class="window" id="music-window" style="top: 60%; left: 40%; width: 320px; height: 380px; resize: none;" data-original-x="40%" data-original-y="60%" data-original-w="320px" data-original-h="380px" data-is-maximized="false">
+                <div class="title-bar">
+                    <div class="window-controls">
+                        <div class="control-btn bg-red-500 close-btn"></div>
+                        <div class="control-btn bg-yellow-500 minimize-btn"></div>
+                        <div class="control-btn bg-green-500 maximize-btn"></div>
+                    </div>
+                    <span class="font-medium text-sm text-slate-300 mx-auto">Music</span>
+                </div>
+                <div class="window-content text-white flex flex-col items-center p-4">
+                    <img id="album-art" src="https://placehold.co/200x200/0f172a/38bdf8?text=Music" class="w-48 h-48 rounded-lg shadow-lg mb-4">
+                    <div class="text-center">
+                        <h3 id="track-title" class="font-bold text-lg">Select a Track</h3>
+                        <p id="track-artist" class="text-sm text-slate-400">Lo-fi Beats</p>
+                    </div>
+                    <input type="range" id="music-progress" class="music-progress-bar my-4" value="0" max="100">
+                    <div class="flex items-center gap-6">
+                        <button id="prev-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>
+                        </button>
+                        <button id="play-pause-btn" class="bg-white text-slate-900 w-12 h-12 rounded-full flex items-center justify-center">
+                            <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 hidden"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                        </button>
+                        <button id="next-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="window" id="settings-window" style="top: 25%; left: 10%; width: 500px; height: 300px;">
-                <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">System Preferences</span></div>
-                <div class="window-content text-slate-300 space-y-6"><h2 class="text-lg font-bold text-white">Appearance</h2><div><h3 class="font-semibold mb-2">Wallpaper</h3><div class="flex gap-2" id="wallpaper-options"><button class="w-20 h-12 rounded-md bg-cover bg-center border-2 border-blue-500" style="background-image: url('https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/Minimalist%20Black%20and%20Blue%20Moodboard%20Desktop%20Wallpaper%20(2).png')" data-wallpaper="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/Minimalist%20Black%20and%20Blue%20Moodboard%20Desktop%20Wallpaper%20(2).png"></button><button class="w-20 h-12 rounded-md bg-cover bg-center border-2 border-transparent" style="background-image: url('https://placehold.co/1920x1080/0f172a/ffffff?text=Abstract')" data-wallpaper="https://placehold.co/1920x1080/0f172a/ffffff?text=Abstract"></button><button class="w-20 h-12 rounded-md bg-cover bg-center border-2 border-transparent" style="background-image: url('https://placehold.co/1920x1080/4338ca/ffffff?text=Gradient')" data-wallpaper="https://placehold.co/1920x1080/4338ca/ffffff?text=Gradient"></button></div></div><div><h3 class="font-semibold mb-2">Accent Color</h3><div class="flex gap-2" id="accent-color-options"><button class="w-8 h-8 rounded-full bg-blue-500 border-2 border-white" data-color="blue"></button><button class="w-8 h-8 rounded-full bg-green-500 border-2 border-transparent" data-color="green"></button><button class="w-8 h-8 rounded-full bg-purple-500 border-2 border-transparent" data-color="purple"></button></div></div></div>
+
+            <div class="window" id="settings-window" style="top: 25%; left: 10%; width: 500px; height: 300px;" data-original-x="10%" data-original-y="25%" data-original-w="500px" data-original-h="300px" data-is-maximized="false">
+                <div class="title-bar">
+                    <div class="window-controls">
+                        <div class="control-btn bg-red-500 close-btn"></div>
+                        <div class="control-btn bg-yellow-500 minimize-btn"></div>
+                        <div class="control-btn bg-green-500 maximize-btn"></div>
+                    </div>
+                    <span class="font-medium text-sm text-slate-300 mx-auto">System Preferences</span>
+                </div>
+                <div class="window-content text-slate-300 space-y-6">
+                    <h2 class="text-lg font-bold text-white">Appearance</h2>
+                    <div>
+                        <h3 class="font-semibold mb-2">Wallpaper</h3>
+                        <div class="flex gap-2" id="wallpaper-options">
+                            <button class="w-20 h-12 rounded-md bg-cover bg-center border-2 border-blue-500" style="background-image: url('https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/Minimalist%20Black%20and%20Blue%20Moodboard%20Desktop%20Wallpaper%20(2).png')" data-wallpaper="https://raw.githubusercontent.com/Harsia-ID/idhescobar/refs/heads/main/Minimalist%20Black%20and%20Blue%20Moodboard%20Desktop%20Wallpaper%20(2).png"></button>
+                            <button class="w-20 h-12 rounded-md bg-cover bg-center border-2 border-transparent" style="background-image: url('https://placehold.co/1920x1080/0f172a/ffffff?text=Abstract')" data-wallpaper="https://placehold.co/1920x1080/0f172a/ffffff?text=Abstract"></button>
+                            <button class="w-20 h-12 rounded-md bg-cover bg-center border-2 border-transparent" style="background-image: url('https://placehold.co/1920x1080/4338ca/ffffff?text=Gradient')" data-wallpaper="https://placehold.co/1920x1080/4338ca/ffffff?text=Gradient"></button>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold mb-2">Accent Color</h3>
+                        <div class="flex gap-2" id="accent-color-options">
+                            <button class="w-8 h-8 rounded-full bg-blue-500 border-2 border-white" data-color="blue"></button>
+                            <button class="w-8 h-8 rounded-full bg-green-500 border-2 border-transparent" data-color="green"></button>
+                            <button class="w-8 h-8 rounded-full bg-purple-500 border-2 border-transparent" data-color="purple"></button>
+                        </div>
+                    </div>
+                </div>
             </div>
-             <div class="window" id="notes-window" style="top: 30%; left: 50%; width: 400px; height: 350px;">
-                <div class="title-bar"><div class="window-controls"><div class="control-btn bg-red-500 close-btn"></div><div class="control-btn bg-yellow-500"></div><div class="control-btn bg-green-500"></div></div><span class="font-medium text-sm text-slate-300 mx-auto">Notes.app</span></div>
+
+             <div class="window" id="notes-window" style="top: 30%; left: 50%; width: 400px; height: 350px;" data-original-x="50%" data-original-y="30%" data-original-w="400px" data-original-h="350px" data-is-maximized="false">
+                <div class="title-bar">
+                    <div class="window-controls">
+                        <div class="control-btn bg-red-500 close-btn"></div>
+                        <div class="control-btn bg-yellow-500 minimize-btn"></div>
+                        <div class="control-btn bg-green-500 maximize-btn"></div>
+                    </div>
+                    <span class="font-medium text-sm text-slate-300 mx-auto">Notes.app</span>
+                </div>
                 <textarea id="notepad-textarea" class="w-full h-full bg-yellow-100/10 text-yellow-100 p-4 font-mono outline-none resize-none" style="height: calc(100% - 36px);" placeholder="Tulis catatan di sini..."></textarea>
             </div>
         </div>
-        
+
         <!-- Notification -->
         <div id="notification" class="fixed top-10 left-1/2 -translate-x-1/2 bg-white/20 backdrop-blur-md text-white px-6 py-3 rounded-lg shadow-xl opacity-0 -translate-y-10"></div>
-        
+
         <!-- Spotlight Search -->
         <div id="spotlight-container" class="fixed inset-0 z-50 flex justify-center items-start pt-32 bg-black/30 backdrop-blur-sm hidden opacity-0 scale-95">
             <div class="w-full max-w-2xl bg-slate-800/80 backdrop-blur-2xl rounded-xl shadow-2xl overflow-hidden">
@@ -392,6 +645,10 @@
             <div class="dock-item" data-window="about-window"><div class="w-10 h-10"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="4" width="32" height="40" rx="4" fill="white"/><path d="M16 16H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/><path d="M16 24H32" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/><path d="M16 32H24" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round"/></svg></div></div>
             <div class="dock-item" data-window="projects-window"><div class="w-10 h-10"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 18C2 15.7909 3.79086 14 6 14H18L22 10H42C44.2091 10 46 11.7909 46 14V38C46 40.2091 44.2091 42 42 42H6C3.79086 42 2 40.2091 2 38V18Z" class="folder-icon-primary"/><rect x="0" y="20" width="48" height="20" rx="4" class="folder-icon-secondary"/></svg></div></div>
             <div class="dock-item" data-window="notes-window"><div class="w-10 h-10"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="4" width="36" height="40" rx="4" fill="#FBBF24"/><rect x="6" y="4" width="36" height="12" rx="4" fill="#F59E0B"/><path d="M14 16H34" stroke="#A16207" stroke-width="2" stroke-linecap="round"/><path d="M14 24H34" stroke="#A16207" stroke-width="2" stroke-linecap="round"/><path d="M14 32H24" stroke="#A16207" stroke-width="2" stroke-linecap="round"/></svg></div></div>
+            <!-- DOCK ITEM BARU: Jadwal Kuliah -->
+            <div class="dock-item" data-window="schedule-window"><div class="w-10 h-10"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="14" rx="2" stroke="#34D399" stroke-width="2"/><path d="M7 3V7M17 3V7" stroke="#34D399" stroke-width="2" stroke-linecap="round"/><path d="M3 9H21" stroke="#34D399" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="14" r="2" fill="#34D399"/></svg></div></div>
+            <!-- DOCK ITEM GUESTBOOK -->
+            <div class="dock-item" data-window="guestbook-window"><div class="w-10 h-10"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 14L12 18L21 14M3 10L12 14L21 10M12 2L3 6L12 10L21 6L12 2Z" stroke="#FBBF24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
             <div class="w-px h-10 bg-slate-600/50 mx-1"></div>
             <div class="dock-item" data-window="music-window"><div class="w-10 h-10"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="20" fill="#F43F5E"/><circle cx="24" cy="24" r="10" fill="white"/><path d="M24 24V14" stroke="#F43F5E" stroke-width="3" stroke-linecap="round"/></svg></div></div>
             <div class="dock-item" data-window="widgets-window"><div class="w-10 h-10"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="12" fill="#F97316"/><path d="M14 14H34V34H14V14Z" fill="#FDBA74"/><path d="M24 10V18" stroke="white" stroke-width="3" stroke-linecap="round"/><path d="M38 24L30 24" stroke="white" stroke-width="3" stroke-linecap="round"/></svg></div></div>
@@ -399,11 +656,21 @@
             <div class="dock-item" data-window="settings-window"><div class="w-10 h-10"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="20" fill="#4B5563"/><circle cx="24" cy="24" r="12" fill="#9CA3AF"/><path d="M24 4L24 44" stroke="#6B7280" stroke-width="3"/><path d="M44 24L4 24" stroke="#6B7280" stroke-width="3"/><path d="M10 10L38 38" stroke="#6B7280" stroke-width="3"/><path d="M38 10L10 38" stroke="#6B7280" stroke-width="3"/></svg></div></div>
         </div>
 
+        <!-- Context Menu (Desktop Right Click) -->
         <div id="context-menu" class="hidden">
-            <div class="context-menu-item" data-action="change-wallpaper">Ubah Wallpaper</div>
-            <div class="context-menu-item" data-action="open-terminal">Buka Terminal</div>
-            <hr class="border-slate-600 my-1">
-            <div class="context-menu-item" data-action="about-portfolio">Tentang Portofolio Ini</div>
+            <div class="context-menu-item" data-action="open-settings">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.44a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM4.22 8.22a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-.44a2 2 0 0 0-2 2v.22zM2 12.22v-.44a2 2 0 0 0 2-2h.44a2 2 0 0 0 2 2v.44a2 2 0 0 0-2 2H4a2 2 0 0 0-2-2zM8.22 18.22a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.44a2 2 0 0 0-2-2h-.44a2 2 0 0 0-2 2v.22zM12.22 16h-.44a2 2 0 0 0-2 2v.44a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.44a2 2 0 0 0-2-2zM16.22 18.22a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.44a2 2 0 0 0-2-2h-.44a2 2 0 0 0-2 2v.22zM20 12.22v-.44a2 2 0 0 0-2-2h-.44a2 2 0 0 0-2 2v.44a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2zM16.22 4.22a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-.44a2 2 0 0 0-2 2v.22z"></path></svg>
+                Ubah Wallpaper
+            </div>
+            <div class="context-menu-item" data-action="open-terminal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-6"></path><path d="m9 14 3 3 3-3"></path><path d="M12 21v-3"></path></svg>
+                Buka Terminal
+            </div>
+            <hr class="border-slate-600/50 my-1">
+            <div class="context-menu-item" data-action="hide-menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                Tutup Menu
+            </div>
         </div>
     </div>
 
@@ -437,7 +704,7 @@
             <section id="mobile-contact">
                  <h2 class="text-2xl font-bold text-slate-800 mb-4 px-2">Hubungi Saya</h2>
                  <div class="bg-white rounded-2xl shadow-sm divide-y divide-slate-200">
-                    <a href="mailto:hadi.prasetia@example.com" class="p-4 flex justify-between items-center text-blue-500">
+                    <a href="/cdn-cgi/l/email-protection#ec848d8885c29c9e8d9f8998858dac89948d819c8089c28f8381" class="p-4 flex justify-between items-center text-blue-500">
                         <span class="font-semibold">Kirim Email</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-slate-400"><path d="m9 18 6-6-6-6"/></svg>
                     </a>
@@ -456,59 +723,646 @@
             <p>&copy; 2025 Hadi Prasetia. All Rights Reserved.</p>
         </footer>
     </div>
-    
+
     <audio id="audio-player" src=""></audio>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- GLOBAL FIREBASE VARIABLES (MANDATORY) ---
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        let db;
+        let auth;
+        let userId = 'anon_user';
+
+        // --- CORE INITIALIZATION ---
+        const desktop = document.getElementById('desktop');
+        const loginScreen = document.getElementById('login-screen');
+        const loginButton = document.getElementById('login-button');
+        const windows = document.querySelectorAll('.window');
+        const dock = document.getElementById('dock');
+        const snapPreview = document.getElementById('snap-preview');
+        const contextMenu = document.getElementById('context-menu'); // NEW: Context Menu Element
+        const topBarHeight = 28;
+
+        let activeWindow = null;
+        let zIndexCounter = 10;
+        const minimizedWindows = new Map(); // Stores windows that are currently minimized
+
+        // Utility to display temporary notification
+        const showNotification = (message) => {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.remove('opacity-0', '-translate-y-10');
+            notification.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                notification.classList.remove('opacity-100', 'translate-y-0');
+                notification.classList.add('opacity-0', '-translate-y-10');
+            }, 3000);
+        };
+        
+        // --- WINDOW MANAGEMENT CORE FUNCTIONS ---
+
+        const bringToFront = (windowEl) => {
+            if (windowEl !== activeWindow) {
+                windows.forEach(w => w.classList.remove('active-window'));
+                windowEl.style.zIndex = ++zIndexCounter;
+                windowEl.classList.add('active-window');
+                activeWindow = windowEl;
+            }
+        };
+
+        const openWindowById = (windowId) => {
+            const windowEl = document.getElementById(windowId);
+            if (!windowEl) return;
+
+            if (minimizedWindows.has(windowId)) {
+                // Restore if minimized
+                restoreWindow(windowEl);
+            } else {
+                // Open normally
+                windowEl.style.display = 'block';
+                bringToFront(windowEl);
+                
+                // Special initialization for new windows
+                if (windowId === 'schedule-window') {
+                    // Populate schedule table on open
+                    populateScheduleTable(); 
+                }
+            }
+            contextMenu.style.display = 'none'; // Hide menu on app open
+        };
+
+        const restoreWindow = (windowEl) => {
+            const windowId = windowEl.id;
+            const dockItem = dock.querySelector(`[data-window="${windowId}"]`);
+            
+            // 1. Remove minimizing classes and restore position/size
+            windowEl.classList.remove('minimizing');
+            windowEl.style.display = 'block';
+            windowEl.style.opacity = 1;
+            windowEl.style.transform = 'none';
+
+            // 2. Restore original position/size from data attributes
+            windowEl.style.left = windowEl.dataset.originalX;
+            windowEl.style.top = windowEl.dataset.originalY;
+            windowEl.style.width = windowEl.dataset.originalW;
+            windowEl.style.height = windowEl.dataset.originalH;
+
+            // 3. Update state
+            minimizedWindows.delete(windowId);
+            dockItem?.classList.remove('minimized-active');
+            bringToFront(windowEl);
+            
+             // Special restoration for new windows
+            if (windowId === 'schedule-window') {
+                populateScheduleTable(); 
+            }
+        };
+
+        const minimizeWindow = (windowEl) => {
+            const windowId = windowEl.id;
+            const dockItem = dock.querySelector(`[data-window="${windowId}"]`);
+
+            if (!minimizedWindows.has(windowId)) {
+                // Save current position/size before minimizing
+                windowEl.dataset.originalX = windowEl.style.left || '10%';
+                windowEl.dataset.originalY = windowEl.style.top || '10%';
+                windowEl.dataset.originalW = windowEl.style.width || '500px';
+                windowEl.dataset.originalH = windowEl.style.height || '300px';
+
+                // 1. Start minimize animation
+                windowEl.classList.add('minimizing');
+                windowEl.style.pointerEvents = 'none';
+                
+                // 2. Hide after animation
+                setTimeout(() => {
+                    windowEl.style.display = 'none';
+                    windowEl.classList.remove('minimizing');
+                    windowEl.style.pointerEvents = 'auto';
+                }, 400); // Match CSS transition duration
+
+                // 3. Update state
+                minimizedWindows.set(windowId, true);
+                dockItem?.classList.add('minimized-active');
+            }
+        };
+
+        const toggleMaximize = (windowEl) => {
+            if (windowEl.dataset.isMaximized === 'true') {
+                // Restore
+                windowEl.style.top = windowEl.dataset.originalY;
+                windowEl.style.left = windowEl.dataset.originalX;
+                windowEl.style.width = windowEl.dataset.originalW;
+                windowEl.style.height = windowEl.dataset.originalH;
+                windowEl.classList.remove('snapped');
+                windowEl.dataset.isMaximized = 'false';
+            } else {
+                // Maximize
+                // Save current state first (if not already saved by minimizing)
+                windowEl.dataset.originalX = windowEl.style.left || '10%';
+                windowEl.dataset.originalY = windowEl.style.top || '10%';
+                windowEl.dataset.originalW = windowEl.style.width || '500px';
+                windowEl.dataset.originalH = windowEl.style.height || '300px';
+
+                windowEl.style.top = `${topBarHeight}px`;
+                windowEl.style.left = '0';
+                windowEl.style.width = '100%';
+                windowEl.style.height = `calc(100% - ${topBarHeight}px)`;
+                windowEl.classList.add('snapped');
+                windowEl.dataset.isMaximized = 'true';
+            }
+            bringToFront(windowEl);
+        };
+
+        // --- DRAG & SNAP LOGIC ---
+        windows.forEach(windowEl => {
+            const titleBar = windowEl.querySelector('.title-bar');
+            let offsetX, offsetY, isDragging = false;
+            let snapTarget = null; // 'left', 'right', 'full', or null
+            let isMaximized = false;
+
+            titleBar.addEventListener('mousedown', (e) => {
+                if (e.target.closest('.control-btn')) return; // Ignore clicks on controls
+                
+                isDragging = true;
+                bringToFront(windowEl);
+                windowEl.classList.remove('snapped'); // Remove snap class when starting drag
+
+                // If currently maximized, restore to original size/pos before dragging starts
+                if (windowEl.dataset.isMaximized === 'true') {
+                    toggleMaximize(windowEl);
+                    isMaximized = true;
+                }
+                
+                offsetX = e.clientX - windowEl.getBoundingClientRect().left;
+                offsetY = e.clientY - windowEl.getBoundingClientRect().top;
+                
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            });
+            
+            // Double-click on title bar to maximize/restore
+            titleBar.addEventListener('dblclick', (e) => {
+                 if (!e.target.closest('.control-btn')) {
+                    toggleMaximize(windowEl);
+                 }
+            });
+
+            const onMouseMove = (e) => {
+                if (!isDragging) return;
+                
+                const rect = desktop.getBoundingClientRect();
+                let newX = e.clientX - offsetX;
+                let newY = e.clientY - offsetY;
+
+                // 1. Move the window
+                windowEl.style.left = `${newX}px`;
+                windowEl.style.top = `${newY}px`;
+                
+                // 2. Check for snap targets
+                snapTarget = null;
+                snapPreview.style.opacity = 0;
+
+                const tolerance = 50; // Pixels from edge to trigger snap
+                
+                if (e.clientX < tolerance) {
+                    snapTarget = 'left';
+                } else if (e.clientX > rect.width - tolerance) {
+                    snapTarget = 'right';
+                } else if (e.clientY < topBarHeight + tolerance) {
+                    snapTarget = 'full';
+                }
+
+                // 3. Show snap preview
+                if (snapTarget) {
+                    snapPreview.style.opacity = 1;
+                    if (snapTarget === 'left' || snapTarget === 'right') {
+                        snapPreview.style.width = '50%';
+                        snapPreview.style.height = `calc(100% - ${topBarHeight}px - 70px)`; // Account for top bar and dock space
+                        snapPreview.style.top = `${topBarHeight}px`;
+                        snapPreview.style.left = snapTarget === 'left' ? '0' : '50%';
+                        snapPreview.style.borderRadius = '0 12px 12px 0';
+                        if (snapTarget === 'left') snapPreview.style.borderRadius = '12px 0 0 12px';
+                    } else if (snapTarget === 'full') {
+                        snapPreview.style.width = '100%';
+                        snapPreview.style.height = `calc(100% - ${topBarHeight}px)`;
+                        snapPreview.style.top = `${topBarHeight}px`;
+                        snapPreview.style.left = '0';
+                        snapPreview.style.borderRadius = '0';
+                    }
+                }
+            };
+
+            const onMouseUp = () => {
+                if (!isDragging) return;
+                isDragging = false;
+                snapPreview.style.opacity = 0; // Hide preview
+
+                const rect = desktop.getBoundingClientRect();
+
+                if (snapTarget) {
+                    windowEl.classList.add('snapped');
+                    windowEl.dataset.isMaximized = 'false'; // Reset maximized state
+                    
+                    if (snapTarget === 'full') {
+                         toggleMaximize(windowEl); // Use maximize function for full snap
+                    } else {
+                        // Half Screen Snap
+                        const newW = rect.width / 2;
+                        const newH = rect.height - topBarHeight - 70; // Adjust for dock
+                        
+                        windowEl.style.width = `${newW}px`;
+                        windowEl.style.height = `${newH}px`;
+                        windowEl.style.top = `${topBarHeight}px`;
+                        windowEl.style.left = snapTarget === 'left' ? '0' : `${newW}px`;
+                    }
+                }
+                // Save current final position as original position for restoration later
+                windowEl.dataset.originalX = windowEl.style.left;
+                windowEl.dataset.originalY = windowEl.style.top;
+                windowEl.dataset.originalW = windowEl.style.width;
+                windowEl.dataset.originalH = windowEl.style.height;
+
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+            };
+        });
+
+        // --- WINDOW CONTROLS HANDLERS ---
+        windows.forEach(windowEl => {
+            windowEl.addEventListener('mousedown', () => bringToFront(windowEl));
+            
+            // Close Button (Red)
+            windowEl.querySelector('.close-btn')?.addEventListener('click', (e) => { 
+                e.stopPropagation();
+                windowEl.style.display = 'none'; 
+                // Clear minimized state if user closes the window
+                if (minimizedWindows.has(windowEl.id)) {
+                     minimizedWindows.delete(windowEl.id);
+                     dock.querySelector(`[data-window="${windowEl.id}"]`)?.classList.remove('minimized-active');
+                }
+            });
+
+            // Minimize Button (Yellow)
+            windowEl.querySelector('.minimize-btn')?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                minimizeWindow(windowEl);
+            });
+
+            // Maximize Button (Green)
+             windowEl.querySelector('.maximize-btn')?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleMaximize(windowEl);
+            });
+        });
+
+        // --- DOCK & DESKTOP ICON TRIGGERS ---
+        document.querySelectorAll('[data-window]').forEach(trigger => {
+            trigger.addEventListener('click', () => openWindowById(trigger.dataset.window));
+        });
+
+        // --- ICON DRAGGING LOGIC (NEW) ---
+        const desktopIcons = document.querySelectorAll('.desktop-icon');
+
+        desktopIcons.forEach(icon => {
+            let isDraggingIcon = false;
+            let iconOffsetX, iconOffsetY;
+
+            // Prevent default drag events from interfering
+            icon.addEventListener('dragstart', (e) => e.preventDefault());
+            icon.addEventListener('mousedown', (e) => {
+                // Only allow drag on left click (button 0) and not when opening the window
+                if (e.button !== 0 || e.target.tagName !== 'DIV' && e.target.tagName !== 'SPAN') return;
+                
+                isDraggingIcon = true;
+                icon.style.zIndex = ++zIndexCounter + 1; // Bring dragged icon above windows
+                icon.style.cursor = 'grabbing';
+                
+                const rect = icon.getBoundingClientRect();
+                iconOffsetX = e.clientX - rect.left;
+                iconOffsetY = e.clientY - rect.top;
+
+                document.addEventListener('mousemove', onIconMouseMove);
+                document.addEventListener('mouseup', onIconMouseUp);
+            });
+
+            const onIconMouseMove = (e) => {
+                if (!isDraggingIcon) return;
+
+                // Move icon freely
+                let newX = e.clientX - iconOffsetX;
+                let newY = e.clientY - iconOffsetY;
+                
+                // Clamp to desktop boundaries
+                const desktopRect = desktop.getBoundingClientRect();
+                newX = Math.max(8, Math.min(newX, desktopRect.width - icon.offsetWidth - 8));
+                newY = Math.max(topBarHeight + 8, Math.min(newY, desktopRect.height - icon.offsetHeight - 70 - 8)); // 70 is rough height/padding for dock
+                
+                icon.style.left = `${newX}px`;
+                icon.style.top = `${newY}px`;
+            };
+
+            const onIconMouseUp = (e) => {
+                if (!isDraggingIcon) return;
+                
+                isDraggingIcon = false;
+                icon.style.cursor = 'pointer';
+                
+                // If the user didn't move it far, treat it as a click to open the window
+                // We skip this complex check for simplicity, relying on the 'click' event listener
+                // which fires if mousedown and mouseup are close enough.
+                
+                document.removeEventListener('mousemove', onIconMouseMove);
+                document.removeEventListener('mouseup', onIconMouseUp);
+            };
+        });
+        
+        // --- CONTEXT MENU LOGIC (NEW) ---
+        desktop.addEventListener('contextmenu', (e) => {
+            e.preventDefault(); // Prevent default browser context menu
+            
+            // Check if click was on an element that shouldn't trigger desktop menu (like a window or dock)
+            if (e.target.closest('.window') || e.target.closest('#dock') || e.target.closest('#top-bar')) {
+                contextMenu.style.display = 'none';
+                return;
+            }
+
+            // Position the context menu
+            let x = e.clientX;
+            let y = e.clientY;
+            
+            // Ensure menu stays on screen
+            const menuWidth = contextMenu.offsetWidth;
+            const menuHeight = contextMenu.offsetHeight;
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+
+            if (x + menuWidth > viewportWidth) {
+                x = viewportWidth - menuWidth - 5;
+            }
+            if (y + menuHeight > viewportHeight - 70) { // Adjust for dock area
+                y = viewportHeight - menuHeight - 70 - 5;
+            }
+            
+            contextMenu.style.left = `${x}px`;
+            contextMenu.style.top = `${y}px`;
+            contextMenu.style.display = 'block';
+            contextMenu.style.zIndex = 10001;
+        });
+
+        // Hide context menu when clicking anywhere else
+        document.addEventListener('click', () => {
+            contextMenu.style.display = 'none';
+        });
+
+        // Handle context menu actions
+        contextMenu.addEventListener('click', (e) => {
+            const action = e.target.dataset.action;
+            switch(action) {
+                case 'open-settings':
+                    openWindowById('settings-window');
+                    break;
+                case 'open-terminal':
+                    openWindowById('terminal-window');
+                    break;
+                case 'hide-menu':
+                default:
+                    // Handled by document click
+                    break;
+            }
+        });
+
+        // --- FIREBASE & GUESTBOOK IMPLEMENTATION (FULL-STACK) ---
+        async function initializeFirebaseAndAuth() {
+            if (!firebaseConfig) {
+                console.error("Firebase config is missing. Guestbook feature is disabled.");
+                document.getElementById('guestbook-status').textContent = "ERROR: Konfigurasi Firebase tidak ditemukan.";
+                return;
+            }
+            
+            try {
+                // 1. Initialize Firebase App and Services
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                setLogLevel('Debug'); // Enable debug logging
+
+                // 2. Authentication
+                if (initialAuthToken) {
+                    // Sign in with custom token (provided by canvas environment)
+                    const userCredential = await signInWithCustomToken(auth, initialAuthToken);
+                    userId = userCredential.user.uid;
+                    document.getElementById('guestbook-status').textContent = `Terhubung sebagai User: ${userId.substring(0, 8)}...`;
+                } else {
+                    // Fallback to anonymous sign-in
+                    const userCredential = await signInAnonymously(auth);
+                    userId = userCredential.user.uid;
+                    document.getElementById('guestbook-status').textContent = `Terhubung sebagai Anonim: ${userId.substring(0, 8)}...`;
+                }
+
+                // 3. Start real-time Guestbook listener
+                loadGuestbookMessages();
+
+            } catch (error) {
+                console.error("Firebase initialization or authentication failed:", error);
+                document.getElementById('guestbook-status').textContent = `ERROR: Gagal terhubung ke server. (${error.code})`;
+            }
+        }
+
+        const GUESTBOOK_COLLECTION_PATH = `/artifacts/${appId}/public/data/guestbook`;
+
+        function loadGuestbookMessages() {
+            if (!db) return;
+
+            const messagesRef = collection(db, GUESTBOOK_COLLECTION_PATH);
+            // NOTE: orderBy is removed as per instruction. Sorting is done client-side.
+            const q = query(messagesRef);
+
+            onSnapshot(q, (snapshot) => {
+                const messagesDisplay = document.getElementById('guestbook-messages');
+                messagesDisplay.innerHTML = '';
+                const messages = [];
+
+                snapshot.forEach(doc => {
+                    messages.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Client-side sorting by timestamp (descending)
+                messages.sort((a, b) => (b.timestamp?.toMillis() || 0) - (a.timestamp?.toMillis() || 0));
+
+
+                if (messages.length === 0) {
+                    messagesDisplay.innerHTML = '<p class="text-center text-slate-500 pt-8">Belum ada pesan. Jadilah yang pertama!</p>';
+                    return;
+                }
+
+                messages.forEach(msg => {
+                    const name = msg.name || `Anonim (${msg.userId.substring(0, 4)})`;
+                    const date = msg.timestamp ? new Date(msg.timestamp.seconds * 1000).toLocaleString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'Baru saja';
+                    
+                    const messageEl = document.createElement('div');
+                    messageEl.className = 'p-3 bg-slate-800/80 rounded-lg shadow-md border-l-4 border-blue-500';
+                    messageEl.innerHTML = `
+                        <p class="text-slate-200">${msg.message}</p>
+                        <p class="text-xs text-slate-400 mt-2">
+                            — <span class="font-semibold text-blue-300">${name}</span> <span class="ml-2">${date}</span>
+                        </p>
+                    `;
+                    messagesDisplay.appendChild(messageEl);
+                });
+            }, (error) => {
+                console.error("Error fetching guestbook messages:", error);
+                document.getElementById('guestbook-messages').innerHTML = `<p class="text-red-400">Gagal memuat pesan: ${error.message}</p>`;
+            });
+        }
+
+        document.getElementById('guestbook-submit')?.addEventListener('click', async () => {
+            if (!db || !userId) {
+                showNotification("Aplikasi tidak terhubung ke database.");
+                return;
+            }
+
+            const nameInput = document.getElementById('guestbook-name');
+            const messageInput = document.getElementById('guestbook-message');
+            const message = messageInput.value.trim();
+            const name = nameInput.value.trim();
+
+            if (message.length < 5) {
+                showNotification("Pesan terlalu pendek (min 5 karakter).");
+                return;
+            }
+
+            document.getElementById('guestbook-submit').disabled = true;
+            document.getElementById('guestbook-submit').textContent = 'Mengirim...';
+
+            try {
+                await addDoc(collection(db, GUESTBOOK_COLLECTION_PATH), {
+                    name: name || null,
+                    message: message,
+                    userId: userId,
+                    timestamp: serverTimestamp()
+                });
+
+                messageInput.value = ''; // Clear message input
+                showNotification("Pesan terkirim! Muncul secara real-time.");
+            } catch (error) {
+                console.error("Error submitting guestbook message:", error);
+                showNotification("ERROR: Gagal mengirim pesan.");
+            } finally {
+                document.getElementById('guestbook-submit').disabled = false;
+                document.getElementById('guestbook-submit').textContent = 'Kirim Pesan';
+            }
+        });
+
+        // --- DATA ---
+        const projectsData = [
+            {id: 'mobile-sigil', title: 'Mobile Sigil Forging', shortDesc: 'Studi kasus UI/UX untuk aplikasi seluler.', longDesc: 'Ini adalah studi kasus komprehensif untuk aplikasi mobile, dimulai dari riset pengguna, wireframing, hingga menghasilkan desain antarmuka yang bersih dan modern. Prototipe interaktif dibuat menggunakan Figma untuk memvalidasi alur pengguna.', image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/uiux.png', techStack: ['Figma', 'UI/UX Research', 'Prototyping', 'User Flow'], liveUrl: '#'},
+            {id: 'visual-codex', title: 'Visual Communication Codex', shortDesc: 'Strategi dan pedoman brand visual.', longDesc: 'Dokumen master yang merinci strategi Komunikasi Visual, termasuk pedoman merek dan struktur naratif, yang penting untuk menjaga integritas cerita di semua media. Tujuannya adalah untuk menciptakan identitas visual yang konsisten dan kuat.', image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/vc.png', techStack: ['Branding', 'Graphic Design', 'Adobe Illustrator', 'Strategy'], liveUrl: '#'},
+            {id: 'corp-authority', title: 'Corporate Authority Sigil', shortDesc: 'Desain sistem identitas korporat.', longDesc: 'Perancangan sistem visual yang kuat untuk identitas korporat, berfokus pada profesionalisme, konsistensi, dan membangun kembali citra otoritas merek di semua titik kontak, baik digital maupun cetak.', image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/a/corpo.png', techStack: ['Corporate Identity', 'Logo Design', 'Brand Guidelines'], liveUrl: '#'},
+            {id: 'video-ritual', title: 'Video Ritual Scroll V2', shortDesc: 'Kompilasi motion graphics & video.', longDesc: 'Sebuah kompilasi motion graphics dan narasi visual, yang berfokus pada tempo cepat dan color grading yang agresif untuk retensi audiens yang tinggi di platform digital. Menggunakan Adobe Premiere Pro dan After Effects.', image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/v2.png', techStack: ['Video Editing', 'Motion Graphics', 'Adobe Premiere Pro', 'Color Grading'], liveUrl: '#'},
+        ];
+        
+        const musicPlaylist = [
+            { title: 'Empty Mind', artist: 'Lofi Girl', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Lofi_Girl/Empty_Mind/Lofi_Girl_-_Empty_Mind.mp3', art: 'https://placehold.co/200x200/1e293b/94a3b8?text=Empty+Mind'},
+            { title: 'Chill', artist: 'Liborio Conti', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Liborio_Conti/Book_The_Flight/Liborio_Conti_-_Chill.mp3', art: 'https://placehold.co/200x200/1e293b/38bdf8?text=Chill'},
+            { title: 'Lazy Walk', artist: 'Cheel', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Cheel/Lazy_Walk/Cheel_-_Lazy_Walk.mp3', art: 'https://placehold.co/200x200/1e293b/a78bfa?text=Lazy+Walk'}
+        ];
+        
+        // --- JADWAL KULIAH BARU DARI TANGKAPAN LAYAR ---
+        const scheduleData = [
+            // Senin
+            { day: 'Senin', time: '11:30 - 13:10', course: 'DKH32 - GAMBAR', lecturer: 'Aprilia Kartini, S.Pd., M.Sn., R506 (L.5 - KAMPUS ANCOL)', sks: 3 },
+            { day: 'Senin', time: '13:30 - 15:10', course: 'DKH32 - GAMBAR', lecturer: 'Aprilia Kartini, S.Pd., M.Sn., R509 (L.5 - KAMPUS ANCOL)', sks: 3 },
+            // Selasa
+            { day: 'Selasa', time: '09:30 - 11:10', course: 'DB101 - SEJARAH DESAIN DAN TEKNOLOGI', lecturer: 'Team Dosen, R701 (L.7 - KAMPUS ANCOL)', sks: 2 },
+            { day: 'Selasa', time: '13:30 - 15:10', course: 'DKH26 - PENGANTAR DESAIN 2D', lecturer: 'Henry Hidajat, S.S., S.Sn., M.Sn., R705 (L.7 - KAMPUS ANCOL)', sks: 3 },
+            // Rabu
+            { day: 'Rabu', time: '13:30 - 15:10', course: 'DK112 - BAHASA VISUAL', lecturer: 'Ika Resmika Andriana, S.Sn., M.Ds., R701 (L.7 - KAMPUS ANCOL)', sks: 3 },
+            { day: 'Rabu', time: '15:30 - 17:10', course: 'DK112 - BAHASA VISUAL', lecturer: 'Ika Resmika Andriana, S.Sn., M.Ds., R702 (L.7 - KAMPUS ANCOL)', sks: 3 },
+            // Kamis
+            { day: 'Kamis', time: '09:30 - 11:10', course: 'TIZ22 - PENGANTAR TEKNOLOGI INFORMASI', lecturer: 'Ester Lumba, S.Si, M.Kom., R537 (L.5 - KAMPUS ANCOL)', sks: 3 },
+            // Jumat
+            { day: 'Jumat', time: '09:30 - 11:10', course: 'UMA04 - PANCASILA & KEWARGANEGARAAN', lecturer: 'Desiana Endah Pramesti, S.Sos, M.Si., Online', sks: 2 },
+            { day: 'Jumat', time: '15:30 - 17:10', course: 'BIZ08 - BAHASA INGGRIS', lecturer: 'Rex Stardy, S.Pd, M.Hum, Online', sks: 2 },
+        ];
+        // --- END JADWAL KULIAH BARU ---
+
+        function populateScheduleTable() {
+            const tableBody = document.querySelector('#schedule-table tbody');
+            if (!tableBody) return;
+            
+            tableBody.innerHTML = ''; // Clear previous content
+
+            scheduleData.forEach(item => {
+                const row = document.createElement('tr');
+                // Highlight the row if the location is 'Online' or 'Omsite' for better visibility
+                const locationClass = item.lecturer.includes('Online') ? 'bg-indigo-900/40 border-l-4 border-indigo-500' : 
+                                      item.lecturer.includes('Omsite') ? 'bg-red-900/40 border-l-4 border-red-500' : 'bg-slate-800/80';
+
+                row.className = locationClass;
+
+                // Split lecturer/location for cleaner display if needed, but keeping it combined as in previous format for consistency
+                const [lecturerName, location] = item.lecturer.split(', ').length > 1 ? [item.lecturer.split(', ').slice(0, -1).join(', '), item.lecturer.split(', ').slice(-1)[0]] : [item.lecturer, ''];
+
+                row.innerHTML = `
+                    <td class="font-bold text-white">${item.day}</td>
+                    <td class="font-mono text-sm text-yellow-300">${item.time}</td>
+                    <td class="font-medium text-blue-300">${item.course}</td>
+                    <td class="text-slate-400 text-sm">${item.lecturer}</td>
+                    <td class="text-center font-bold text-green-400">${item.sks}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // --- EVENT LISTENERS & DOM CONTENT LOADED ---
         document.addEventListener('DOMContentLoaded', () => {
-            const desktop = document.getElementById('desktop');
-            const loginScreen = document.getElementById('login-screen');
-            const loginButton = document.getElementById('login-button');
+
+            // Call Firebase initialization
+            initializeFirebaseAndAuth();
 
             // --- LOGIN SCREEN LOGIC ---
             setTimeout(() => {
                 loginButton.disabled = false;
                 loginButton.classList.remove('opacity-0');
-            }, 2000); // Wait for progress bar animation
+            }, 2000); 
 
             loginButton.addEventListener('click', () => {
                 loginScreen.classList.add('opacity-0', 'invisible');
                 setTimeout(() => {
                     loginScreen.style.display = 'none';
-                }, 500); // Match transition duration
+                }, 500); 
             });
 
-            // --- DOCK MAGNIFICATION LOGIC ---
-            const dock = document.getElementById('dock');
+            // --- DOCK MAGNIFICATION LOGIC (Preserved) ---
             if (dock) {
                 const dockItems = dock.querySelectorAll('.dock-item');
                 dock.addEventListener('mousemove', (e) => {
                     const dockRect = dock.getBoundingClientRect();
                     const mouseX = e.clientX;
-
                     dockItems.forEach(item => {
                         const itemRect = item.getBoundingClientRect();
                         const itemCenterX = itemRect.left + itemRect.width / 2;
-                        
                         const distance = Math.abs(mouseX - itemCenterX);
                         const maxDistance = 100;
                         const baseScale = 1;
                         const maxScale = 1.75;
                         const maxLift = -16;
-
                         let scale = baseScale;
                         let lift = 0;
-
                         if (distance < maxDistance) {
                             const proximity = 1 - (distance / maxDistance);
                             scale = baseScale + (maxScale - baseScale) * proximity;
                             lift = maxLift * proximity;
                         }
-                        
                         item.style.transform = `translateY(${lift}px) scale(${scale})`;
                     });
                 });
-
                 dock.addEventListener('mouseleave', () => {
                     dockItems.forEach(item => {
                         item.style.transform = 'translateY(0) scale(1)';
@@ -516,21 +1370,7 @@
                 });
             }
 
-            // --- DATA ---
-            const projectsData = [
-                {id: 'mobile-sigil', title: 'Mobile Sigil Forging', shortDesc: 'Studi kasus UI/UX untuk aplikasi seluler.', longDesc: 'Ini adalah studi kasus komprehensif untuk aplikasi mobile, dimulai dari riset pengguna, wireframing, hingga menghasilkan desain antarmuka yang bersih dan modern. Prototipe interaktif dibuat menggunakan Figma untuk memvalidasi alur pengguna.', image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/uiux.png', techStack: ['Figma', 'UI/UX Research', 'Prototyping', 'User Flow'], liveUrl: '#'},
-                {id: 'visual-codex', title: 'Visual Communication Codex', shortDesc: 'Strategi dan pedoman brand visual.', longDesc: 'Dokumen master yang merinci strategi Komunikasi Visual, termasuk pedoman merek dan struktur naratif, yang penting untuk menjaga integritas cerita di semua media. Tujuannya adalah untuk menciptakan identitas visual yang konsisten dan kuat.', image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/vc.png', techStack: ['Branding', 'Graphic Design', 'Adobe Illustrator', 'Strategy'], liveUrl: '#'},
-                {id: 'corp-authority', title: 'Corporate Authority Sigil', shortDesc: 'Desain sistem identitas korporat.', longDesc: 'Perancangan sistem visual yang kuat untuk identitas korporat, berfokus pada profesionalisme, konsistensi, dan membangun kembali citra otoritas merek di semua titik kontak, baik digital maupun cetak.', image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/a/corpo.png', techStack: ['Corporate Identity', 'Logo Design', 'Brand Guidelines'], liveUrl: '#'},
-                {id: 'video-ritual', title: 'Video Ritual Scroll V2', shortDesc: 'Kompilasi motion graphics & video.', longDesc: 'Sebuah kompilasi motion graphics dan narasi visual, yang berfokus pada tempo cepat dan color grading yang agresif untuk retensi audiens yang tinggi di platform digital. Menggunakan Adobe Premiere Pro dan After Effects.', image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/v2.png', techStack: ['Video Editing', 'Motion Graphics', 'Adobe Premiere Pro', 'Color Grading'], liveUrl: '#'},
-            ];
-            
-            const musicPlaylist = [
-                { title: 'Empty Mind', artist: 'Lofi Girl', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Lofi_Girl/Empty_Mind/Lofi_Girl_-_Empty_Mind.mp3', art: 'https://placehold.co/200x200/1e293b/94a3b8?text=Empty+Mind'},
-                { title: 'Chill', artist: 'Liborio Conti', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Liborio_Conti/Book_The_Flight/Liborio_Conti_-_Chill.mp3', art: 'https://placehold.co/200x200/1e293b/38bdf8?text=Chill'},
-                { title: 'Lazy Walk', artist: 'Cheel', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Cheel/Lazy_Walk/Cheel_-_Lazy_Walk.mp3', art: 'https://placehold.co/200x200/1e293b/a78bfa?text=Lazy+Walk'}
-            ];
-
-            // --- DYNAMIC CONTENT ---
+            // --- DYNAMIC CONTENT (Preserved) ---
             const projectsGrid = document.getElementById('projects-grid');
             const mobileProjectsList = document.getElementById('mobile-projects-list');
             
@@ -580,17 +1420,16 @@
                 });
                 detailLiveUrl.style.display = (project.liveUrl && project.liveUrl !== '#') ? 'inline-block' : 'none';
                 detailLiveUrl.href = project.liveUrl;
-                detailWindow.style.display = 'block';
-                bringToFront(detailWindow);
+                openWindowById('project-detail-window');
             }
 
-            // --- MUSIC PLAYER ---
+            // --- MUSIC PLAYER (Preserved) ---
             const audioPlayer = document.getElementById('audio-player');
             const [playPauseBtn, nextBtn, prevBtn] = [document.getElementById('play-pause-btn'), document.getElementById('next-btn'), document.getElementById('prev-btn')];
             const [playIcon, pauseIcon] = [document.getElementById('play-icon'), document.getElementById('pause-icon')];
             const [musicProgress, trackTitle, trackArtist, albumArt] = [document.getElementById('music-progress'), document.getElementById('track-title'), document.getElementById('track-artist'), document.getElementById('album-art')];
             let currentTrackIndex = 0;
-
+            
             const loadTrack = (index) => {
                 const track = musicPlaylist[index];
                 audioPlayer.src = track.src;
@@ -600,7 +1439,7 @@
             };
             const playTrack = () => { audioPlayer.play(); playIcon.classList.add('hidden'); pauseIcon.classList.remove('hidden'); };
             const pauseTrack = () => { audioPlayer.pause(); playIcon.classList.remove('hidden'); pauseIcon.classList.add('hidden'); };
-
+            
             playPauseBtn.addEventListener('click', () => (audioPlayer.paused ? playTrack() : pauseTrack()));
             nextBtn.addEventListener('click', () => { currentTrackIndex = (currentTrackIndex + 1) % musicPlaylist.length; loadTrack(currentTrackIndex); playTrack(); });
             prevBtn.addEventListener('click', () => { currentTrackIndex = (currentTrackIndex - 1 + musicPlaylist.length) % musicPlaylist.length; loadTrack(currentTrackIndex); playTrack(); });
@@ -608,7 +1447,7 @@
             musicProgress.addEventListener('input', () => { audioPlayer.currentTime = (musicProgress.value / 100) * audioPlayer.duration; });
             loadTrack(currentTrackIndex);
             
-            // --- SYSTEM PREFERENCES ---
+            // --- SYSTEM PREFERENCES (Preserved) ---
             const wallpaperOptions = document.getElementById('wallpaper-options');
             const accentColorOptions = document.getElementById('accent-color-options');
             wallpaperOptions.addEventListener('click', (e) => {
@@ -627,16 +1466,18 @@
                 }
             });
 
-            // --- TERMINAL ---
+            // --- TERMINAL (Updated for 'schedule' command) ---
             const terminalInput = document.getElementById('terminal-input');
             const terminalOutput = document.getElementById('terminal-output');
             const terminalCursor = document.getElementById('terminal-cursor');
             const terminalWindowContent = terminalInput?.closest('.window-content');
             const commands = {
-                help: () => 'Perintah: help, about, projects, contact, clear',
+                help: () => 'Perintah: help, about, projects, contact, guestbook, schedule, clear',
                 about: () => { openWindowById('about-window'); return 'Membuka jendela "Tentang Saya"...'; },
                 projects: () => { openWindowById('projects-window'); return `Membuka folder "Proyek"...\n\n` + projectsData.map(p => `- ${p.title}`).join('\n'); },
                 contact: () => { openWindowById('contact-window'); return 'Membuka aplikasi "Kontak"...'; },
+                guestbook: () => { openWindowById('guestbook-window'); return 'Membuka aplikasi "Guestbook" (Full-Stack Demo)...'; },
+                schedule: () => { openWindowById('schedule-window'); return 'Membuka aplikasi "Schedule.app" (Jadwal Kuliah)...'; }, // NEW COMMAND
                 clear: () => { setTimeout(() => terminalOutput.innerHTML = '', 1); return ''; }
             };
             const appendToTerminal = (html) => {
@@ -656,7 +1497,7 @@
             terminalInput?.addEventListener('blur', () => terminalCursor.style.display = 'none');
             appendToTerminal(`Selamat datang! Ketik 'help' untuk daftar perintah.`);
 
-            // --- WIDGETS & CLOCK ---
+            // --- WIDGETS & CLOCK (Preserved) ---
             const datetimeElement = document.getElementById('datetime');
             const widgetTime = document.getElementById('widget-time');
             const widgetDate = document.getElementById('widget-date');
@@ -689,55 +1530,8 @@
             updateClock();
             generateCalendar();
             setInterval(updateClock, 30000);
-
-            // --- WINDOW MANAGEMENT ---
-            let activeWindow = null;
-            let zIndexCounter = 10;
-            const windows = document.querySelectorAll('.window');
-            const bringToFront = (windowEl) => {
-                if (windowEl !== activeWindow) {
-                    windows.forEach(w => w.classList.remove('active-window'));
-                    windowEl.style.zIndex = ++zIndexCounter;
-                    windowEl.classList.add('active-window');
-                    activeWindow = windowEl;
-                }
-            };
-            const openWindowById = (windowId) => {
-                const windowEl = document.getElementById(windowId);
-                if (windowEl) { windowEl.style.display = 'block'; bringToFront(windowEl); }
-            };
-
-            windows.forEach(windowEl => windowEl.addEventListener('mousedown', () => bringToFront(windowEl)));
-            document.querySelectorAll('[data-window]').forEach(trigger => trigger.addEventListener('click', () => openWindowById(trigger.dataset.window)));
-            document.querySelectorAll('.close-btn').forEach(btn => btn.addEventListener('click', (e) => { e.stopPropagation(); btn.closest('.window').style.display = 'none'; }));
-            
-            windows.forEach(windowEl => {
-                const titleBar = windowEl.querySelector('.title-bar');
-                let offsetX, offsetY, isDragging = false;
-                titleBar.addEventListener('mousedown', (e) => {
-                    isDragging = true;
-                    offsetX = e.clientX - windowEl.getBoundingClientRect().left;
-                    offsetY = e.clientY - windowEl.getBoundingClientRect().top;
-                    document.addEventListener('mousemove', onMouseMove);
-                    document.addEventListener('mouseup', onMouseUp);
-                });
-                const onMouseMove = (e) => {
-                    if (!isDragging) return;
-                    let newX = e.clientX - offsetX, newY = e.clientY - offsetY;
-                    const rect = desktop.getBoundingClientRect();
-                    newX = Math.max(0, Math.min(newX, rect.width - windowEl.offsetWidth));
-                    newY = Math.max(28, Math.min(newY, rect.height - windowEl.offsetHeight));
-                    windowEl.style.left = `${newX}px`;
-                    windowEl.style.top = `${newY}px`;
-                };
-                const onMouseUp = () => {
-                    isDragging = false;
-                    document.removeEventListener('mousemove', onMouseMove);
-                    document.removeEventListener('mouseup', onMouseUp);
-                };
-            });
         });
+
     </script>
 </body>
 </html>
-
