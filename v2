@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hadi Prasetia | Portofolio Desainer & Developer (Redesign)</title>
+    
+    <!-- SEO Meta Tags --><meta name="description" content="Portofolio interaktif Hadi Prasetia, seorang Digital Product Designer & Developer yang berfokus pada UI/UX dan pengembangan front-end. Versi redesign yang lebih modern dan bersih.">
+    <meta name="keywords" content="Hadi Prasetia, Portofolio, UI/UX Designer, Front-end Developer, Web Developer, Desainer Produk Digital, Redesign">
+    <meta property="og:title" content="Hadi Prasetia | Digital Desktop Portfolio (Redesign)">
+    <meta property="og:description" content="Jelajahi portofolio interaktif Hadi Prasetia dalam format desktop OS yang bersih dan modern.">
+    <meta property="og:image" content="https://avatars.githubusercontent.com/u/68311980">
+    <meta property="og:url" content="https://hadi-portfolio.example.com">
+    <link rel="canonical" href="https://hadi-portfolio.example.com">
+
+    <!-- Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter & JetBrains Mono --><link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons --><script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* --- Login Screen --- */
+        #login-screen {
+            /* Wallpaper yang sama dengan desktop untuk transisi mulus */
+            background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
+            transition: opacity 0.5s ease-out, visibility 0.5s;
+        }
+        
+        #login-box {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* --- Desktop --- */
+        #desktop {
+            /* Wallpaper baru yang lebih cerah dan modern */
+            background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: relative;
+            transition: background-image 0.5s ease-in-out; /* Transisi untuk ganti wallpaper */
+        }
+
+        /* --- Top Menu Bar --- */
+        #top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 32px; /* Sedikit lebih tinggi */
+            background: rgba(255, 255, 255, 0.45); /* Latar belakang putih transparan (lebih transparan) */
+            backdrop-filter: blur(20px); /* Blur lebih kuat */
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05); /* Border halus */
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #334155; /* Teks lebih gelap */
+        }
+
+        /* --- Windows --- */
+        .window {
+            position: absolute;
+            min-width: 350px;
+            min-height: 200px;
+            /* Estetika baru: Putih transparan, blur tebal, bayangan lembut */
+            background: rgba(255, 255, 255, 0.55); /* Sedikit lebih transparan */
+            backdrop-filter: blur(28px); /* Blur lebih tebal */
+            border-radius: 20px; /* Sudut lebih bulat */
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.3);
+            display: none; /* Sembunyi by default */
+            resize: both;
+            overflow: hidden;
+            transition: width 0.2s ease-out, height 0.2s ease-out, top 0.2s ease-out, left 0.2s ease-out;
+        }
+        
+        .title-bar {
+            height: 40px; /* Sedikit lebih tinggi untuk drag */
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            user-select: none;
+            /* Border halus di bawah title bar */
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .title-bar:active { cursor: grabbing; }
+
+        .window-controls { display: flex; gap: 8px; }
+        .control-btn { width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.1); }
+        .control-btn.close-btn { background-color: #ff5f57; border-color: #e0443e; }
+        .control-btn.minimize-btn { background-color: #ffbd2e; border-color: #dea123; }
+        .control-btn.maximize-btn { background-color: #28c940; border-color: #1aab29; }
+
+        .window-content {
+            padding: 16px;
+            height: calc(100% - 40px); /* Disesuaikan dengan title-bar baru */
+            overflow-y: auto;
+            color: #1e293b; /* Teks gelap untuk readability */
+        }
+
+        /* Custom scrollbar untuk windows */
+        .window-content::-webkit-scrollbar { width: 8px; }
+        .window-content::-webkit-scrollbar-track { background: transparent; }
+        .window-content::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 4px; }
+        .window-content::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.3); }
+
+        /* --- Desktop Icons --- */
+        .desktop-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            text-align: center;
+            width: 100px;
+        }
+        .desktop-icon:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+        .desktop-icon span {
+            color: #1a1a1a; /* Teks lebih gelap agar tajam */
+            font-weight: 600; /* Sedikit lebih tebal */
+            font-size: 13px;
+            /* text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5); Dihilangkan agar lebih tajam */
+        }
+        /* Ikon desktop lebih besar */
+        .desktop-icon i {
+            width: 48px; 
+            height: 48px;
+        }
+
+        /* --- Dock --- */
+        #dock {
+            position: absolute;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            /* Dock dengan style light mode */
+            background: rgba(255, 255, 255, 0.35); /* Lebih transparan */
+            backdrop-filter: blur(15px);
+            border-radius: 20px; /* Sudut lebih bulat, konsisten dengan window */
+            box-shadow: 0 8px 20px -8px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(255,255,255,0.7);
+            padding: 10px; /* Padding lebih besar */
+            display: flex;
+            gap: 10px; /* Jarak antar item lebih besar */
+            align-items: flex-end;
+            z-index: 500;
+        }
+
+        .dock-item {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px; /* Sudut lebih bulat */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            /* Ikon di-tweak agar lebih jelas di background terang */
+            color: #334155;
+            background-color: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* --- Terminal --- */
+        #terminal-output { white-space: pre-wrap; }
+        #terminal-cursor {
+            display: inline-block;
+            background-color: #334155; /* Kursor gelap */
+            width: 8px; height: 1.2em;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 50% { background-color: transparent; } }
+
+        /* --- Projects Window Redesign --- */
+        #projects-window-layout {
+            display: grid;
+            grid-template-columns: 200px 1fr; /* Kolom kiri untuk list, kanan untuk detail */
+            height: 100%;
+        }
+        #projects-list-pane {
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 0;
+            overflow-y: auto;
+        }
+        .project-list-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #334155;
+        }
+        .project-list-item:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+        .project-list-item.active {
+            background-color: #3b82f6; /* Aksen biru */
+            color: white;
+        }
+        .project-list-item.active i {
+            color: white !important;
+        }
+        #project-detail-pane {
+            padding: 24px;
+            overflow-y: auto;
+        }
+        #project-detail-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            color: #64748b;
+        }
+
+        /* --- Music Player --- */
+        .music-progress-bar { 
+            -webkit-appearance: none; appearance: none; 
+            width: 100%; height: 6px; 
+            background: rgba(0,0,0,0.1); 
+            outline: none; border-radius: 3px; cursor: pointer;
+        }
+        .music-progress-bar::-webkit-slider-thumb { 
+            -webkit-appearance: none; appearance: none; 
+            width: 16px; height: 16px; 
+            background: #3b82f6; 
+            cursor: pointer; border-radius: 50%; 
+            border: 3px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        /* --- Settings Window --- */
+        .wallpaper-option {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .wallpaper-option:hover {
+            transform: scale(1.05);
+        }
+        .wallpaper-option.active {
+            box-shadow: 0 0 0 4px #3b82f6;
+        }
+
+        /* --- Spotlight Search --- */
+        #spotlight-container {
+            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
+        .spotlight-result-item:hover, .spotlight-result-item.selected {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .spotlight-result-item:hover i, .spotlight-result-item.selected i {
+            color: white !important;
+        }
+
+        /* Style baru untuk Spotlight Box agar konsisten */
+        #spotlight-box {
+            background: rgba(255, 255, 255, 0.55) !important;
+            backdrop-filter: blur(28px) !important;
+            border-radius: 20px !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        /* --- Context Menu Item Hover --- */
+        .context-menu-item:hover {
+            background-color: #e0e7ff; /* light blue */
+            color: #2563eb; /* darker blue */
+        }
+
+        /* --- Mobile Fallback (Redesigned) --- */
+        @media (max-width: 768px) {
+            #desktop, #login-screen { display: none; }
+            #mobile-fallback {
+                display: block;
+                background-color: #f1f5f9; /* Latar belakang abu-abu muda */
+                min-height: 100vh;
+                padding-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-100">
+
+    <noscript>
+        <div style="background-color: #f1f5f9; color: #1e293b; text-align: center; padding: 2rem; min-height: 100vh;">
+            <h1 style="font-size: 2rem; font-weight: bold;">Portofolio Hadi Prasetia</h1>
+            <p>Situs ini memerlukan JavaScript untuk pengalaman interaktif penuh. Silakan aktifkan JavaScript untuk melanjutkan.</p>
+        </div>
+    </noscript>
+
+    <!-- Login Screen --><div id="login-screen" class="fixed inset-0 z-[10001] flex flex-col items-center justify-center">
+        <div id="login-box" class="text-center p-10 rounded-2xl shadow-2xl">
+            <img src="https://avatars.githubusercontent.com/u/68311980" alt="Logo" class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-white shadow-lg">
+            <h1 class="text-2xl font-bold text-slate-800">Hadi Prasetia</h1>
+            <div class="w-64 h-2 bg-slate-300 rounded-full mt-8 overflow-hidden">
+                <div id="progress-bar-inner" class="h-full bg-blue-500 rounded-full"></div>
+            </div>
+            <button id="login-button" class="mt-8 text-white font-semibold bg-blue-500 px-6 py-2 rounded-lg shadow-lg hover:bg-blue-600 transition-all opacity-0" disabled>Masuk ke Desktop</button>
+        </div>
+    </div>
+
+    <!-- Desktop View --><div id="desktop" class="hidden md:block">
+
+        <!-- Top Menu Bar --><header id="top-bar">
+            <div class="flex items-center gap-4">
+                <span class="font-bold text-slate-900">Portfolio</span>
+                <span>File</span>
+                <span>Edit</span>
+                <span>View</span>
+                <span>Go</span>
+            </div>
+            <div class="flex items-center gap-4 text-slate-700">
+                <div id="spotlight-trigger" class="cursor-pointer p-1 hover:bg-black/10 rounded">
+                    <i data-lucide="search" class="w-5 h-5"></i>
+                </div>
+                <div id="datetime" class="font-mono text-sm"></div>
+            </div>
+        </header>
+
+        <!-- Desktop Icons --><div class="p-8 pt-16 grid grid-cols-1 gap-y-4">
+            <div class="desktop-icon" data-window="about-window" draggable="true">
+                <i data-lucide="info" class="text-blue-500 pointer-events-none"></i>
+                <span class="text-sm pointer-events-none">Tentang Saya</span>
+            </div>
+            <div class="desktop-icon" data-window="projects-window" draggable="true">
+                <i data-lucide="layout-grid" class="text-orange-500 pointer-events-none"></i>
+                <span class="text-sm pointer-events-none">Proyek</span>
+            </div>
+            <div class="desktop-icon" data-window="contact-window">
+                 <i data-lucide="send" class="text-green-500 pointer-events-none"></i>
+                <span class="text-sm pointer-events-none">Kontak</span>
+            </div>
+            <div class="desktop-icon" data-window="terminal-window">
+                <i data-lucide="terminal" class="text-slate-700 pointer-events-none"></i>
+                <span class="text-sm pointer-events-none">Terminal</span>
+            </div>
+            <div class="desktop-icon" data-window="music-window">
+                <i data-lucide="disc" class="text-pink-500 pointer-events-none"></i>
+                <span class="text-sm pointer-events-none">Musik</span>
+            </div>
+            <div class="desktop-icon" data-window="settings-window">
+                <i data-lucide="settings" class="text-gray-500 pointer-events-none"></i>
+                <span class="text-sm pointer-events-none">Pengaturan</span>
+            </div>
+        </div>
+
+        <!-- All Windows --><div id="windows-container">
+            
+            <!-- About Me Window --><div class="window" id="about-window" style="top: 10%; left: 15%; width: 600px; height: 450px;">
+                <div class="title-bar">
+                    <div class="window-controls">
+                        <div class="control-btn close-btn"></div>
+                        <div class="control-btn minimize-btn"></div>
+                        <div class="control-btn maximize-btn"></div>
+                    </div>
+                    <span class="font-medium text-sm text-slate-700 mx-auto">Tentang Saya</span>
+                </div>
+                <div class="window-content">
+                    <div class="flex gap-6 items-start">
+                        <img src="https://avatars.githubusercontent.com/u/68311980" alt="Foto profil Hadi Prasetia" class="w-24 h-24 rounded-full border-4 border-white shadow-md">
+                        <div>
+                            <h1 class="text-3xl font-bold text-slate-900 mb-1">Hadi Prasetia</h1>
+                            <p class="text-lg text-slate-600">Digital Product Designer & Developer</p>
+                        </div>
+                    </div>
+                    <hr class="my-4 border-slate-200">
+                    <p class="mb-4 text-slate-700 leading-relaxed">
+                        Saya adalah seorang desainer dan developer dengan fokus pada UI/UX dan pengembangan front-end. Saya percaya bahwa desain yang baik adalah perpaduan antara estetika yang indah dan fungsionalitas yang mulus.
+                    </p>
+                    <p class="text-slate-700 leading-relaxed">
+                        Dengan pengalaman magang di PT. PLN Indonesia Power dan berbagai proyek akademis, saya terbiasa menerjemahkan data kompleks menjadi cerita visual yang menarik.
+                    </p>
+                    <h2 class="text-xl font-bold text-slate-900 mt-6 mb-3">Keahlian Utama</h2>
+                    <div class="flex flex-wrap gap-2 text-sm">
+                        <span class="bg-slate-200 text-slate-700 px-3 py-1 rounded-full font-medium">UI/UX Design</span>
+                        <span class="bg-slate-200 text-slate-700 px-3 py-1 rounded-full font-medium">Figma</span>
+                        <span class="bg-slate-200 text-slate-700 px-3 py-1 rounded-full font-medium">HTML & CSS</span>
+                        <span class="bg-slate-200 text-slate-700 px-3 py-1 rounded-full font-medium">JavaScript</span>
+                        <span class="bg-slate-200 text-slate-700 px-3 py-1 rounded-full font-medium">Tailwind CSS</span>
+                        <span class="bg-slate-200 text-slate-700 px-3 py-1 rounded-full font-medium">PHP & Laravel</span>
+                        <span class="bg-slate-200 text-slate-700 px-3 py-1 rounded-full font-medium">Video Editing</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Window (REDESIGNED) --><div class="window" id="projects-window" style="top: 15%; left: 25%; width: 800px; height: 600px;">
+                <div class="title-bar">
+                    <div class="window-controls">
+                        <div class="control-btn close-btn"></div>
+                        <div class="control-btn minimize-btn"></div>
+                        <div class="control-btn maximize-btn"></div>
+                    </div>
+                    <span class="font-medium text-sm text-slate-700 mx-auto">Finder > Proyek</span>
+                </div>
+                <!-- Konten window di-nol-kan padding-nya untuk layout 2 kolom --><div class="window-content !p-0">
+                    <div id="projects-window-layout">
+                        <!-- Kolom Kiri: List Proyek --><div id="projects-list-pane" class="bg-white/50">
+                            <!-- List proyek akan di-generate oleh JS di sini --></div>
+                        
+                        <!-- Kolom Kanan: Detail Proyek --><div id="project-detail-pane">
+                            <!-- Placeholder saat belum ada proyek dipilih --><div id="project-detail-placeholder">
+                                <i data-lucide="arrow-left" class="w-16 h-16 text-slate-400 mb-4"></i>
+                                <h3 class="text-lg font-semibold">Pilih Proyek</h3>
+                                <p>Pilih proyek dari daftar di samping untuk melihat detailnya.</p>
+                            </div>
+                            <!-- Konten detail akan di-generate oleh JS di sini --><div id="project-detail-content" class="hidden">
+                                <img id="detail-image" src="" class="w-full h-64 object-cover rounded-lg mb-4 shadow-md">
+                                <h1 id="detail-title" class="text-3xl font-bold text-slate-900 mb-2"></h1>
+                                <p id="detail-description" class="mb-6 text-slate-600 leading-relaxed"></p>
+                                <h2 class="text-lg font-bold text-slate-900 mb-3">Teknologi yang Digunakan</h2>
+                                <div id="detail-tech-stack" class="flex flex-wrap gap-2 text-sm mb-6"></div>
+                                <a id="detail-live-url" href="#" target="_blank" class="inline-flex items-center gap-2 bg-blue-500 text-white font-bold py-2 px-5 rounded-lg hover:bg-blue-600 transition-all">
+                                    Lihat Proyek Langsung
+                                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Window --><div class="window" id="contact-window" style="top: 40%; left: 10%; width: 400px; height: 320px;">
+                <div class="title-bar">
+                    <div class="window-controls">
+                        <div class="control-btn close-btn"></div>
+                        <div class="control-btn minimize-btn"></div>
+                        <div class="control-btn maximize-btn"></div>
+                    </div>
+                    <span class="font-medium text-sm text-slate-700 mx-auto">Kontak</span>
+                </div>
+                <div class="window-content flex flex-col items-center justify-center text-center">
+                    <i data-lucide="send" class="w-16 h-16 text-blue-500 mb-4"></i>
+                    <h2 class="text-2xl font-bold text-slate-900">Mari Terhubung</h2>
+                    <p class="text-slate-600 mt-2 mb-6">Saya terbuka untuk proyek dan kolaborasi baru.</p>
+                    <a href="mailto:hadi@example.com" class="bg-blue-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-600 transition-all w-full text-center">
+                        Kirim Email
+                    </a>
+                    <div class="flex space-x-6 mt-8">
+                        <a href="#" class="text-slate-500 hover:text-blue-500 transition-colors" title="GitHub">
+                            <i data-lucide="github" class="w-8 h-8"></i>
+                        </a>
+                        <a href="#" class="text-slate-500 hover:text-blue-500 transition-colors" title="LinkedIn">
+                            <i data-lucide="linkedin" class="w-8 h-8"></i>
+                        </a>
+                        <a href="#" class="text-slate-500 hover:text-blue-500 transition-colors" title="Dribbble">
+                            <i data-lucide="dribbble" class="w-8 h-8"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terminal Window --><div class="window" id="terminal-window" style="top: 50%; left: 20%; width: 640px; height: 360px;">
+                <div class="title-bar">
+                    <div class="window-controls">
+                        <div class="control-btn close-btn"></div>
+                        <div class="control-btn minimize-btn"></div>
+                        <div class="control-btn maximize-btn"></div>
+                    </div>
+                    <span class="font-medium text-sm text-slate-700 mx-auto">zsh</span>
+                </div>
+                <div class="window-content bg-white/50 text-slate-800 font-mono text-sm p-2" onclick="this.querySelector('input').focus()">
+                    <div id="terminal-output"></div>
+                    <div class="flex">
+                        <span class="text-blue-600">hadi@portfolio:~$ </span>
+                        <input type="text" id="terminal-input" class="flex-1 bg-transparent border-none outline-none text-slate-800 ml-2 p-0">
+                    </div>
+                    <span id="terminal-cursor"></span>
+                </div>
+            </div>
+
+            <!-- Music Window (NEW) --><div class="window" id="music-window" style="top: 55%; left: 40%; width: 340px; height: 420px; resize: none;">
+                <div class="title-bar">
+                    <div class="window-controls">
+                        <div class="control-btn close-btn"></div>
+                        <div class="control-btn minimize-btn"></div>
+                        <div class="control-btn maximize-btn"></div>
+                    </div>
+                    <span class="font-medium text-sm text-slate-700 mx-auto">Musik</span>
+                </div>
+                <div class="window-content text-slate-800 flex flex-col items-center p-6">
+                    <img id="album-art" src="https://placehold.co/200x200/e0f2fe/0c4a6e?text=Lo-fi" class="w-48 h-48 rounded-lg shadow-xl mb-6">
+                    <div class="text-center w-full">
+                        <h3 id="track-title" class="font-bold text-xl text-slate-900 truncate">Pilih Lagu</h3>
+                        <p id="track-artist" class="text-sm text-slate-500 mb-4">Lofi Beats</p>
+                    </div>
+                    <input type="range" id="music-progress" class="music-progress-bar my-4" value="0" max="100">
+                    <div class="flex items-center gap-8 mt-4">
+                        <button id="prev-btn" class="text-slate-500 hover:text-slate-900 transition-colors">
+                            <i data-lucide="skip-back" class="w-6 h-6"></i>
+                        </button>
+                        <button id="play-pause-btn" class="bg-blue-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-blue-600 transition-all">
+                            <i id="play-icon" data-lucide="play" class="w-6 h-6 ml-1"></i>
+                            <i id="pause-icon" data-lucide="pause" class="w-6 h-6 hidden"></i>
+                        </button>
+                        <button id="next-btn" class="text-slate-500 hover:text-slate-900 transition-colors">
+                            <i data-lucide="skip-forward" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Window (NEW) --><div class="window" id="settings-window" style="top: 20%; left: 10%; width: 500px; height: 350px;">
+                <div class="title-bar">
+                    <div class="window-controls">
+                        <div class="control-btn close-btn"></div>
+                        <div class="control-btn minimize-btn"></div>
+                        <div class="control-btn maximize-btn"></div>
+                    </div>
+                    <span class="font-medium text-sm text-slate-700 mx-auto">Pengaturan</span>
+                </div>
+                <div class="window-content text-slate-800 space-y-6">
+                    <h2 class="text-xl font-bold text-slate-900">Tampilan</h2>
+                    <div>
+                        <h3 class="font-semibold mb-3 text-slate-700">Pilih Wallpaper</h3>
+                        <div class="flex gap-4" id="wallpaper-options">
+                            <button class="wallpaper-option w-32 h-20 rounded-lg bg-cover bg-center border-2 border-white shadow-md active" 
+                                style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=300&q=80')" 
+                                data-wallpaper="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1920&q=80">
+                            </button>
+                            <button class="wallpaper-option w-32 h-20 rounded-lg bg-cover bg-center border-2 border-white shadow-md" 
+                                style="background-image: url('https://images.unsplash.com/photo-1554110397-96cdca2d759f?auto=format&fit=crop&w=300&q=80')" 
+                                data-wallpaper="https://images.unsplash.com/photo-1554110397-96cdca2d759f?auto=format&fit=crop&w=1920&q=80">
+                            </button>
+                            <button class="wallpaper-option w-32 h-20 rounded-lg bg-cover bg-center border-2 border-white shadow-md" 
+                                style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=300&q=80')"
+                                data-wallpaper="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Context Menu (Disederhanakan) --><div id="context-menu" class="hidden" style="background: rgba(255,255,255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 6px; z-index: 10000; border-radius: 8px; position: absolute;">
+                <div class="context-menu-item" data-action="open-projects" style="padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; color: #334155; display: flex; align-items: center; gap: 8px;"><i data-lucide="layout-grid" class="w-4 h-4 text-slate-500"></i> Buka Proyek</div>
+                <div class="context-menu-item" data-action="open-terminal" style="padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; color: #334155; display: flex; align-items: center; gap: 8px;"><i data-lucide="terminal" class="w-4 h-4 text-slate-500"></i> Buka Terminal</div>
+                <hr class="border-slate-200 my-1">
+                <div class="context-menu-item" data-action="about-portfolio" style="padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; color: #334155; display: flex; align-items: center; gap: 8px;"><i data-lucide="info" class="w-4 h-4 text-slate-500"></i> Tentang Portofolio Ini</div>
+            </div>
+        </div>
+
+        <!-- Spotlight Search (NEW) --><div id="spotlight-container" class="fixed inset-0 z-[5000] flex justify-center items-start pt-32 bg-black/20 backdrop-blur-sm hidden opacity-0 scale-95">
+            <div id="spotlight-box" class="w-full max-w-xl overflow-hidden">
+                <div class="flex items-center gap-3 p-4">
+                    <i data-lucide="search" class="w-6 h-6 text-slate-500"></i>
+                    <input type="text" id="spotlight-input" class="w-full bg-transparent text-slate-900 text-2xl placeholder-slate-500 outline-none" placeholder="Cari...">
+                </div>
+                <ul id="spotlight-results" class="max-h-80 overflow-y-auto text-slate-700 border-t border-black/5">
+                    <!-- Hasil pencarian akan muncul di sini --></ul>
+            </div>
+        </div>
+
+        <!-- Dock --><div id="dock">
+            <div class="dock-item" data-window="about-window" title="Tentang Saya"><i data-lucide="info" class="w-8 h-8"></i></div>
+            <div class="dock-item" data-window="projects-window" title="Proyek"><i data-lucide="layout-grid" class="w-8 h-8"></i></div>
+            <div class="dock-item" data-window="contact-window" title="Kontak"><i data-lucide="send" class="w-8 h-8"></i></div>
+            <div class="w-px h-10 bg-black/10 mx-1"></div>
+            <div class="dock-item" data-window="music-window" title="Musik"><i data-lucide="disc" class="w-8 h-8"></i></div>
+            <div class="dock-item" data-window="terminal-window" title="Terminal"><i data-lucide="terminal" class="w-8 h-8"></i></div>
+            <div class="dock-item" data-window="settings-window" title="Pengaturan"><i data-lucide="settings" class="w-8 h-8"></i></div>
+        </div>
+
+    </div>
+
+    <!-- Mobile Fallback View (REDESIGNED) --><div id="mobile-fallback" class="hidden">
+        
+        <!-- Mobile Header --><header class="text-center pt-12 pb-8 bg-white shadow-sm">
+            <img src="https://avatars.githubusercontent.com/u/68311980" alt="Foto profil Hadi Prasetia" class="w-28 h-28 rounded-full mx-auto mb-4 ring-4 ring-white shadow-lg">
+            <h1 class="text-4xl font-bold text-slate-800">Hadi Prasetia</h1>
+            <p class="text-xl text-slate-500 mt-2">Digital Product Designer & Developer</p>
+        </header>
+
+        <main class="space-y-6 p-4">
+            
+            <!-- Mobile About --><section id="mobile-about" class="bg-white p-6 rounded-2xl shadow-sm">
+                <h2 class="text-xl font-bold text-slate-800 mb-3 flex items-center gap-2">
+                    <i data-lucide="info" class="w-6 h-6 text-blue-500"></i>
+                    Tentang Saya
+                </h2>
+                <p class="text-slate-600 leading-relaxed text-base mb-4">
+                    Saya adalah seorang desainer dan developer dengan fokus pada UI/UX dan pengembangan front-end. Saya percaya bahwa desain yang baik adalah perpaduan antara estetika yang indah dan fungsionalitas yang mulus.
+                </p>
+                <div class="flex flex-wrap gap-2 text-sm">
+                    <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full font-medium">UI/UX Design</span>
+                    <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full font-medium">Figma</span>
+                    <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full font-medium">JavaScript</span>
+                    <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full font-medium">Tailwind CSS</span>
+                </div>
+            </section>
+
+            <!-- Mobile Projects --><section id="mobile-projects" class="bg-white p-6 rounded-2xl shadow-sm">
+                <h2 class="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                    <i data-lucide="layout-grid" class="w-6 h-6 text-orange-500"></i>
+                    Proyek Pilihan
+                </h2>
+                <ul id="mobile-projects-list" class="space-y-4">
+                    <!-- Projects will be populated here by JS --></ul>
+            </section>
+
+            <!-- Mobile Contact --><section id="mobile-contact" class="bg-white p-6 rounded-2xl shadow-sm">
+                 <h2 class="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                    <i data-lucide="send" class="w-6 h-6 text-green-500"></i>
+                    Hubungi Saya
+                 </h2>
+                 <div class="space-y-3">
+                    <a href="mailto:hadi@example.com" class="p-4 flex justify-between items-center text-blue-600 bg-blue-50 rounded-lg font-semibold">
+                        <span>Kirim Email</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="p-4 flex justify-between items-center text-slate-700 bg-slate-100 rounded-lg font-medium">
+                        <span>GitHub</span>
+                        <i data-lucide="external-link" class="w-5 h-5 text-slate-400"></i>
+                    </a>
+                     <a href="#" class="p-4 flex justify-between items-center text-slate-700 bg-slate-100 rounded-lg font-medium">
+                        <span>LinkedIn</span>
+                        <i data-lucide="external-link" class="w-5 h-5 text-slate-400"></i>
+                    </a>
+                 </div>
+            </section>
+        </main>
+        
+        <footer class="text-center mt-12 pb-8 text-slate-400 text-sm">
+            <p>&copy; 2025 Hadi Prasetia. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Audio Player --><audio id="audio-player" src=""></audio>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Aktifkan ikon Lucide
+            lucide.createIcons();
+
+            // --- Variabel Elemen DOM ---
+            // Pindahkan semua deklarasi elemen ke atas
+            const desktop = document.getElementById('desktop');
+            const loginScreen = document.getElementById('login-screen');
+            const loginButton = document.getElementById('login-button');
+            const dock = document.getElementById('dock');
+            
+            // Elemen Projects
+            const projectsListPane = document.getElementById('projects-list-pane');
+            const detailPane = document.getElementById('project-detail-pane');
+            const detailPlaceholder = document.getElementById('project-detail-placeholder');
+            const detailContent = document.getElementById('project-detail-content');
+            const detailImage = document.getElementById('detail-image');
+            const detailTitle = document.getElementById('detail-title');
+            const detailDescription = document.getElementById('detail-description');
+            const detailTechStack = document.getElementById('detail-tech-stack');
+            const detailLiveUrl = document.getElementById('detail-live-url');
+            
+            // Elemen Mobile
+            const mobileProjectsList = document.getElementById('mobile-projects-list');
+
+            // Elemen Music Player
+            const audioPlayer = document.getElementById('audio-player');
+            const [playPauseBtn, nextBtn, prevBtn] = [document.getElementById('play-pause-btn'), document.getElementById('next-btn'), document.getElementById('prev-btn')];
+            const [playIcon, pauseIcon] = [document.getElementById('play-icon'), document.getElementById('pause-icon')];
+            const [musicProgress, trackTitle, trackArtist, albumArt] = [document.getElementById('music-progress'), document.getElementById('track-title'), document.getElementById('track-artist'), document.getElementById('album-art')];
+            
+            // Elemen Settings
+            const wallpaperOptions = document.getElementById('wallpaper-options');
+
+            // Elemen Spotlight
+            const spotlightContainer = document.getElementById('spotlight-container');
+            const spotlightTrigger = document.getElementById('spotlight-trigger');
+            const spotlightInput = document.getElementById('spotlight-input');
+            const spotlightResults = document.getElementById('spotlight-results');
+
+            // Elemen Terminal
+            const terminalInput = document.getElementById('terminal-input');
+            const terminalOutput = document.getElementById('terminal-output');
+            const terminalCursor = document.getElementById('terminal-cursor');
+            const terminalWindowContent = terminalInput?.closest('.window-content');
+
+            // Elemen Jam
+            const datetimeElement = document.getElementById('datetime');
+
+            // Elemen Context Menu
+            const contextMenu = document.getElementById('context-menu');
+
+            // Variabel Window Management
+            let activeWindow = null;
+            let zIndexCounter = 10;
+            const windows = document.querySelectorAll('.window');
+            // const desktopEl = document.getElementById('desktop'); // Ini duplikat, sudah ada 'desktop'
+
+
+            // --- LOGIN SCREEN LOGIC ---
+            setTimeout(() => {
+                loginButton.disabled = false;
+                loginButton.classList.remove('opacity-0');
+            }, 2000); // Tunggu animasi progress bar
+            
+            loginButton.addEventListener('click', () => {
+                loginScreen.classList.add('opacity-0', 'invisible');
+                setTimeout(() => {
+                    loginScreen.style.display = 'none';
+                }, 500); // Sesuaikan durasi transisi
+            });
+
+            // --- DOCK MAGNIFICATION LOGIC ---
+            if (dock) {
+                const dockItems = dock.querySelectorAll('.dock-item');
+                dock.addEventListener('mousemove', (e) => {
+                    const dockRect = dock.getBoundingClientRect();
+                    const mouseX = e.clientX;
+
+                    dockItems.forEach(item => {
+                        const itemRect = item.getBoundingClientRect();
+                        const itemCenterX = itemRect.left + itemRect.width / 2;
+                        const distance = Math.abs(mouseX - itemCenterX);
+                        const maxDistance = 100; // Jarak 'magnet'
+                        const baseScale = 1;
+                        const maxScale = 1.6; // Skala maksimal
+                        const maxLift = -14; // Angkatan maksimal
+
+                        let scale = baseScale;
+                        let lift = 0;
+
+                        if (distance < maxDistance) {
+                            const proximity = 1 - (distance / maxDistance);
+                            const easedProximity = Math.pow(proximity, 0.7); // Efek ease-out
+                            scale = baseScale + (maxScale - baseScale) * easedProximity;
+                            lift = maxLift * easedProximity;
+                        }
+                        
+                        item.style.transform = `translateY(${lift}px) scale(${scale})`;
+                    });
+                });
+
+                dock.addEventListener('mouseleave', () => {
+                    dockItems.forEach(item => {
+                        item.style.transform = 'translateY(0) scale(1)';
+                    });
+                });
+            }
+
+            // --- DATA ---
+            const projectsData = [
+                {id: 'mobile-sigil', title: 'Mobile Sigil Forging', shortDesc: 'Studi kasus UI/UX untuk aplikasi seluler.', longDesc: 'Ini adalah studi kasus komprehensif untuk aplikasi mobile, dimulai dari riset pengguna, wireframing, hingga menghasilkan desain antarmuka yang bersih dan modern. Prototipe interaktif dibuat menggunakan Figma untuk memvalidasi alur pengguna.', image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/uiux.png', techStack: ['Figma', 'UI/UX Research', 'Prototyping', 'User Flow'], liveUrl: '#'},
+                {id: 'visual-codex', title: 'Visual Communication Codex', shortDesc: 'Strategi dan pedoman brand visual.', longDesc: 'Dokumen master yang merinci strategi Komunikasi Visual, termasuk pedoman merek dan struktur naratif, yang penting untuk menjaga integritas cerita di semua media. Tujuannya adalah untuk menciptakan identitas visual yang konsisten dan kuat.', image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/vc.png', techStack: ['Branding', 'Graphic Design', 'Adobe Illustrator', 'Strategy'], liveUrl: '#'},
+                {id: 'corp-authority', title: 'Corporate Authority Sigil', shortDesc: 'Desain sistem identitas korporat.', longDesc: 'Perancangan sistem visual yang kuat untuk identitas korporat, berfokus pada profesionalisme, konsistensi, dan membangun kembali citra otoritas merek di semua titik kontak, baik digital maupun cetak.', image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/a/corpo.png', techStack: ['Corporate Identity', 'Logo Design', 'Brand Guidelines'], liveUrl: '#'},
+                {id: 'video-ritual', title: 'Video Ritual Scroll V2', shortDesc: 'Kompilasi motion graphics & video.', longDesc: 'Sebuah kompilasi motion graphics dan narasi visual, yang berfokus pada tempo cepat dan color grading yang agresif untuk retensi audiens yang tinggi di platform digital. Menggunakan Adobe Premiere Pro dan After Effects.', image: 'https://raw.githubusercontent.com/Harsia-ID/design/refs/heads/main/v2.png', techStack: ['Video Editing', 'Motion Graphics', 'Adobe Premiere Pro', 'Color Grading'], liveUrl: '#'},
+            ];
+
+            const musicPlaylist = [
+                { title: 'Empty Mind', artist: 'Lofi Girl', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Lofi_Girl/Empty_Mind/Lofi_Girl_-_Empty_Mind.mp3', art: 'https://placehold.co/200x200/a5f3fc/083344?text=Empty+Mind'},
+                { title: 'Chill', artist: 'Liborio Conti', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Liborio_Conti/Book_The_Flight/Liborio_Conti_-_Chill.mp3', art: 'https://placehold.co/200x200/d8b4fe/3b0764?text=Chill'},
+                { title: 'Lazy Walk', artist: 'Cheel', src: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Cheel/Lazy_Walk/Cheel_-_Lazy_Walk.mp3', art: 'https://placehold.co/200x200/fecaca/7f1d1d?text=Lazy+Walk'}
+            ];
+            
+            // --- DYNAMIC CONTENT ---
+            
+            // --- Projects Window (Redesigned Logic) ---
+            projectsData.forEach(project => {
+                // 1. Populate Desktop Project List (Kolom Kiri)
+                const listItem = document.createElement('div');
+                listItem.className = 'project-list-item';
+                listItem.dataset.projectId = project.id;
+                // Menggunakan ikon Lucide baru untuk daftar proyek
+                listItem.innerHTML = `<i data-lucide="folder-open" class="w-4 h-4 text-slate-500"></i> ${project.title}`;
+                listItem.addEventListener('click', () => {
+                    showProjectDetail(project.id);
+                    // Handle active state
+                    projectsListPane.querySelectorAll('.project-list-item').forEach(item => item.classList.remove('active'));
+                    listItem.classList.add('active');
+                    lucide.createIcons(); // Perbarui ikon setelah active state berubah
+                });
+                projectsListPane.appendChild(listItem);
+                
+                // 2. Populate Mobile List
+                const mobileItem = document.createElement('li');
+                mobileItem.className = 'p-4 flex items-center space-x-4 border border-slate-200 rounded-lg';
+                mobileItem.innerHTML = `
+                    <img src="${project.image}" alt="Ikon Proyek ${project.title}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0">
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-slate-800">${project.title}</h3>
+                        <p class="text-slate-500 text-sm">${project.shortDesc}</p>
+                    </div>
+                    <i data-lucide="arrow-right" class="w-5 h-5 text-slate-400"></i>
+                `;
+                mobileProjectsList.appendChild(mobileItem);
+            });
+            
+            function showProjectDetail(projectId) {
+                const project = projectsData.find(p => p.id === projectId);
+                if (!project) return;
+                
+                // Tampilkan konten, sembunyikan placeholder
+                detailPlaceholder.style.display = 'none';
+                detailContent.classList.remove('hidden');
+
+                // Isi data
+                detailImage.src = project.image;
+                detailTitle.textContent = project.title;
+                detailDescription.textContent = project.longDesc;
+                
+                // Isi tech stack
+                detailTechStack.innerHTML = '';
+                project.techStack.forEach(tech => {
+                    const span = document.createElement('span');
+                    span.className = 'bg-slate-200 text-slate-700 px-3 py-1 rounded-full font-medium';
+                    span.textContent = tech;
+                    detailTechStack.appendChild(span);
+                });
+                
+                // Atur link
+                detailLiveUrl.style.display = (project.liveUrl && project.liveUrl !== '#') ? 'inline-flex' : 'none';
+                detailLiveUrl.href = project.liveUrl;
+                
+                // Re-run lucide untuk ikon 'external-link'
+                lucide.createIcons();
+            }
+
+            // --- MUSIC PLAYER LOGIC (NEW) ---
+            let currentTrackIndex = 0;
+
+            const loadTrack = (index) => {
+                const track = musicPlaylist[index];
+                audioPlayer.src = track.src;
+                trackTitle.textContent = track.title;
+                trackArtist.textContent = track.artist;
+                albumArt.src = track.art;
+            };
+            const playTrack = () => { 
+                audioPlayer.play().catch(e => console.error("Audio play failed:", e)); 
+                playIcon.classList.add('hidden'); 
+                pauseIcon.classList.remove('hidden'); 
+            };
+            const pauseTrack = () => { 
+                audioPlayer.pause(); 
+                playIcon.classList.remove('hidden'); 
+                pauseIcon.classList.add('hidden'); 
+            };
+
+            playPauseBtn.addEventListener('click', () => (audioPlayer.paused ? playTrack() : pauseTrack()));
+            nextBtn.addEventListener('click', () => { 
+                currentTrackIndex = (currentTrackIndex + 1) % musicPlaylist.length; 
+                loadTrack(currentTrackIndex); 
+                playTrack(); 
+            });
+            prevBtn.addEventListener('click', () => { 
+                currentTrackIndex = (currentTrackIndex - 1 + musicPlaylist.length) % musicPlaylist.length; 
+                loadTrack(currentTrackIndex); 
+                playTrack(); 
+            });
+            audioPlayer.addEventListener('timeupdate', () => { 
+                musicProgress.value = (audioPlayer.currentTime / audioPlayer.duration) * 100 || 0; 
+            });
+            audioPlayer.addEventListener('ended', () => {
+                nextBtn.click(); // Otomatis putar lagu berikutnya
+            });
+            musicProgress.addEventListener('input', () => { 
+                if (audioPlayer.duration) {
+                    audioPlayer.currentTime = (musicProgress.value / 100) * audioPlayer.duration; 
+                }
+            });
+            loadTrack(currentTrackIndex); // Load lagu pertama
+
+            // --- SETTINGS LOGIC (NEW) ---
+            wallpaperOptions.addEventListener('click', (e) => {
+                const button = e.target.closest('button');
+                if (button) {
+                    desktop.style.backgroundImage = `url('${button.dataset.wallpaper}')`;
+                    // Update active state
+                    wallpaperOptions.querySelectorAll('button').forEach(btn => btn.classList.remove('active', 'border-blue-500'));
+                    button.classList.add('active', 'border-blue-500');
+                }
+            });
+
+            // --- SPOTLIGHT SEARCH LOGIC (NEW) ---
+            // Data untuk pencarian
+            const searchIndex = [
+                { name: 'Tentang Saya', type: 'Aplikasi', icon: 'info', windowId: 'about-window' },
+                { name: 'Proyek', type: 'Aplikasi', icon: 'layout-grid', windowId: 'projects-window' },
+                { name: 'Kontak', type: 'Aplikasi', icon: 'send', windowId: 'contact-window' },
+                { name: 'Terminal', type: 'Aplikasi', icon: 'terminal', windowId: 'terminal-window' },
+                { name: 'Musik', type: 'Aplikasi', icon: 'disc', windowId: 'music-window' },
+                { name: 'Pengaturan', type: 'Aplikasi', icon: 'settings', windowId: 'settings-window' },
+                ...projectsData.map(p => ({ name: p.title, type: 'Proyek', icon: 'folder-open', windowId: 'projects-window', projectId: p.id }))
+            ];
+
+            const openSpotlight = () => {
+                spotlightContainer.classList.remove('hidden');
+                setTimeout(() => {
+                    spotlightContainer.classList.remove('opacity-0', 'scale-95');
+                    spotlightInput.focus();
+                }, 10);
+            };
+
+            const closeSpotlight = () => {
+                spotlightContainer.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    spotlightContainer.classList.add('hidden');
+                    spotlightInput.value = '';
+                    spotlightResults.innerHTML = '';
+                }, 200);
+            };
+
+            spotlightTrigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openSpotlight();
+            });
+            
+            spotlightContainer.addEventListener('click', (e) => {
+                if (e.target === spotlightContainer) closeSpotlight();
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !spotlightContainer.classList.contains('hidden')) {
+                    closeSpotlight();
+                }
+                // Anda bisa tambahkan shortcut keyboard di sini, misal Ctrl+Space
+            });
+
+            spotlightInput.addEventListener('input', () => {
+                const query = spotlightInput.value.toLowerCase();
+                spotlightResults.innerHTML = '';
+                if (!query) return;
+
+                const results = searchIndex.filter(item => item.name.toLowerCase().includes(query));
+                
+                results.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'spotlight-result-item flex items-center gap-3 p-3 mx-2 my-1 rounded-lg cursor-pointer';
+                    li.innerHTML = `
+                        <i data-lucide="${item.icon}" class="w-5 h-5 text-slate-500"></i>
+                        <div>
+                            <span class="font-medium">${item.name}</span>
+                            <span class="text-xs text-slate-500 ml-2">${item.type}</span>
+                        </div>`;
+                    
+                    li.addEventListener('click', () => {
+                        openWindowById(item.windowId);
+                        // Jika ini item proyek, buka dan tampilkan detailnya
+                        if (item.projectId) {
+                            showProjectDetail(item.projectId);
+                            // Tandai sebagai aktif di list
+                            projectsListPane.querySelectorAll('.project-list-item').forEach(el => {
+                                el.classList.toggle('active', el.dataset.projectId === item.projectId);
+                            });
+                        }
+                        closeSpotlight();
+                    });
+                    
+                    spotlightResults.appendChild(li);
+                });
+                lucide.createIcons(); // Perbarui ikon di hasil pencarian
+            });
+
+
+            // --- TERMINAL ---
+            const commands = {
+                'help': () => 'Perintah: help, about, projects, contact, clear, music, settings, theme [dark|light]',
+                'about': () => { openWindowById('about-window'); return 'Membuka jendela "Tentang Saya"...'; },
+                'projects': () => { 
+                    openWindowById('projects-window'); 
+                    return `Membuka "Proyek"...\n\n` + projectsData.map(p => `- ${p.title}`).join('\n'); 
+                },
+                'contact': () => { openWindowById('contact-window'); return 'Membuka "Kontak"...'; },
+                'clear': () => { setTimeout(() => terminalOutput.innerHTML = '', 1); return ''; },
+                'music': () => { openWindowById('music-window'); return 'Membuka "Musik"...'; },
+                'settings': () => { openWindowById('settings-window'); return 'Membuka "Pengaturan"...'; },
+                'theme light': () => { /* Logic untuk ganti ke light (sudah) */ return 'Tema sudah light.'; },
+                'theme dark': () => 'Fitur ganti ke dark mode belum tersedia. Hubungi developer! :)',
+                'theme': () => 'Gunakan: theme [dark|light]'
+            };
+
+            const appendToTerminal = (html) => {
+                terminalOutput.insertAdjacentHTML('beforeend', `<div>${html}</div>`);
+                if(terminalWindowContent) {
+                    terminalWindowContent.scrollTop = terminalWindowContent.scrollHeight;
+                }
+            };
+            
+            terminalInput?.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const cmd = terminalInput.value.trim().toLowerCase();
+                    appendToTerminal(`<span class="text-blue-600">hadi@portfolio:~$ </span><span>${cmd}</span>`);
+                    
+                    let result = `bash: command not found: ${cmd}`;
+                    if (commands[cmd]) {
+                        result = commands[cmd]();
+                    } else if (cmd.startsWith('theme ')) {
+                        result = commands[cmd] ? commands[cmd]() : commands['theme']();
+                    }
+                    
+                    if (result) appendToTerminal(result);
+                    terminalInput.value = '';
+                }
+            });
+
+            terminalInput?.addEventListener('focus', () => terminalCursor.style.display = 'inline-block');
+            terminalInput?.addEventListener('blur', () => terminalCursor.style.display = 'none');
+            appendToTerminal(`Selamat datang! Ketik 'help' untuk daftar perintah.`);
+
+            // --- CLOCK ---
+            function updateClock() {
+                const now = new Date();
+                if(datetimeElement) {
+                    datetimeElement.textContent = now.toLocaleDateString('id-ID', { 
+                        weekday: 'short', 
+                        day: 'numeric', 
+                        month: 'short', 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                    });
+                }
+            }
+            updateClock();
+            setInterval(updateClock, 30000); // Update setiap 30 detik
+
+            // --- CONTEXT MENU (Right Click) LOGIC ---
+            desktop.addEventListener('contextmenu', (e) => {
+                e.preventDefault(); // Mencegah menu default browser
+                
+                // Dapatkan posisi klik
+                let x = e.clientX;
+                let y = e.clientY;
+                
+                // Tampilkan menu
+                contextMenu.style.display = 'block';
+                contextMenu.style.left = `${x}px`;
+                contextMenu.style.top = `${y}px`;
+
+                // Cek agar tidak keluar layar
+                const menuRect = contextMenu.getBoundingClientRect();
+                const desktopRect = desktop.getBoundingClientRect();
+
+                if (x + menuRect.width > desktopRect.width) {
+                    contextMenu.style.left = `${x - menuRect.width}px`;
+                }
+                if (y + menuRect.height > desktopRect.height) {
+                    contextMenu.style.top = `${y - menuRect.height}px`;
+                }
+                lucide.createIcons(); // Pastikan ikon di menu konteks dirender
+            });
+
+            // Sembunyikan context menu saat klik di tempat lain
+            window.addEventListener('click', (e) => {
+                if (e.target !== contextMenu && !contextMenu.contains(e.target)) {
+                    contextMenu.style.display = 'none';
+                }
+            });
+
+            // Handle aksi item context menu
+            contextMenu.addEventListener('click', (e) => {
+                const targetItem = e.target.closest('.context-menu-item');
+                if (targetItem) {
+                    const action = targetItem.dataset.action;
+                    if (action) {
+                        switch (action) {
+                            case 'open-projects':
+                                openWindowById('projects-window');
+                                break;
+                            case 'open-terminal':
+                                openWindowById('terminal-window');
+                                break;
+                            case 'about-portfolio':
+                                // Untuk sekarang, kita buka window 'About Me'
+                                openWindowById('about-window');
+                                break;
+                        }
+                        contextMenu.style.display = 'none'; // Sembunyikan setelah diklik
+                    }
+                }
+            });
+
+            // --- WINDOW MANAGEMENT ---
+            const bringToFront = (windowEl) => {
+                if (windowEl !== activeWindow) {
+                    windows.forEach(w => w.classList.remove('active-window')); // 'active-window' bisa dipakai untuk styling
+                    windowEl.style.zIndex = ++zIndexCounter;
+                    windowEl.classList.add('active-window');
+                    activeWindow = windowEl;
+                }
+            };
+
+            const openWindowById = (windowId) => {
+                const windowEl = document.getElementById(windowId);
+                if (windowEl) {
+                    windowEl.style.display = 'block';
+                    bringToFront(windowEl);
+                    
+                    // Reset project window jika itu yang dibuka
+                    if (windowId === 'projects-window') {
+                        // Cek jika placeholder ada sebelum mengubah stylenya
+                        if (detailPlaceholder) detailPlaceholder.style.display = 'flex';
+                        if (detailContent) detailContent.classList.add('hidden');
+                        if (projectsListPane) {
+                            projectsListPane.querySelectorAll('.project-list-item').forEach(item => item.classList.remove('active'));
+                        }
+                    }
+                }
+            };
+
+            // Event listeners untuk membuka window
+            document.querySelectorAll('[data-window]').forEach(trigger => {
+                trigger.addEventListener('click', () => openWindowById(trigger.dataset.window));
+                // Double click di desktop icon
+                if (trigger.classList.contains('desktop-icon')) {
+                    trigger.addEventListener('dblclick', () => openWindowById(trigger.dataset.window));
+                }
+            });
+
+            // Event listeners untuk menutup window
+            document.querySelectorAll('.close-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    btn.closest('.window').style.display = 'none';
+                });
+            });
+
+            // Window Dragging Logic
+            windows.forEach(windowEl => {
+                const titleBar = windowEl.querySelector('.title-bar');
+                if (!titleBar) return;
+
+                // Bawa ke depan saat diklik
+                windowEl.addEventListener('mousedown', () => bringToFront(windowEl));
+
+                let offsetX, offsetY, isDragging = false;
+                
+                titleBar.addEventListener('mousedown', (e) => {
+                    // Hanya drag jika targetnya adalah title-bar, bukan tombol
+                    if (e.target.classList.contains('control-btn')) return;
+                    
+                    isDragging = true;
+                    offsetX = e.clientX - windowEl.getBoundingClientRect().left;
+                    offsetY = e.clientY - windowEl.getBoundingClientRect().top;
+                    titleBar.style.cursor = 'grabbing';
+                    
+                    document.addEventListener('mousemove', onMouseMove);
+                    document.addEventListener('mouseup', onMouseUp);
+                });
+
+                const onMouseMove = (e) => {
+                    if (!isDragging) return;
+                    let newX = e.clientX - offsetX;
+                    let newY = e.clientY - offsetY;
+                    
+                    const rect = desktop.getBoundingClientRect(); // Mengganti desktopEl dengan desktop
+                    const topBarHeight = 32; // Sesuaikan dengan tinggi top-bar
+
+                    // Batasan agar tidak keluar window
+                    newX = Math.max(0, Math.min(newX, rect.width - windowEl.offsetWidth));
+                    newY = Math.max(topBarHeight, Math.min(newY, rect.height - windowEl.offsetHeight));
+                    
+                    windowEl.style.left = `${newX}px`;
+                    windowEl.style.top = `${newY}px`;
+                };
+
+                const onMouseUp = () => {
+                    isDragging = false;
+                    titleBar.style.cursor = 'grab';
+                    document.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseup', onMouseUp);
+                };
+            });
+            
+            // Re-run Lucide untuk ikon di mobile
+            if (document.getElementById('mobile-fallback').style.display !== 'none') {
+                lucide.createIcons();
+            }
+            
+            // Re-run Lucide untuk ikon yang baru ditambahkan
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
+
+
